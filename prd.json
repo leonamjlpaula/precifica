@@ -208,8 +208,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 11,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Server component page.tsx fetches materials via getMateriais(userId) and passes to MateriaisTable client component. MateriaisTable features: client-side search filter, inline price editing with Check/X buttons (Enter/Escape support), Add Material dialog (with validation), delete button for custom materials (shows toast with procedure names on conflict), Badge distinguishing 'Padrão VRPO' vs 'Customizado'. Created Badge and Dialog UI components (shadcn/ui style using @radix-ui/react-dialog). Typecheck passes."
     },
     {
       "id": "US-012",
