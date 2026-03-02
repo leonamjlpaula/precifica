@@ -11,7 +11,29 @@
 - bcrypt for password hashing (@types/bcrypt in devDependencies)
 - No local PostgreSQL available — use `prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script` to generate migration SQL; run `npx prisma migrate dev` when DB is available
 - Migration files committed to prisma/migrations/ so they're ready for deployment
+- Prisma singleton at src/lib/db.ts — import `prisma` from '@/lib/db' in server code
+- VRPO seed data (materials, procedures, createDefaultDataForUser) in src/lib/vrpo-seed-data.ts
+- Global seed (Especialidades + VRPOReferencias) in prisma/seed.ts — run `npx prisma db seed` when DB ready
+- seed.ts uses its own PrismaClient directly (not the singleton from db.ts) to avoid module resolution issues in ts-node
+- prisma/seed.ts does NOT import from src/lib/* to avoid @/ alias resolution issues in ts-node CommonJS mode
 
+---
+
+## 2026-03-02 - US-003
+- What was implemented: Script de seed com dados VRPO (materiais, procedimentos, referências)
+- Files changed:
+  - src/lib/db.ts (new — Prisma singleton for app use)
+  - src/lib/vrpo-seed-data.ts (new — 14 custo fixo items, 30 materials, 40 procedures with materials, createDefaultDataForUser function)
+  - prisma/seed.ts (new — seeds 11 Especialidades + 75 VRPOReferencias globally)
+  - package.json (added `prisma.seed` field for `npx prisma db seed`)
+  - prd.json (US-003 marked passes: true)
+- **Learnings for future iterations:**
+  - seed.ts must NOT import from src/lib/* because ts-node CommonJS mode can't resolve @/ path aliases
+  - Keep prisma/seed.ts self-contained with its own PrismaClient instance
+  - createDefaultDataForUser(userId) in src/lib/vrpo-seed-data.ts uses the global prisma singleton from ./db
+  - Function depends on Especialidades already being seeded globally — call createDefaultDataForUser AFTER npx prisma db seed
+  - DEFAULT_PROCEDIMENTOS references materials by nome (string lookup) — material names must match exactly between DEFAULT_MATERIAIS and procedure compositions
+  - No local DB — typecheck passes but `npx prisma db seed` needs a real DB connection
 ---
 
 ## 2026-03-02 - US-001

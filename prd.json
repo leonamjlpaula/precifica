@@ -57,8 +57,8 @@
         "Typecheck passes"
       ],
       "priority": 3,
-      "passes": false,
-      "notes": "Dado o volume de dados (+200 procedimentos e +130 materiais), o seed pode usar dados representativos para as especialidades principais. Os dados completos podem ser expandidos incrementalmente."
+      "passes": true,
+      "notes": "Dado o volume de dados (+200 procedimentos e +130 materiais), o seed pode usar dados representativos para as especialidades principais. Os dados completos podem ser expandidos incrementalmente. Implemented with 11 especialidades, 75 VRPOReferencias, 30 default materials, and 40 default procedures. No local DB — run npx prisma db seed when DB is ready."
     },
     {
       "id": "US-004",

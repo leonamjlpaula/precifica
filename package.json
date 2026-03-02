@@ -12,6 +12,9 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts"
   },
+  "prisma": {
+    "seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^6.3.1",
     "@radix-ui/react-alert-dialog": "^1.1.6",
