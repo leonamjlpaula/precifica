@@ -1,3 +1,17 @@
+## 2026-03-02 - US-019
+- What was implemented: Server actions para Snapshots (CRUD) — GerarSnapshot use case + 5 server actions
+- Files changed:
+  - src/application/usecases/GerarSnapshot.ts (new — non-server-action use case; fetches all user procedures + custoFixoPorMinuto in parallel, maps to SnapshotItem[], returns SnapshotDados)
+  - src/application/usecases/snapshotActions.ts (new — 'use server' file with createSnapshot, listSnapshots, getSnapshot, deleteSnapshot, compareSnapshotWithCurrent)
+  - prd.json (US-019 marked passes: true)
+- **Learnings for future iterations:**
+  - GerarSnapshot is a non-'use server' use case — can be imported by both server actions and other use cases (like compareSnapshotWithCurrent calls it directly without being a server action itself)
+  - createSnapshot stores dados as `dados as object` for Prisma Json type — Prisma accepts plain objects; cast back to SnapshotDados when reading
+  - compareSnapshotWithCurrent uses getSnapshot (another server action) internally — calling server actions from other server actions is allowed within the same 'use server' file
+  - listSnapshots uses `select` (not `include`) to return only metadata columns without the large dados JSON — important for performance in list views
+  - 10-snapshot limit: check `prisma.snapshot.count` before creating; return clear user-facing error message
+---
+
 ## 2026-03-02 - US-018
 - What was implemented: Página de Comparativo VRPO (/comparativo-vrpo) com resumo por situação, filtros e tabela completa
 - Files changed:

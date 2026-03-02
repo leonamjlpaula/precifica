@@ -359,8 +359,8 @@
         "Typecheck passes"
       ],
       "priority": 19,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "GerarSnapshot use case in src/application/usecases/GerarSnapshot.ts: collects all user procedures + calculates custoFixoPorMinuto in parallel, returns SnapshotDados { custoFixoPorMinuto, procedimentos[] }. All 5 server actions in src/application/usecases/snapshotActions.ts: createSnapshot (validates nome, enforces 10-snapshot limit, calls gerarSnapshot, stores dados as JSON + custoFixoPorMinuto float), listSnapshots (select only metadata fields, ordered desc), getSnapshot (full data with dados cast to SnapshotDados), deleteSnapshot (ownership check), compareSnapshotWithCurrent (parallel snapshot+current fetch, Map by codigo for O(1) lookup, returns array with diferenca+diferencaPerc). Typecheck passes."
     },
     {
       "id": "US-020",
