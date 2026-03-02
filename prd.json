@@ -286,8 +286,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 15,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Server component page.tsx fetches procedimento detail + all user materials, redirects if not found. ProcedimentoDetailPage client component: back link to especialidade list, header with código/nome/especialidade badge/customizado badge, 4 financial summary cards (Custo Variável, Custo Fixo, Preço Final, VRPO Referência with diff %), inline tempo editing with Enter/Escape support + router.refresh(), materials table (Nº/Material/Embalagem/Consumo/Divisor/Preço/Custo por Uso) with per-row inline editing (consumo+divisor) and remove button, add material form with search filter + select + consumo + divisor fields, delete procedure button (isCustom only) with confirmation dialog. All mutations use useTransition + router.refresh(). Typecheck passes."
     },
     {
       "id": "US-016",

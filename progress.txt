@@ -1,3 +1,17 @@
+## 2026-03-02 - US-015
+- What was implemented: Página de Detalhes do Procedimento (/procedimentos/[especialidade]/[id]) com resumo financeiro, edição de tempo, tabela de materiais editável e deleção de procedimentos customizados
+- Files changed:
+  - src/app/(dashboard)/procedimentos/[especialidade]/[id]/page.tsx (new — server component; fetches detail + all user materials, redirects if not found)
+  - src/presentation/components/procedimentos/ProcedimentoDetailPage.tsx (new — client component with all interactions)
+  - prd.json (US-015 marked passes: true)
+- **Learnings for future iterations:**
+  - Detail page pattern: server fetches both `getProcedimentoDetail` and `getMateriais` (for the add-material select), passes both to client component
+  - After each mutation, call `router.refresh()` to re-fetch server data and recalculate prices — simpler than maintaining local computed state
+  - `parseConsumoNumerico` is importable in client components (it's not a 'use server' file) — reuse it for client-side cost display
+  - Delete flow: `deleteProcedimento` returns success → `router.push` to list page (not refresh); on error → close dialog + show toast
+  - Inline editing pattern: track `editingPmaId` (null = none editing); render Input instead of text when id matches; Enter/Escape for keyboard UX
+---
+
 ## 2026-03-02 - US-014
 - What was implemented: Server actions para edição de Procedimentos (tempo e materiais)
 - Files changed:
