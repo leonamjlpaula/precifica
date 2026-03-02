@@ -7,6 +7,8 @@ import { calcularPrecoProcedimento } from './calcularPrecoProcedimento'
 import type { ProcedimentoWithMateriais } from '@/application/interfaces/IProcedimentoRepository'
 import type { PrecoCalculado } from './calcularPrecoProcedimento'
 
+export type ActionResult = { success: boolean; error?: string }
+
 const repository = new PrismaProcedimentoRepository()
 
 export type ProcedimentoComPreco = {
@@ -138,4 +140,136 @@ export async function createProcedimentoCustomizado(
       errors: { general: ['Erro ao criar procedimento. Tente novamente.'] },
     }
   }
+}
+
+// ─── getProcedimentoDetail ────────────────────────────────────────────────────
+
+export async function getProcedimentoDetail(
+  id: string,
+  userId: string
+): Promise<ProcedimentoComPreco | null> {
+  const procedimento = await repository.getDetail(id, userId)
+  if (!procedimento) return null
+
+  const custoFixoPorMinuto = await calcularCustoFixoPorMinuto(userId)
+  const vrpoRef = await prisma.vRPOReferencia.findUnique({
+    where: { codigo: procedimento.codigo },
+  })
+
+  return {
+    procedimento,
+    precoCalculado: calcularPrecoProcedimento(procedimento, custoFixoPorMinuto),
+    vrpoReferencia: vrpoRef?.valorReferencia ?? null,
+  }
+}
+
+// ─── updateProcedimentoTempo ──────────────────────────────────────────────────
+
+export async function updateProcedimentoTempo(
+  id: string,
+  userId: string,
+  tempoMinutos: number
+): Promise<ActionResult> {
+  if (tempoMinutos <= 0) return { success: false, error: 'Tempo deve ser maior que zero' }
+
+  const procedimento = await prisma.procedimento.findFirst({ where: { id, userId } })
+  if (!procedimento) return { success: false, error: 'Procedimento não encontrado' }
+
+  await prisma.procedimento.update({
+    where: { id },
+    data: { tempoMinutos },
+  })
+  return { success: true }
+}
+
+// ─── addMaterialToProcedimento ────────────────────────────────────────────────
+
+export async function addMaterialToProcedimento(
+  procedimentoId: string,
+  userId: string,
+  materialId: string,
+  consumo: string,
+  divisor: number
+): Promise<ActionResult> {
+  if (!consumo.trim()) return { success: false, error: 'Consumo é obrigatório' }
+  if (divisor <= 0) return { success: false, error: 'Divisor deve ser maior que zero' }
+
+  const procedimento = await prisma.procedimento.findFirst({ where: { id: procedimentoId, userId } })
+  if (!procedimento) return { success: false, error: 'Procedimento não encontrado' }
+
+  const material = await prisma.material.findFirst({ where: { id: materialId, userId } })
+  if (!material) return { success: false, error: 'Material não encontrado' }
+
+  const count = await prisma.procedimentoMaterial.count({ where: { procedimentoId } })
+
+  await prisma.procedimentoMaterial.create({
+    data: {
+      procedimentoId,
+      materialId,
+      consumo: consumo.trim(),
+      divisor,
+      ordem: count + 1,
+    },
+  })
+  return { success: true }
+}
+
+// ─── removeMaterialFromProcedimento ──────────────────────────────────────────
+
+export async function removeMaterialFromProcedimento(
+  pmaId: string,
+  userId: string
+): Promise<ActionResult> {
+  const pma = await prisma.procedimentoMaterial.findFirst({
+    where: { id: pmaId },
+    include: { procedimento: true },
+  })
+  if (!pma || pma.procedimento.userId !== userId) {
+    return { success: false, error: 'Item não encontrado' }
+  }
+
+  await prisma.procedimentoMaterial.delete({ where: { id: pmaId } })
+  return { success: true }
+}
+
+// ─── updateProcedimentoMaterial ───────────────────────────────────────────────
+
+export async function updateProcedimentoMaterial(
+  pmaId: string,
+  userId: string,
+  consumo: string,
+  divisor: number
+): Promise<ActionResult> {
+  if (!consumo.trim()) return { success: false, error: 'Consumo é obrigatório' }
+  if (divisor <= 0) return { success: false, error: 'Divisor deve ser maior que zero' }
+
+  const pma = await prisma.procedimentoMaterial.findFirst({
+    where: { id: pmaId },
+    include: { procedimento: true },
+  })
+  if (!pma || pma.procedimento.userId !== userId) {
+    return { success: false, error: 'Item não encontrado' }
+  }
+
+  await prisma.procedimentoMaterial.update({
+    where: { id: pmaId },
+    data: { consumo: consumo.trim(), divisor },
+  })
+  return { success: true }
+}
+
+// ─── deleteProcedimento ───────────────────────────────────────────────────────
+
+export async function deleteProcedimento(
+  id: string,
+  userId: string
+): Promise<ActionResult> {
+  const procedimento = await prisma.procedimento.findFirst({ where: { id, userId } })
+  if (!procedimento) return { success: false, error: 'Procedimento não encontrado' }
+  if (!procedimento.isCustom) {
+    return { success: false, error: 'Apenas procedimentos customizados podem ser excluídos' }
+  }
+
+  await prisma.procedimento.delete({ where: { id } })
+  return { success: true }
 }
