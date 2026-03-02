@@ -322,8 +322,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 17,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Server component page.tsx fetches all 4 data sources in parallel (getDashboardStats, getTopProcedimentos, getBottomProcedimentosVRPO, getLastUpdateInfo) and passes to DashboardPage client component. DashboardPage: 3 stat cards (custoFixoPorMinuto with link to /custos-fixos, totalCustosFixosMensais, totalProcedimentos+totalMateriais), yellow stale warning if lastUpdate > 6 months ago, 'Procedimentos Mais Caros' table (nome+especialidade, precoFinal), 'Mais Abaixo da Tabela VRPO' table (nome, precoFinal, vrpoReferencia, diferencaPerc in red), quick action buttons (Editar Custos Fixos, Ver Todos os Procedimentos), disabled 'Salvar Snapshot Atual' placeholder. Typecheck passes."
     },
     {
       "id": "US-018",

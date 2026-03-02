@@ -1,3 +1,16 @@
+## 2026-03-02 - US-017
+- What was implemented: Página de Dashboard (/dashboard) com cards de estatísticas, alertas de dados desatualizados, tabelas de procedimentos e ações rápidas
+- Files changed:
+  - src/app/(dashboard)/dashboard/page.tsx (updated — replaced placeholder with real server component that fetches all dashboard data in parallel)
+  - src/presentation/components/dashboard/DashboardPage.tsx (new — client component with all dashboard UI)
+  - prd.json (US-017 marked passes: true)
+- **Learnings for future iterations:**
+  - Dashboard page follows the same server+client split pattern — server fetches all data in parallel via Promise.all, client renders
+  - stale date comparison: `new Date(lastUpdate) < sixMonthsAgo` — always wrap `lastUpdate` prop with `new Date()` since server-serialized Date becomes a string on the client
+  - 'Salvar Snapshot Atual' button is disabled placeholder (title="Disponível em breve") — US-019 will wire it up
+  - Table rows with link: use `<Link>` inside `<td>` for clickable procedure names, not the whole row
+---
+
 ## 2026-03-02 - US-016
 - What was implemented: Server actions para Dashboard com 4 funções de agregação de métricas
 - Files changed:
