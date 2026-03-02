@@ -9,6 +9,8 @@
 - Run typecheck with: npx tsc --noEmit
 - next-auth@4 stable used (not v5 beta)
 - bcrypt for password hashing (@types/bcrypt in devDependencies)
+- No local PostgreSQL available — use `prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script` to generate migration SQL; run `npx prisma migrate dev` when DB is available
+- Migration files committed to prisma/migrations/ so they're ready for deployment
 
 ---
 
@@ -34,4 +36,20 @@
   - Next.js 15.5.12 is the minimum secure version (15.1.6 has critical vulnerability CVE-2025-66478)
   - next-auth@4 stable works; use "next-auth": "^4.24.11"
   - The prisma/schema.prisma already covers US-002 acceptance criteria
+---
+
+## 2026-03-02 - US-002
+- What was implemented: Schema Prisma com todos os modelos do banco de dados
+- Files changed:
+  - prisma/migrations/20260302000000_init/migration.sql (generated migration SQL via prisma migrate diff)
+  - prisma/migrations/migration_lock.toml (Prisma migration lock file)
+  - prd.json (US-002 marked as passes: true)
+  - .env (created from .env.example — gitignored)
+- **Learnings for future iterations:**
+  - No local PostgreSQL available in this environment — `npx prisma migrate dev` fails with P1001
+  - Use `npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script` to generate migration SQL without a DB connection
+  - `npx prisma generate` works without a DB and generates the Prisma client for TypeScript type checking
+  - `npx prisma validate` confirms schema syntax is valid without DB connection
+  - Migration SQL files should be committed to version control so devs can apply them when they have a DB
+  - When a real DB is available: run `npx prisma migrate dev` to apply migrations, then `npx prisma db seed` to populate data
 ---
