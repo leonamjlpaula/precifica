@@ -128,8 +128,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 7,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Server component layout.tsx uses getServerSession(authOptions) and redirects to /login if no session. DashboardLayout client component at src/presentation/components/layout/DashboardLayout.tsx uses usePathname for active nav highlighting. Desktop: fixed sidebar with 7 nav items + header with user name + logout. Mobile: header + bottom nav with 4 items (Dashboard, Procedimentos, Custos, Mais) where 'Mais' opens an overlay grid with remaining items. signOut called with callbackUrl: '/login'. Placeholder dashboard page at src/app/(dashboard)/dashboard/page.tsx. Typecheck passes."
     },
     {
       "id": "US-008",

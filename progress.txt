@@ -1,4 +1,8 @@
 ## Codebase Patterns
+- Dashboard layout: server component (session check + redirect) wraps a client component (DashboardLayout) that handles nav, sidebar, and mobile bottom nav
+- Active nav state: use `'/' + href.split('/')[1]` vs `'/' + pathname.split('/')[1]` to match base segment (handles nested routes like /procedimentos/diagnostico)
+- Mobile nav "Mais" pattern: fixed bottom overlay grid with remaining nav items; close on backdrop click or item click
+- getServerSession(authOptions) in server components for session access; signOut({ callbackUrl: '/login' }) in client components for logout
 - useActionState from React 19 (not useFormState) for server action form state in client components
 - Auth pages go in src/app/(auth)/ route group
 - Server actions go in src/application/usecases/ as 'use server' files
@@ -28,6 +32,22 @@
 - seed.ts uses its own PrismaClient directly (not the singleton from db.ts) to avoid module resolution issues in ts-node
 - prisma/seed.ts does NOT import from src/lib/* to avoid @/ alias resolution issues in ts-node CommonJS mode
 
+---
+
+## 2026-03-02 - US-007
+- What was implemented: Layout da área autenticada com sidebar desktop e navegação mobile
+- Files changed:
+  - src/presentation/components/layout/DashboardLayout.tsx (new — client component with sidebar, header, mobile bottom nav, active state, logout)
+  - src/app/(dashboard)/layout.tsx (new — server component with getServerSession, redirect to /login if no session, renders DashboardLayout)
+  - src/app/(dashboard)/dashboard/page.tsx (new — placeholder dashboard page for US-017 to expand)
+  - prd.json (US-007 marked passes: true)
+- **Learnings for future iterations:**
+  - Dashboard layout is split: server layout.tsx for session check + DashboardLayout client component for interactivity
+  - Active nav detection: compare first path segments (`'/' + href.split('/')[1]` === `'/' + pathname.split('/')[1]`) to handle nested routes correctly
+  - Mobile "Mais" button opens an overlay grid (fixed positioning, z-index above bottom nav) with backdrop close
+  - Procedimentos sidebar link points to `/procedimentos/diagnostico` (first especialidade) as default destination
+  - Use `shrink-0` on sidebar to prevent it from collapsing; use `min-w-0` on content area to prevent overflow
+  - Bottom nav height: ~56px — add `pb-20` (80px) to main content on mobile to prevent content from being hidden behind it
 ---
 
 ## 2026-03-02 - US-006
