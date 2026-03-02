@@ -301,8 +301,8 @@
         "Typecheck passes"
       ],
       "priority": 16,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "All 4 server actions in src/application/usecases/dashboardActions.ts: getDashboardStats (fetches config+counts in parallel, computes custoFixoPorMinuto via CustoFixoPorMinuto.calculate + totalCustosFixosMensais = custoFixoPorMinuto * minutosUteis), getTopProcedimentos (fetches all user procedures + custoFixoPorMinuto in parallel, sorts by precoFinal desc, returns top limit), getBottomProcedimentosVRPO (fetches all procedures + custoFixoPorMinuto in parallel + VRPO refs, filters to those with VRPO, computes diferencaPerc, sorts ascending to get most negative first), getLastUpdateInfo (returns CustoFixoConfig.updatedAt). Typecheck passes."
     },
     {
       "id": "US-017",

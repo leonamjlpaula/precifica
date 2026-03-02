@@ -1,3 +1,16 @@
+## 2026-03-02 - US-016
+- What was implemented: Server actions para Dashboard com 4 funções de agregação de métricas
+- Files changed:
+  - src/application/usecases/dashboardActions.ts (new — getDashboardStats, getTopProcedimentos, getBottomProcedimentosVRPO, getLastUpdateInfo)
+  - prd.json (US-016 marked passes: true)
+- **Learnings for future iterations:**
+  - getDashboardStats avoids double config query: uses CustoFixoPorMinuto.calculate directly (not the use case) since config is already fetched; computes totalCustosFixosMensais = custoFixoPorMinuto × (diasUteis × horasTrabalho × 60)
+  - getAllProcedimentos (private helper): fetches all user procedures across all specialties at once — used by getTopProcedimentos and getBottomProcedimentosVRPO
+  - getBottomProcedimentosVRPO: filters to procedures with VRPO references only (others can't be compared), sorts ascending by diferencaPerc to get most negative first
+  - getTopProcedimentos accepts order: 'highest' | 'lowest' for flexibility (default: 'highest')
+  - Parallel fetching pattern: Promise.all([getAllProcedimentos(userId), calcularCustoFixoPorMinuto(userId)]) for efficiency
+---
+
 ## 2026-03-02 - US-015
 - What was implemented: Página de Detalhes do Procedimento (/procedimentos/[especialidade]/[id]) com resumo financeiro, edição de tempo, tabela de materiais editável e deleção de procedimentos customizados
 - Files changed:
