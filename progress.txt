@@ -32,6 +32,28 @@
 - seed.ts uses its own PrismaClient directly (not the singleton from db.ts) to avoid module resolution issues in ts-node
 - prisma/seed.ts does NOT import from src/lib/* to avoid @/ alias resolution issues in ts-node CommonJS mode
 
+- Repository pattern: interfaces in src/application/interfaces/, implementations in src/infrastructure/repositories/
+- Value objects in src/domain/value-objects/ with static calculation methods (no DB calls inside)
+- Use cases in src/application/usecases/ — non-server-action use cases are plain async functions (no 'use server')
+- Server actions grouped by domain in single 'use server' file (e.g., custoFixoActions.ts with getCustoFixo, saveCustoFixo, addItem, deleteItem)
+
+---
+
+## 2026-03-02 - US-008
+- What was implemented: Server actions e lógica de domínio para Custos Fixos
+- Files changed:
+  - src/application/interfaces/ICustoFixoRepository.ts (new — interface with getByUserId and upsert)
+  - src/infrastructure/repositories/PrismaCustoFixoRepository.ts (new — Prisma implementation; upsert uses delete+recreate strategy for items)
+  - src/domain/value-objects/CustoFixoPorMinuto.ts (new — static calculate(config, items) method)
+  - src/application/usecases/calcularCustoFixoPorMinuto.ts (new — use case fetching config from DB and computing value)
+  - src/application/usecases/custoFixoActions.ts (new — 'use server' file with getCustoFixoConfig, saveCustoFixoConfig, addCustoFixoItem, deleteCustoFixoItem)
+  - prd.json (US-008 marked passes: true)
+- **Learnings for future iterations:**
+  - CustoFixoPorMinuto formula: custoFixoBase (totalItens/minutosUteis) + depreciacao (investimento/(anos*12*minutosUteis)) + remuneracao (salario*(1+%s)/minutosUteis) + taxaRetorno (investimento*taxa%/(anosRetorno*12*minutosUteis))
+  - Repository upsert strategy: delete all items then recreate — simpler than tracking individual item changes by ID
+  - Non-'use server' use cases (like calcularCustoFixoPorMinuto) are plain async functions — only files directly called from client components/Server Components need 'use server'
+  - Server actions in custoFixoActions.ts accept userId as a parameter (caller must pass session.user.id) — no session fetching inside actions
+  - Export result types from server action files so pages can type their state properly
 ---
 
 ## 2026-03-02 - US-007

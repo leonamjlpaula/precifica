@@ -147,8 +147,8 @@
         "Typecheck passes"
       ],
       "priority": 8,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "ICustoFixoRepository interface in src/application/interfaces/ICustoFixoRepository.ts. PrismaCustoFixoRepository in src/infrastructure/repositories/ (upsert strategy: delete+recreate items). CustoFixoPorMinuto value object in src/domain/value-objects/CustoFixoPorMinuto.ts with static calculate(config, items) method (formula: custoFixoBase + depreciacao + remuneracao + taxaRetorno per minute). calcularCustoFixoPorMinuto use case in src/application/usecases/. All 4 server actions (getCustoFixoConfig, saveCustoFixoConfig, addCustoFixoItem, deleteCustoFixoItem) in src/application/usecases/custoFixoActions.ts. Typecheck passes."
     },
     {
       "id": "US-009",
