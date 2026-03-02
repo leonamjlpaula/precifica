@@ -15,6 +15,12 @@ export type ProcedimentoComPreco = {
   vrpoReferencia: number | null
 }
 
+export type CreateProcedimentoResult = {
+  success: boolean
+  procedimento?: ProcedimentoWithMateriais
+  errors?: Record<string, string[]>
+}
+
 // ─── getProcedimentosByEspecialidade ──────────────────────────────────────────
 
 export async function getProcedimentosByEspecialidade(
@@ -82,4 +88,54 @@ export async function searchProcedimentos(
     precoCalculado: calcularPrecoProcedimento(procedimento, custoFixoPorMinuto),
     vrpoReferencia: vrpoMap.get(procedimento.codigo) ?? null,
   }))
+}
+
+// ─── createProcedimentoCustomizado ────────────────────────────────────────────
+
+export async function createProcedimentoCustomizado(
+  userId: string,
+  especialidadeId: string,
+  codigo: string,
+  nome: string,
+  tempoMinutos: number
+): Promise<CreateProcedimentoResult> {
+  if (!codigo.trim()) return { success: false, errors: { codigo: ['Código é obrigatório'] } }
+  if (!nome.trim()) return { success: false, errors: { nome: ['Nome é obrigatório'] } }
+  if (tempoMinutos <= 0)
+    return { success: false, errors: { tempo: ['Tempo deve ser maior que zero'] } }
+
+  try {
+    const procedimento = (await prisma.procedimento.create({
+      data: {
+        userId,
+        especialidadeId,
+        codigo: codigo.trim(),
+        nome: nome.trim(),
+        tempoMinutos,
+        isCustom: true,
+      },
+      include: {
+        especialidade: true,
+        materiais: {
+          include: { material: true },
+          orderBy: { ordem: 'asc' },
+        },
+      },
+    })) as ProcedimentoWithMateriais
+
+    return { success: true, procedimento }
+  } catch (e: unknown) {
+    if (
+      typeof e === 'object' &&
+      e !== null &&
+      'code' in e &&
+      (e as { code: string }).code === 'P2002'
+    ) {
+      return { success: false, errors: { codigo: ['Código já existe para este usuário'] } }
+    }
+    return {
+      success: false,
+      errors: { general: ['Erro ao criar procedimento. Tente novamente.'] },
+    }
+  }
 }
