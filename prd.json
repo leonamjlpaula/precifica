@@ -265,8 +265,8 @@
         "Typecheck passes"
       ],
       "priority": 14,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "All 7 server actions added to procedimentoActions.ts: getProcedimentoDetail (uses repository.getDetail + calcularCustoFixoPorMinuto + VRPO ref lookup), updateProcedimentoTempo (validates > 0, checks ownership), addMaterialToProcedimento (validates ownership of both procedure and material, sets ordem = count+1), removeMaterialFromProcedimento (ownership via include procedimento join), updateProcedimentoMaterial (same ownership check), createProcedimentoCustomizado (already existed from US-013), deleteProcedimento (only isCustom: true). ActionResult type exported. Typecheck passes."
     },
     {
       "id": "US-015",

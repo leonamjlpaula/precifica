@@ -1,3 +1,15 @@
+## 2026-03-02 - US-014
+- What was implemented: Server actions para edição de Procedimentos (tempo e materiais)
+- Files changed:
+  - src/application/usecases/procedimentoActions.ts (updated — added 6 new server actions + ActionResult type)
+  - prd.json (US-014 marked passes: true)
+- **Learnings for future iterations:**
+  - ProcedimentoMaterial ownership validation: use `include: { procedimento: true }` then check `pma.procedimento.userId === userId` — no need for separate lookup
+  - addMaterialToProcedimento ordem: use `prisma.procedimentoMaterial.count({ where: { procedimentoId } })` then count+1 for next position
+  - ActionResult type `{ success: boolean; error?: string }` exported from procedimentoActions.ts for reuse in UI components
+  - deleteProcedimento guards against non-custom deletion with `isCustom` check before deleting — returns clear error message
+---
+
 ## 2026-03-02 - US-013
 - What was implemented: Página de Listagem de Procedimentos (/procedimentos/[especialidade]) com navegação por especialidades, tabela com cálculo de preço e comparativo VRPO
 - Files changed:
