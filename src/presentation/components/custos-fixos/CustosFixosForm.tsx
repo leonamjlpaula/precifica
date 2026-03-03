@@ -195,13 +195,11 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
           <CardTitle className="text-base">Seção 1 — Custos Mensais</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="divide-y divide-border">
+          <div className="divide-y">
             {items.map((item, index) => (
               <div
                 key={item.id ?? `new-${index}`}
-                className={`flex items-center gap-3 px-6 py-3 ${
-                  index % 2 === 0 ? 'bg-background' : 'bg-muted/40'
-                }`}
+                className="flex items-center gap-3 px-6 py-3 hover:bg-muted/30 transition-colors"
               >
                 <span className="flex-1 text-sm leading-snug">{item.nome}</span>
                 <div className="relative w-36 shrink-0">
