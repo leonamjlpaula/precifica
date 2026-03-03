@@ -395,8 +395,8 @@
         "Typecheck passes"
       ],
       "priority": 21,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "PdfExportService in src/infrastructure/services/PdfExportService.tsx using @react-pdf/renderer v4 renderToBuffer. Document component (PrecificaDocument) renders A4 landscape with header (title, userName, date) and table (Código/Procedimento/Tempo/Custo Variável/Preço Calculado/VRPO Ref.). API route at src/app/api/export/pdf/route.ts: GET handler verifies auth via getServerSession, parses especialidade (all|slug) and tipo (all|custom) query params, fetches procedures+custoFixoPorMinuto in parallel, batch fetches VRPO refs, calculates prices, generates PDF, returns Response with Content-Type: application/pdf and Content-Disposition filename: precifica-[nome-slug]-[YYYY-MM-DD].pdf. Buffer converted to Uint8Array for Response body. Added serverExternalPackages: ['@react-pdf/renderer'] to next.config.ts to prevent bundling issues. Typecheck passes."
     },
     {
       "id": "US-022",
@@ -412,8 +412,8 @@
         "Typecheck passes"
       ],
       "priority": 22,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "ExcelExportService in src/infrastructure/services/ExcelExportService.ts using xlsx (SheetJS v0.18.5). ProcedimentoExportExcel type includes especialidade field. generate() method builds AOA worksheet with 8 columns (Código/Procedimento/Especialidade/Tempo/Custo Variável/Preço Calculado/VRPO Ref./Diferença %), bold headers via cell.s.font.bold, auto-width columns via !cols wch, second 'Informações' sheet with metadata. API route at src/app/api/export/excel/route.ts: same auth/filter/data-fetch pattern as PDF route; returns Response with Content-Type application/vnd.openxmlformats-officedocument.spreadsheetml.sheet and Content-Disposition filename precifica-[nome-slug]-[YYYY-MM-DD].xlsx. Typecheck passes."
     },
     {
       "id": "US-023",
