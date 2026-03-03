@@ -194,88 +194,96 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
         <CardHeader>
           <CardTitle className="text-base">Seção 1 — Custos Mensais</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          {items.map((item, index) => (
-            <div key={item.id ?? `new-${index}`} className="flex items-center gap-3">
-              <span className="flex-1 text-sm">{item.nome}</span>
-              <div className="relative w-36">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                  R$
-                </span>
-                <Input
-                  type="number"
-                  className="pl-8"
-                  value={item.valor}
-                  onChange={(e) => updateItemValor(index, parseFloat(e.target.value) || 0)}
-                  min={0}
-                  step={0.01}
-                />
-              </div>
-              {item.isCustom && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => deleteItem(index)}
-                  className="text-destructive hover:text-destructive px-2"
-                >
-                  ✕
-                </Button>
-              )}
-            </div>
-          ))}
-
-          {/* Add custom item */}
-          {showAddForm ? (
-            <div className="border rounded-lg p-4 space-y-3 mt-4">
-              <p className="text-sm font-medium">Novo item customizado</p>
-              <div className="flex gap-3">
-                <div className="flex-1 space-y-1">
-                  <Label className="text-xs">Nome</Label>
-                  <Input
-                    placeholder="Ex: Contador"
-                    value={newItemNome}
-                    onChange={(e) => setNewItemNome(e.target.value)}
-                  />
-                </div>
-                <div className="w-36 space-y-1">
-                  <Label className="text-xs">Valor (R$)</Label>
+        <CardContent className="p-0">
+          <div className="divide-y divide-border">
+            {items.map((item, index) => (
+              <div
+                key={item.id ?? `new-${index}`}
+                className={`flex items-center gap-3 px-6 py-3 ${
+                  index % 2 === 0 ? 'bg-background' : 'bg-muted/40'
+                }`}
+              >
+                <span className="flex-1 text-sm leading-snug">{item.nome}</span>
+                <div className="relative w-36 shrink-0">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">
+                    R$
+                  </span>
                   <Input
                     type="number"
-                    placeholder="0,00"
-                    value={newItemValor}
-                    onChange={(e) => setNewItemValor(e.target.value)}
+                    className="pl-8"
+                    value={item.valor}
+                    onChange={(e) => updateItemValor(index, parseFloat(e.target.value) || 0)}
                     min={0}
                     step={0.01}
                   />
                 </div>
+                {item.isCustom && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => deleteItem(index)}
+                    className="text-destructive hover:text-destructive px-2 shrink-0"
+                  >
+                    ✕
+                  </Button>
+                )}
               </div>
-              <div className="flex gap-2">
-                <Button size="sm" onClick={addItem}>
-                  Confirmar
-                </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => {
-                    setShowAddForm(false)
-                    setNewItemNome('')
-                    setNewItemValor('')
-                  }}
-                >
-                  Cancelar
-                </Button>
+            ))}
+          </div>
+
+          {/* Add custom item */}
+          <div className="px-6 pt-4 pb-5">
+            {showAddForm ? (
+              <div className="border rounded-lg p-4 space-y-3">
+                <p className="text-sm font-medium">Novo item customizado</p>
+                <div className="flex gap-3">
+                  <div className="flex-1 space-y-1">
+                    <Label className="text-xs">Nome</Label>
+                    <Input
+                      placeholder="Ex: Contador"
+                      value={newItemNome}
+                      onChange={(e) => setNewItemNome(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-36 space-y-1">
+                    <Label className="text-xs">Valor (R$)</Label>
+                    <Input
+                      type="number"
+                      placeholder="0,00"
+                      value={newItemValor}
+                      onChange={(e) => setNewItemValor(e.target.value)}
+                      min={0}
+                      step={0.01}
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" onClick={addItem}>
+                    Confirmar
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      setShowAddForm(false)
+                      setNewItemNome('')
+                      setNewItemValor('')
+                    }}
+                  >
+                    Cancelar
+                  </Button>
+                </div>
               </div>
-            </div>
-          ) : (
-            <Button
-              variant="outline"
-              size="sm"
-              className="mt-2"
-              onClick={() => setShowAddForm(true)}
-            >
-              + Adicionar item
-            </Button>
-          )}
+            ) : (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowAddForm(true)}
+              >
+                + Adicionar item
+              </Button>
+            )}
+          </div>
         </CardContent>
       </Card>
 
