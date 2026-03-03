@@ -431,8 +431,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 23,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "getExportData server action in src/application/usecases/exportActions.ts: fetches all user procedures + custoFixoPorMinuto + especialidades in parallel, computes custoVariavel/precoFinal/vrpoReferencia for each, returns ExportPreviewItem[] with isCustom + especialidadeSlug for client-side filtering. Page at src/app/(dashboard)/exportar/page.tsx. ExportarPage client component at src/presentation/components/exportar/ExportarPage.tsx: Especialidade select (Todas + 11) and Tipo select (Todos|standard|custom); client-side filter via useMemo; preview table with 20-row pagination (ChevronLeft/Right); Baixar PDF/Excel buttons use useTransition + fetch→blob download with Content-Disposition filename extraction; loading state shows 'Gerando...' with animated icon; disabled when filteredItems.length === 0. Updated PDF and Excel API routes to handle tipo='standard' (sets isCustom=false). Typecheck passes."
     },
     {
       "id": "US-024",

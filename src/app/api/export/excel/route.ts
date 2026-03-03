@@ -35,6 +35,8 @@ export async function GET(request: NextRequest) {
 
   if (tipo === 'custom') {
     where.isCustom = true
+  } else if (tipo === 'standard') {
+    where.isCustom = false
   }
 
   // Fetch procedures and custo fixo por minuto in parallel
