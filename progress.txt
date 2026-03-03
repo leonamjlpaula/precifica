@@ -1,3 +1,35 @@
+## 2026-03-02 - US-024
+- What was implemented: Wizard de Onboarding para novos usuários — 3 passos sequenciais no dashboard, progress bar, navegação Anterior/Próximo/Concluir, Pular configuração
+- Files changed:
+  - src/application/usecases/onboardingActions.ts (new — updateOnboardingCompleted server action; updates user.onboardingCompleted = true)
+  - src/presentation/components/layout/OnboardingWizard.tsx (new — client component; 3 steps with title/description/link button, progress bar, Anterior/Próximo/Concluir nav, Pular on all steps; calls updateOnboardingCompleted + setIsVisible(false) + router.refresh() on complete/skip)
+  - src/app/(dashboard)/dashboard/page.tsx (updated — added prisma.user.findUnique to fetch onboardingCompleted in parallel with other data; passes onboardingCompleted prop to DashboardPage)
+  - src/presentation/components/dashboard/DashboardPage.tsx (updated — added onboardingCompleted prop; renders OnboardingWizard when !onboardingCompleted)
+  - prd.json (US-024 marked passes: true)
+- **Learnings for future iterations:**
+  - OnboardingWizard uses local isVisible state to hide itself after completion/skip without waiting for router.refresh() to complete — avoids flicker
+  - Parallel data fetch in page.tsx: add prisma.user.findUnique to the Promise.all array alongside existing server actions — keep all DB calls together
+  - Wizard progress: track currentStep (1-3) in local state — no server state needed for step navigation since it's ephemeral per session
+  - On skip/complete: call server action + setIsVisible(false) + router.refresh() (refresh updates server-rendered onboardingCompleted so wizard stays hidden on future navigations)
+---
+
+## 2026-03-02 - US-023
+- What was implemented: Página de Exportação com UI de filtros (/exportar) — filtros de especialidade e tipo, prévia com paginação, botões de download PDF e Excel com loading state
+- Files changed:
+  - src/application/usecases/exportActions.ts (new — getExportData server action; fetches all user procedures + custoFixoPorMinuto + especialidades in parallel; returns ExportPreviewItem[] with isCustom+especialidadeSlug for client-side filtering)
+  - src/app/(dashboard)/exportar/page.tsx (new — server component; fetches export data + passes to ExportarPage)
+  - src/presentation/components/exportar/ExportarPage.tsx (new — client component with Especialidade/Tipo selects, useMemo filter, 20-row paginated preview table, Baixar PDF/Excel buttons using useTransition+fetch→blob download)
+  - src/app/api/export/pdf/route.ts (updated — added handling for tipo='standard' setting isCustom=false)
+  - src/app/api/export/excel/route.ts (updated — added handling for tipo='standard' setting isCustom=false)
+  - prd.json (US-023 marked passes: true)
+- **Learnings for future iterations:**
+  - Download via fetch→blob pattern: `fetch(url)` → `response.blob()` → `URL.createObjectURL(blob)` → programmatic anchor click — handles auth cookies automatically (unlike window.open which can lose session in some browsers)
+  - useTransition for async downloads: `startTransition(async () => { await fetch... })` gives isPending loading state without needing extra useState
+  - Content-Disposition filename extraction: `response.headers.get('Content-Disposition').match(/filename="([^"]+)"/)` — reuse the server-generated filename
+  - Client-side filter + pagination: useMemo for filtered items, then slice for page — instant updates, no extra server calls
+  - Disable download buttons when filteredItems.length === 0 — prevents empty file downloads
+---
+
 ## 2026-03-02 - US-022
 - What was implemented: ExcelExportService + API route GET /api/export/excel para exportação em XLSX
 - Files changed:

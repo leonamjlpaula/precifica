@@ -450,8 +450,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 24,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "OnboardingWizard client component at src/presentation/components/layout/OnboardingWizard.tsx. Server action updateOnboardingCompleted(userId) in src/application/usecases/onboardingActions.ts sets user.onboardingCompleted = true. Dashboard page fetches user.onboardingCompleted via prisma.user.findUnique (in parallel with other data). DashboardPage receives onboardingCompleted prop, renders OnboardingWizard when false. Wizard: 3 steps (Configure Custos Fixos → /custos-fixos, Atualize Materiais → /materiais, Ver Procedimentos → /procedimentos/diagnostico), progress bar, Anterior/Próximo/Concluir navigation, 'Pular configuração' on all steps. On Concluir (step 3) or Pular: calls updateOnboardingCompleted + sets isVisible=false + router.refresh(). Wizard defaults to hidden (isVisible=false) when onboardingCompleted=true. Typecheck passes."
     }
   ]
 }
