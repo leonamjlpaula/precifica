@@ -14,6 +14,7 @@ import {
   Download,
   LogOut,
   MoreHorizontal,
+  BookOpen,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/presentation/components/ui/button'
@@ -26,6 +27,7 @@ const navItems = [
   { label: 'Comparativo VRPO', href: '/comparativo-vrpo', icon: BarChart2 },
   { label: 'Histórico', href: '/historico', icon: Clock },
   { label: 'Exportar', href: '/exportar', icon: Download },
+  { label: 'Primeiros Passos', href: '/primeiros-passos', icon: BookOpen },
 ]
 
 const mobileMainItems = [
@@ -39,6 +41,7 @@ const mobileMoreItems = [
   { label: 'Comparativo VRPO', href: '/comparativo-vrpo', icon: BarChart2 },
   { label: 'Histórico', href: '/historico', icon: Clock },
   { label: 'Exportar', href: '/exportar', icon: Download },
+  { label: 'Primeiros Passos', href: '/primeiros-passos', icon: BookOpen },
 ]
 
 interface DashboardLayoutProps {
