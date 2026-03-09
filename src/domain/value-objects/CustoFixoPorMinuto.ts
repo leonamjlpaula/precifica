@@ -1,5 +1,14 @@
 import type { CustoFixoConfig, CustoFixoItem } from '@prisma/client'
 
+export type BreakEvenMensal = {
+  /** Custos do consultório sem pró-labore (itens + depreciação + retorno) */
+  semProLabore: number
+  /** Custos totais com pró-labore — faturar acima disso é lucro acima do esperado */
+  comProLabore: number
+  /** Valor mensal do pró-labore (salário + encargos) */
+  proLaboreMensal: number
+}
+
 export class CustoFixoPorMinuto {
   /**
    * Calculate the fixed cost per minute using the VRPO methodology.
@@ -15,6 +24,10 @@ export class CustoFixoPorMinuto {
    *   result = custoFixoBase + depreciacao + remuneracao + taxaRetorno
    */
   static calculate(config: CustoFixoConfig, items: CustoFixoItem[]): number {
+    return this.calculateBreakdown(config, items).porMinuto
+  }
+
+  static calculateBreakdown(config: CustoFixoConfig, items: CustoFixoItem[]): BreakEvenMensal & { porMinuto: number } {
     const {
       diasUteis,
       horasTrabalho,
@@ -29,7 +42,9 @@ export class CustoFixoPorMinuto {
     } = config
 
     const minutosUteis = diasUteis * horasTrabalho * 60
-    if (minutosUteis <= 0) return 0
+    if (minutosUteis <= 0) {
+      return { semProLabore: 0, comProLabore: 0, proLaboreMensal: 0, porMinuto: 0 }
+    }
 
     // 1. Fixed costs base (monthly items)
     const totalItens = items.reduce((sum, item) => sum + item.valor, 0)
@@ -40,14 +55,22 @@ export class CustoFixoPorMinuto {
     const depreciacao = investimentoEquipamentos / (anosDepreciacao * minutosAnuais)
 
     // 3. Professional remuneration (salary + social charges)
-    const remuneracaoMensal =
+    const proLaboreMensal =
       salarioBase * (1 + percFundoReserva / 100 + percInsalubridade / 100 + percImprevistos / 100)
-    const remuneracao = remuneracaoMensal / minutosUteis
+    const remuneracao = proLaboreMensal / minutosUteis
 
     // 4. Return on investment
     const taxaRetorno =
       (investimentoEquipamentos * (taxaRetornoPerc / 100)) / (anosRetorno * minutosAnuais)
 
-    return custoFixoBase + depreciacao + remuneracao + taxaRetorno
+    const porMinutoSemProLabore = custoFixoBase + depreciacao + taxaRetorno
+    const porMinuto = porMinutoSemProLabore + remuneracao
+
+    return {
+      semProLabore: porMinutoSemProLabore * minutosUteis,
+      comProLabore: porMinuto * minutosUteis,
+      proLaboreMensal,
+      porMinuto,
+    }
   }
 }

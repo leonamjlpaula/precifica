@@ -13,6 +13,11 @@ export type DashboardStats = {
   totalCustosFixosMensais: number
   totalProcedimentos: number
   totalMateriais: number
+  breakEven: {
+    semProLabore: number
+    comProLabore: number
+    proLaboreMensal: number
+  }
 }
 
 export type TopProcedimento = {
@@ -65,11 +70,17 @@ export async function getDashboardStats(userId: string): Promise<DashboardStats>
 
   let custoFixoPorMinuto = 0
   let totalCustosFixosMensais = 0
+  let breakEven = { semProLabore: 0, comProLabore: 0, proLaboreMensal: 0 }
 
   if (config) {
-    custoFixoPorMinuto = CustoFixoPorMinuto.calculate(config, config.items)
-    const minutosUteis = config.diasUteis * config.horasTrabalho * 60
-    totalCustosFixosMensais = custoFixoPorMinuto * minutosUteis
+    const breakdown = CustoFixoPorMinuto.calculateBreakdown(config, config.items)
+    custoFixoPorMinuto = breakdown.porMinuto
+    totalCustosFixosMensais = breakdown.comProLabore
+    breakEven = {
+      semProLabore: breakdown.semProLabore,
+      comProLabore: breakdown.comProLabore,
+      proLaboreMensal: breakdown.proLaboreMensal,
+    }
   }
 
   return {
@@ -77,6 +88,7 @@ export async function getDashboardStats(userId: string): Promise<DashboardStats>
     totalCustosFixosMensais,
     totalProcedimentos,
     totalMateriais,
+    breakEven,
   }
 }
 

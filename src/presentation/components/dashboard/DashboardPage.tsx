@@ -191,6 +191,41 @@ export function DashboardPage({ userId, stats, topProcedimentos, bottomVRPO, las
         </Card>
       </div>
 
+      {/* Breakeven card */}
+      {stats.breakEven.comProLabore > 0 && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Pontos de Equilíbrio Mensal</CardTitle>
+            <CardDescription>
+              Estimativa com ocupação 100% — quanto você precisa faturar para cobrir cada nível de custo.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between rounded-lg border border-orange-200 bg-orange-50 px-4 py-3">
+              <div>
+                <p className="text-sm font-medium text-orange-900">Para pagar os custos do consultório</p>
+                <p className="text-xs text-orange-700 mt-0.5">Itens fixos + depreciação + retorno (sem pró-labore)</p>
+              </div>
+              <span className="text-lg font-bold tabular-nums text-orange-900 ml-4 shrink-0">
+                {formatBRL(stats.breakEven.semProLabore)}<span className="text-sm font-normal">/mês</span>
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg border border-green-200 bg-green-50 px-4 py-3">
+              <div>
+                <p className="text-sm font-medium text-green-900">Para se pagar (custos + pró-labore)</p>
+                <p className="text-xs text-green-700 mt-0.5">
+                  Inclui pró-labore de {formatBRL(stats.breakEven.proLaboreMensal)}/mês — acima disso é lucro
+                </p>
+              </div>
+              <span className="text-lg font-bold tabular-nums text-green-900 ml-4 shrink-0">
+                {formatBRL(stats.breakEven.comProLabore)}<span className="text-sm font-normal">/mês</span>
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Tables section */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Top procedures */}
