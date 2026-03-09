@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/presentation/components/ui/button'
 import { Input } from '@/presentation/components/ui/input'
+import { PasswordInput } from '@/presentation/components/ui/password-input'
 import { Label } from '@/presentation/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/presentation/components/ui/card'
 import { createUser, type CreateUserState } from '@/application/usecases/createUser'
@@ -64,10 +65,9 @@ export default function CadastroPage() {
 
             <div className="space-y-2">
               <Label htmlFor="senha">Senha</Label>
-              <Input
+              <PasswordInput
                 id="senha"
                 name="senha"
-                type="password"
                 placeholder="Mínimo 8 caracteres"
                 required
                 disabled={isPending}
@@ -79,10 +79,9 @@ export default function CadastroPage() {
 
             <div className="space-y-2">
               <Label htmlFor="confirmSenha">Confirmar senha</Label>
-              <Input
+              <PasswordInput
                 id="confirmSenha"
                 name="confirmSenha"
-                type="password"
                 placeholder="Repita a senha"
                 required
                 disabled={isPending}

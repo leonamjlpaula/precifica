@@ -6,6 +6,7 @@ import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '@/presentation/components/ui/button'
 import { Input } from '@/presentation/components/ui/input'
+import { PasswordInput } from '@/presentation/components/ui/password-input'
 import { Label } from '@/presentation/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/presentation/components/ui/card'
 
@@ -69,10 +70,9 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <Label htmlFor="password">Senha</Label>
-              <Input
+              <PasswordInput
                 id="password"
                 name="password"
-                type="password"
                 placeholder="Sua senha"
                 required
                 disabled={isPending}
