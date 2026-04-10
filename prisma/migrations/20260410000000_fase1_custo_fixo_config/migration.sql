@@ -1,0 +1,5 @@
+-- AlterTable: add Fase 1 fields to CustoFixoConfig
+ALTER TABLE "CustoFixoConfig" ADD COLUMN "numeroCadeiras" INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE "CustoFixoConfig" ADD COLUMN "percOciosidade" DOUBLE PRECISION NOT NULL DEFAULT 0;
+ALTER TABLE "CustoFixoConfig" ADD COLUMN "percImpostos" DOUBLE PRECISION NOT NULL DEFAULT 8;
+ALTER TABLE "CustoFixoConfig" ADD COLUMN "percTaxaCartao" DOUBLE PRECISION NOT NULL DEFAULT 4;

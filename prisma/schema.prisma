@@ -49,6 +49,10 @@ model CustoFixoConfig {
   percImprevistos        Float           @default(20)
   taxaRetornoPerc        Float           @default(3)
   anosRetorno            Int             @default(3)
+  numeroCadeiras         Int             @default(1)
+  percOciosidade         Float           @default(0)
+  percImpostos           Float           @default(8)
+  percTaxaCartao         Float           @default(4)
   updatedAt              DateTime        @updatedAt
   items                  CustoFixoItem[]
 }

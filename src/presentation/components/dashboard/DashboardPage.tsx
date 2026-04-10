@@ -144,6 +144,17 @@ export function DashboardPage({ userId, stats, topProcedimentos, bottomVRPO, las
         </div>
       )}
 
+      {/* Ociosidade nudge */}
+      {stats.ociosidadeNaoConfigurada && (
+        <div className="rounded-md border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+          💡 Sua taxa de ociosidade está em 0%. Clínicas típicas ficam com 20% do tempo ocioso — configurar
+          esse valor torna o custo por minuto mais realista.{' '}
+          <Link href="/custos-fixos" className="font-medium underline underline-offset-2">
+            Configurar agora
+          </Link>
+        </div>
+      )}
+
       {/* Stats cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Link href="/custos-fixos" className="block">

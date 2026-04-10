@@ -13,6 +13,10 @@ export type UpsertCustoFixoData = {
   percImprevistos?: number
   taxaRetornoPerc?: number
   anosRetorno?: number
+  numeroCadeiras?: number
+  percOciosidade?: number
+  percImpostos?: number
+  percTaxaCartao?: number
   items?: Array<{
     id?: string
     nome: string

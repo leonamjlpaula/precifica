@@ -18,6 +18,7 @@ export type DashboardStats = {
     comProLabore: number
     proLaboreMensal: number
   }
+  ociosidadeNaoConfigurada: boolean
 }
 
 export type TopProcedimento = {
@@ -89,6 +90,7 @@ export async function getDashboardStats(userId: string): Promise<DashboardStats>
     totalProcedimentos,
     totalMateriais,
     breakEven,
+    ociosidadeNaoConfigurada: config?.percOciosidade === 0,
   }
 }
 

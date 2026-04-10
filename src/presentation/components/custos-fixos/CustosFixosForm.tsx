@@ -20,6 +20,10 @@ type ConfigState = {
   percImprevistos: number
   taxaRetornoPerc: number
   anosRetorno: number
+  numeroCadeiras: number
+  percOciosidade: number
+  percImpostos: number
+  percTaxaCartao: number
 }
 
 type ItemState = {
@@ -31,11 +35,12 @@ type ItemState = {
 }
 
 function calcCustoFixoPorMinuto(config: ConfigState, items: ItemState[]): number {
-  const minutosUteis = config.diasUteis * config.horasTrabalho * 60
+  const minutosUteis = config.diasUteis * config.horasTrabalho * 60 * (1 - config.percOciosidade / 100)
   if (minutosUteis <= 0) return 0
+  const cadeiras = Math.max(1, config.numeroCadeiras)
   const totalItens = items.reduce((sum, item) => sum + item.valor, 0)
-  const custoFixoBase = totalItens / minutosUteis
-  const minutosAnuais = minutosUteis * 12
+  const custoFixoBase = totalItens / (minutosUteis * cadeiras)
+  const minutosAnuais = minutosUteis * 11
   const depreciacao = config.investimentoEquipamentos / (config.anosDepreciacao * minutosAnuais)
   const remuneracaoMensal =
     config.salarioBase *
@@ -72,6 +77,10 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
     percImprevistos: initialConfig.percImprevistos,
     taxaRetornoPerc: initialConfig.taxaRetornoPerc,
     anosRetorno: initialConfig.anosRetorno,
+    numeroCadeiras: initialConfig.numeroCadeiras,
+    percOciosidade: initialConfig.percOciosidade,
+    percImpostos: initialConfig.percImpostos,
+    percTaxaCartao: initialConfig.percTaxaCartao,
   })
 
   const [items, setItems] = useState<ItemState[]>(
@@ -154,8 +163,10 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
           <p className="text-sm font-medium opacity-80">Custo Fixo por Minuto</p>
           <p className="text-4xl font-bold mt-1">{formatBRL(custoFixoPorMinuto)} / min</p>
           <p className="text-xs opacity-70 mt-2">
-            Total mensal ÷ {config.diasUteis} dias ÷ {config.horasTrabalho}h ÷ 60min + Depreciação
-            + Remuneração + Retorno
+            Total mensal ÷ {config.diasUteis} dias × {config.horasTrabalho}h × 60min
+            {config.percOciosidade > 0 && ` × ${(100 - config.percOciosidade).toFixed(0)}% ocupação`}
+            {config.numeroCadeiras > 1 && ` ÷ ${config.numeroCadeiras} cadeiras`}
+            {' '}+ Depreciação (11 meses) + Remuneração + Retorno
           </p>
         </CardContent>
       </Card>
@@ -392,6 +403,70 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
               onChange={(e) => updateConfig('anosRetorno', parseInt(e.target.value) || 1)}
               min={1}
             />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Section 5 — Contexto do Consultório */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Seção 5 — Contexto do Consultório</CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Número de cadeiras ativas</Label>
+            <Input
+              type="number"
+              value={config.numeroCadeiras}
+              onChange={(e) => updateConfig('numeroCadeiras', parseInt(e.target.value) || 1)}
+              min={1}
+              max={20}
+            />
+            <p className="text-xs text-muted-foreground">
+              Divide os custos fixos entre as cadeiras. Use 1 se atende sozinho(a).
+            </p>
+          </div>
+          <div className="space-y-2">
+            <Label>Taxa de ociosidade (%)</Label>
+            <Input
+              type="number"
+              value={config.percOciosidade}
+              onChange={(e) => updateConfig('percOciosidade', parseFloat(e.target.value) || 0)}
+              min={0}
+              max={99}
+              step={1}
+            />
+            <p className="text-xs text-muted-foreground">
+              % do tempo produtivo não utilizado. Recomendado: 20% para clínicas típicas.
+            </p>
+          </div>
+          <div className="space-y-2">
+            <Label>Impostos sobre faturamento (%)</Label>
+            <Input
+              type="number"
+              value={config.percImpostos}
+              onChange={(e) => updateConfig('percImpostos', parseFloat(e.target.value) || 0)}
+              min={0}
+              max={100}
+              step={0.1}
+            />
+            <p className="text-xs text-muted-foreground">
+              ISS / Simples Nacional incidente sobre o preço de venda (não sobre o custo).
+            </p>
+          </div>
+          <div className="space-y-2">
+            <Label>Taxa de cartão (%)</Label>
+            <Input
+              type="number"
+              value={config.percTaxaCartao}
+              onChange={(e) => updateConfig('percTaxaCartao', parseFloat(e.target.value) || 0)}
+              min={0}
+              max={100}
+              step={0.1}
+            />
+            <p className="text-xs text-muted-foreground">
+              Taxa média cobrada pela operadora de cartão. Usado no cálculo de margem.
+            </p>
           </div>
         </CardContent>
       </Card>

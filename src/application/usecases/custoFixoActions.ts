@@ -39,6 +39,10 @@ const saveConfigSchema = z.object({
   percImprevistos: z.number().min(0).max(100),
   taxaRetornoPerc: z.number().min(0).max(100),
   anosRetorno: z.number().int().min(1),
+  numeroCadeiras: z.number().int().min(1).max(20),
+  percOciosidade: z.number().min(0).max(100),
+  percImpostos: z.number().min(0).max(100),
+  percTaxaCartao: z.number().min(0).max(100),
   items: z.array(
     z.object({
       id: z.string().optional(),

@@ -45,3 +45,5 @@ prisma/*.db
 # project files
 custos_consultorio.numbers
 tasks/
+
+.remember/
