@@ -7,6 +7,7 @@ import { Search, Plus } from 'lucide-react'
 import type { Especialidade } from '@prisma/client'
 import type { ProcedimentoComPreco } from '@/application/usecases/procedimentoActions'
 import { createProcedimentoCustomizado } from '@/application/usecases/procedimentoActions'
+import { margemColor } from '@/application/usecases/calcularPrecoProcedimento'
 import { useToast } from '@/presentation/hooks/use-toast'
 import { Button } from '@/presentation/components/ui/button'
 import { Input } from '@/presentation/components/ui/input'
@@ -38,6 +39,32 @@ function formatBRL(value: number): string {
 function formatPercentage(value: number): string {
   const sign = value >= 0 ? '+' : ''
   return `${sign}${value.toFixed(1)}%`
+}
+
+function MargemBadge({ margemLucro, precoMinimoParaMargem30 }: { margemLucro: number | null; precoMinimoParaMargem30: number }) {
+  const color = margemColor(margemLucro)
+
+  if (color === null) {
+    return (
+      <span className="text-xs text-muted-foreground whitespace-nowrap">
+        Mín: {formatBRL(precoMinimoParaMargem30)}
+      </span>
+    )
+  }
+
+  const pct = (margemLucro! * 100).toFixed(1)
+  const colorClass =
+    color === 'green'
+      ? 'bg-green-100 text-green-800 border-green-200'
+      : color === 'yellow'
+        ? 'bg-yellow-100 text-yellow-800 border-yellow-200'
+        : 'bg-red-100 text-red-800 border-red-200'
+
+  return (
+    <span className={cn('inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border tabular-nums', colorClass)}>
+      {pct}%
+    </span>
+  )
 }
 
 export function ProcedimentosPage({
@@ -243,6 +270,9 @@ export function ProcedimentosPage({
                     Preço Calculado
                   </th>
                   <th className="text-right px-4 py-3 font-medium text-muted-foreground">
+                    Margem
+                  </th>
+                  <th className="text-right px-4 py-3 font-medium text-muted-foreground">
                     VRPO Ref.
                   </th>
                   <th className="text-right px-4 py-3 font-medium text-muted-foreground">
@@ -253,7 +283,7 @@ export function ProcedimentosPage({
               <tbody className="divide-y">
                 {initialProcedimentos.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-8 text-muted-foreground">
+                    <td colSpan={8} className="text-center py-8 text-muted-foreground">
                       {isSearching
                         ? 'Nenhum procedimento encontrado para a busca.'
                         : 'Nenhum procedimento cadastrado para esta especialidade.'}
@@ -304,6 +334,12 @@ export function ProcedimentosPage({
                         </td>
                         <td className="px-4 py-3 text-right font-semibold tabular-nums">
                           {formatBRL(precoCalculado.precoFinal)}
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <MargemBadge
+                            margemLucro={precoCalculado.margemLucro}
+                            precoMinimoParaMargem30={precoCalculado.precoMinimoParaMargem30}
+                          />
                         </td>
                         <td className="px-4 py-3 text-right text-muted-foreground tabular-nums">
                           {vrpoReferencia !== null ? formatBRL(vrpoReferencia) : '—'}

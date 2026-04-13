@@ -3,6 +3,7 @@
 import { z } from 'zod'
 import { prisma } from '@/lib/db'
 import { PrismaMaterialRepository } from '@/infrastructure/repositories/PrismaMaterialRepository'
+import { contarProcedimentosNoVermelho } from './dashboardActions'
 import type { Material } from '@prisma/client'
 
 const repository = new PrismaMaterialRepository()
@@ -18,6 +19,8 @@ export async function getMateriais(userId: string): Promise<Material[]> {
 export type UpdateMaterialPriceState = {
   errors?: { general?: string[] }
   success?: boolean
+  /** Number of procedures now below 10% margin after the price update */
+  procedimentosNoVermelho?: number
 }
 
 export async function updateMaterialPrice(
@@ -31,7 +34,8 @@ export async function updateMaterialPrice(
 
   try {
     await repository.updatePrice(id, userId, preco)
-    return { success: true }
+    const procedimentosNoVermelho = await contarProcedimentosNoVermelho(userId)
+    return { success: true, procedimentosNoVermelho }
   } catch {
     return { errors: { general: ['Erro ao atualizar preço. Tente novamente.'] } }
   }

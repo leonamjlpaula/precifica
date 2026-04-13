@@ -44,6 +44,17 @@ export type BottomVRPOProcedimento = {
   diferencaPerc: number
 }
 
+export type ProcedimentoNoVermelho = {
+  id: string
+  nome: string
+  especialidadeNome: string
+  especialidadeSlug: string
+  precoFinal: number
+  precoVenda: number
+  margemLucro: number
+  precoMinimoParaMargem30: number
+}
+
 // ─── Helper ────────────────────────────────────────────────────────────────────
 
 const getAllProcedimentos = cache(async function getAllProcedimentos(userId: string): Promise<ProcedimentoWithMateriais[]> {
@@ -169,5 +180,59 @@ export async function getBottomProcedimentosVRPO(
   comDiferenca.sort((a, b) => a.diferencaPerc - b.diferencaPerc)
 
   return comDiferenca.slice(0, limit)
+}
+
+// ─── getProcedimentosNoVermelho ────────────────────────────────────────────────
+
+/**
+ * Returns up to `limit` procedures with precoVenda set and margemLucro < 10%,
+ * sorted by lowest margin first.
+ */
+export async function getProcedimentosNoVermelho(
+  userId: string,
+  limit: number = 5
+): Promise<ProcedimentoNoVermelho[]> {
+  const [procedimentos, custoFixoPorMinuto] = await Promise.all([
+    getAllProcedimentos(userId),
+    calcularCustoFixoPorMinuto(userId),
+  ])
+
+  const config = await prisma.custoFixoConfig.findUnique({
+    where: { userId },
+    select: { percImpostos: true, percTaxaCartao: true },
+  })
+  const percImpostos = config?.percImpostos ?? 8
+  const percTaxaCartao = config?.percTaxaCartao ?? 4
+
+  const noVermelho: ProcedimentoNoVermelho[] = []
+
+  for (const p of procedimentos) {
+    if (p.precoVenda == null) continue
+    const calc = calcularPrecoProcedimento(p, custoFixoPorMinuto, percImpostos, percTaxaCartao)
+    if (calc.margemLucro !== null && calc.margemLucro < 0.10) {
+      noVermelho.push({
+        id: p.id,
+        nome: p.nome,
+        especialidadeNome: p.especialidade.nome,
+        especialidadeSlug: p.especialidade.codigo,
+        precoFinal: calc.precoFinal,
+        precoVenda: p.precoVenda,
+        margemLucro: calc.margemLucro,
+        precoMinimoParaMargem30: calc.precoMinimoParaMargem30,
+      })
+    }
+  }
+
+  noVermelho.sort((a, b) => a.margemLucro - b.margemLucro)
+  return noVermelho.slice(0, limit)
+}
+
+/**
+ * Counts all procedures with precoVenda set and margemLucro < 10%.
+ * Used for the post-save alert.
+ */
+export async function contarProcedimentosNoVermelho(userId: string): Promise<number> {
+  const all = await getProcedimentosNoVermelho(userId, 9999)
+  return all.length
 }
 

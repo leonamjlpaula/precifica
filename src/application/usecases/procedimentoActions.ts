@@ -7,6 +7,18 @@ import { calcularPrecoProcedimento } from './calcularPrecoProcedimento'
 import type { ProcedimentoWithMateriais } from '@/application/interfaces/IProcedimentoRepository'
 import type { PrecoCalculado } from './calcularPrecoProcedimento'
 
+/** Returns percImpostos and percTaxaCartao from the user's config (with defaults). */
+async function getPercConfig(userId: string): Promise<{ percImpostos: number; percTaxaCartao: number }> {
+  const config = await prisma.custoFixoConfig.findUnique({
+    where: { userId },
+    select: { percImpostos: true, percTaxaCartao: true },
+  })
+  return {
+    percImpostos: config?.percImpostos ?? 8,
+    percTaxaCartao: config?.percTaxaCartao ?? 4,
+  }
+}
+
 export type ActionResult = { success: boolean; error?: string }
 
 const repository = new PrismaProcedimentoRepository()
@@ -35,7 +47,10 @@ export async function getProcedimentosByEspecialidade(
   if (!especialidade) return []
 
   const procedimentos = await repository.listByUserAndEspecialidade(userId, especialidade.id)
-  const custoFixoPorMinuto = await calcularCustoFixoPorMinuto(userId)
+  const [custoFixoPorMinuto, { percImpostos, percTaxaCartao }] = await Promise.all([
+    calcularCustoFixoPorMinuto(userId),
+    getPercConfig(userId),
+  ])
 
   // Fetch VRPO references for all procedure codes in a single query
   const codigos = procedimentos.map((p) => p.codigo)
@@ -46,7 +61,7 @@ export async function getProcedimentosByEspecialidade(
 
   return procedimentos.map((procedimento) => ({
     procedimento,
-    precoCalculado: calcularPrecoProcedimento(procedimento, custoFixoPorMinuto),
+    precoCalculado: calcularPrecoProcedimento(procedimento, custoFixoPorMinuto, percImpostos, percTaxaCartao),
     vrpoReferencia: vrpoMap.get(procedimento.codigo) ?? null,
   }))
 }
@@ -78,7 +93,10 @@ export async function searchProcedimentos(
     take: 50,
   })) as ProcedimentoWithMateriais[]
 
-  const custoFixoPorMinuto = await calcularCustoFixoPorMinuto(userId)
+  const [custoFixoPorMinuto, { percImpostos, percTaxaCartao }] = await Promise.all([
+    calcularCustoFixoPorMinuto(userId),
+    getPercConfig(userId),
+  ])
 
   const codigos = procedimentos.map((p) => p.codigo)
   const vrpoRefs = await prisma.vRPOReferencia.findMany({
@@ -88,7 +106,7 @@ export async function searchProcedimentos(
 
   return procedimentos.map((procedimento) => ({
     procedimento,
-    precoCalculado: calcularPrecoProcedimento(procedimento, custoFixoPorMinuto),
+    precoCalculado: calcularPrecoProcedimento(procedimento, custoFixoPorMinuto, percImpostos, percTaxaCartao),
     vrpoReferencia: vrpoMap.get(procedimento.codigo) ?? null,
   }))
 }
@@ -152,14 +170,15 @@ export async function getProcedimentoDetail(
   const procedimento = await repository.getDetail(id, userId)
   if (!procedimento) return null
 
-  const custoFixoPorMinuto = await calcularCustoFixoPorMinuto(userId)
-  const vrpoRef = await prisma.vRPOReferencia.findUnique({
-    where: { codigo: procedimento.codigo },
-  })
+  const [custoFixoPorMinuto, { percImpostos, percTaxaCartao }, vrpoRef] = await Promise.all([
+    calcularCustoFixoPorMinuto(userId),
+    getPercConfig(userId),
+    prisma.vRPOReferencia.findUnique({ where: { codigo: procedimento.codigo } }),
+  ])
 
   return {
     procedimento,
-    precoCalculado: calcularPrecoProcedimento(procedimento, custoFixoPorMinuto),
+    precoCalculado: calcularPrecoProcedimento(procedimento, custoFixoPorMinuto, percImpostos, percTaxaCartao),
     vrpoReferencia: vrpoRef?.valorReferencia ?? null,
   }
 }
@@ -272,5 +291,26 @@ export async function deleteProcedimento(
   }
 
   await prisma.procedimento.delete({ where: { id } })
+  return { success: true }
+}
+
+// ─── updatePrecoVenda ─────────────────────────────────────────────────────────
+
+export async function updatePrecoVenda(
+  id: string,
+  userId: string,
+  precoVenda: number | null
+): Promise<ActionResult> {
+  if (precoVenda !== null && precoVenda < 0) {
+    return { success: false, error: 'Preço de venda não pode ser negativo' }
+  }
+
+  const procedimento = await prisma.procedimento.findFirst({ where: { id, userId } })
+  if (!procedimento) return { success: false, error: 'Procedimento não encontrado' }
+
+  await prisma.procedimento.update({
+    where: { id },
+    data: { precoVenda: precoVenda === 0 ? null : precoVenda },
+  })
   return { success: true }
 }

@@ -137,7 +137,14 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
         })),
       })
       if (result.success) {
-        toast({ title: 'Configuração salva!', description: 'Seus custos fixos foram atualizados.' })
+        const n = result.procedimentosNoVermelho ?? 0
+        toast({
+          title: 'Configuração salva!',
+          description:
+            n > 0
+              ? `${n} procedimento${n > 1 ? 's estão' : ' está'} abaixo de 10% de margem. Revise seus preços.`
+              : 'Seus custos fixos foram atualizados.',
+        })
       } else {
         toast({
           title: 'Erro ao salvar',

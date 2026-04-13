@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { prisma } from '@/lib/db'
 import { CustoFixoPorMinuto } from '@/domain/value-objects/CustoFixoPorMinuto'
 import { PrismaCustoFixoRepository } from '@/infrastructure/repositories/PrismaCustoFixoRepository'
+import { contarProcedimentosNoVermelho } from './dashboardActions'
 import type { CustoFixoConfig, CustoFixoItem } from '@prisma/client'
 
 export type CustoFixoConfigResult = {
@@ -59,6 +60,8 @@ export type SaveCustoFixoConfigData = z.infer<typeof saveConfigSchema>
 export type SaveCustoFixoConfigState = {
   errors?: { general?: string[] }
   success?: boolean
+  /** Number of procedures now below 10% margin after the save */
+  procedimentosNoVermelho?: number
 }
 
 export async function saveCustoFixoConfig(
@@ -72,7 +75,8 @@ export async function saveCustoFixoConfig(
 
   try {
     await repository.upsert(userId, result.data)
-    return { success: true }
+    const procedimentosNoVermelho = await contarProcedimentosNoVermelho(userId)
+    return { success: true, procedimentosNoVermelho }
   } catch {
     return { errors: { general: ['Erro ao salvar configuração. Tente novamente.'] } }
   }

@@ -73,7 +73,14 @@ export function MateriaisTable({ userId, initialMateriais }: Props) {
         setMateriais((prev) => prev.map((m) => m.id === material.id ? { ...m, preco } : m))
         setEditingId(null)
         setEditingPreco('')
-        toast({ title: 'Preço atualizado!', description: `${material.nome} atualizado com sucesso.` })
+        const n = result.procedimentosNoVermelho ?? 0
+        toast({
+          title: 'Preço atualizado!',
+          description:
+            n > 0
+              ? `${n} procedimento${n > 1 ? 's estão' : ' está'} abaixo de 10% de margem. Revise seus preços.`
+              : `${material.nome} atualizado com sucesso.`,
+        })
       } else {
         toast({
           title: 'Erro ao atualizar',

@@ -24,13 +24,13 @@ import { Label } from '@/presentation/components/ui/label'
 import { useToast } from '@/presentation/hooks/use-toast'
 import { createSnapshot } from '@/application/usecases/snapshotActions'
 import { OnboardingWizard } from '@/presentation/components/layout/OnboardingWizard'
-import type { DashboardStats, TopProcedimento, BottomVRPOProcedimento } from '@/application/usecases/dashboardActions'
+import type { DashboardStats, TopProcedimento, ProcedimentoNoVermelho } from '@/application/usecases/dashboardActions'
 
 type Props = {
   userId: string
   stats: DashboardStats
   topProcedimentos: TopProcedimento[]
-  bottomVRPO: BottomVRPOProcedimento[]
+  procedimentosNoVermelho: ProcedimentoNoVermelho[]
   lastUpdate: Date | null
   onboardingCompleted: boolean
 }
@@ -42,11 +42,8 @@ function formatBRL(value: number) {
   }).format(value)
 }
 
-function formatPerc(value: number) {
-  return `${value >= 0 ? '+' : ''}${value.toFixed(1)}%`
-}
 
-export function DashboardPage({ userId, stats, topProcedimentos, bottomVRPO, lastUpdate, onboardingCompleted }: Props) {
+export function DashboardPage({ userId, stats, topProcedimentos, procedimentosNoVermelho, lastUpdate, onboardingCompleted }: Props) {
   const router = useRouter()
   const { toast } = useToast()
   const [isPending, startTransition] = useTransition()
@@ -280,29 +277,29 @@ export function DashboardPage({ userId, stats, topProcedimentos, bottomVRPO, las
           </CardContent>
         </Card>
 
-        {/* Bottom VRPO procedures */}
+        {/* Procedimentos no vermelho */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Mais Abaixo da Tabela VRPO</CardTitle>
+            <CardTitle className="text-base text-red-700">Procedimentos no Vermelho</CardTitle>
+            <CardDescription>Margem abaixo de 10% — requer atenção</CardDescription>
           </CardHeader>
           <CardContent className="p-0">
-            {bottomVRPO.length === 0 ? (
+            {procedimentosNoVermelho.length === 0 ? (
               <p className="px-6 pb-6 text-sm text-muted-foreground">
-                Nenhum procedimento abaixo da referência VRPO.
+                Nenhum procedimento com margem abaixo de 10%. Configure o preço de venda nos procedimentos para monitorar.
               </p>
             ) : (
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-left text-xs text-muted-foreground">
                     <th className="px-6 py-2 font-medium">Procedimento</th>
-                    <th className="px-6 py-2 text-right font-medium">Meu Preço</th>
-                    <th className="px-6 py-2 text-right font-medium">VRPO Ref.</th>
-                    <th className="px-6 py-2 text-right font-medium">Dif. %</th>
+                    <th className="px-6 py-2 text-right font-medium">Margem</th>
+                    <th className="px-6 py-2 text-right font-medium">Mín. 30%</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {bottomVRPO.map((p, i) => (
-                    <tr key={p.id} className={i < bottomVRPO.length - 1 ? 'border-b' : ''}>
+                  {procedimentosNoVermelho.map((p, i) => (
+                    <tr key={p.id} className={i < procedimentosNoVermelho.length - 1 ? 'border-b' : ''}>
                       <td className="px-6 py-3">
                         <Link
                           href={`/procedimentos/${p.especialidadeSlug}/${p.id}`}
@@ -312,14 +309,11 @@ export function DashboardPage({ userId, stats, topProcedimentos, bottomVRPO, las
                         </Link>
                         <p className="text-xs text-muted-foreground">{p.especialidadeNome}</p>
                       </td>
-                      <td className="px-6 py-3 text-right tabular-nums">
-                        {formatBRL(p.precoFinal)}
+                      <td className="px-6 py-3 text-right tabular-nums font-medium text-red-600">
+                        {(p.margemLucro * 100).toFixed(1)}%
                       </td>
                       <td className="px-6 py-3 text-right tabular-nums text-muted-foreground">
-                        {formatBRL(p.vrpoReferencia)}
-                      </td>
-                      <td className="px-6 py-3 text-right tabular-nums font-medium text-red-600">
-                        {formatPerc(p.diferencaPerc)}
+                        {formatBRL(p.precoMinimoParaMargem30)}
                       </td>
                     </tr>
                   ))}

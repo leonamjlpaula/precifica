@@ -8,12 +8,13 @@ import type { Material } from '@prisma/client'
 import type { ProcedimentoComPreco } from '@/application/usecases/procedimentoActions'
 import {
   updateProcedimentoTempo,
+  updatePrecoVenda,
   addMaterialToProcedimento,
   removeMaterialFromProcedimento,
   updateProcedimentoMaterial,
   deleteProcedimento,
 } from '@/application/usecases/procedimentoActions'
-import { parseConsumoNumerico } from '@/application/usecases/calcularPrecoProcedimento'
+import { parseConsumoNumerico, margemColor } from '@/application/usecases/calcularPrecoProcedimento'
 import { useToast } from '@/presentation/hooks/use-toast'
 import { Button } from '@/presentation/components/ui/button'
 import { Input } from '@/presentation/components/ui/input'
@@ -55,6 +56,31 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
     vrpoReferencia !== null
       ? ((precoCalculado.precoFinal - vrpoReferencia) / vrpoReferencia) * 100
       : null
+
+  // ─── precoVenda editing ───────────────────────────────────────────────────
+  const [editingPreco, setEditingPreco] = useState(false)
+  const [precoValue, setPrecoValue] = useState(
+    procedimento.precoVenda != null ? String(procedimento.precoVenda).replace('.', ',') : ''
+  )
+
+  function handleSavePreco() {
+    const raw = precoValue.replace(',', '.').trim()
+    const valor = raw === '' ? null : parseFloat(raw)
+    if (valor !== null && (isNaN(valor) || valor < 0)) {
+      toast({ title: 'Preço inválido', description: 'Informe um valor positivo.', variant: 'destructive' })
+      return
+    }
+    startTransition(async () => {
+      const result = await updatePrecoVenda(procedimento.id, userId, valor)
+      if (result.success) {
+        setEditingPreco(false)
+        toast({ title: 'Preço de venda atualizado!' })
+        router.refresh()
+      } else {
+        toast({ title: 'Erro', description: result.error, variant: 'destructive' })
+      }
+    })
+  }
 
   // ─── Tempo editing ────────────────────────────────────────────────────────
   const [editingTempo, setEditingTempo] = useState(false)
@@ -231,7 +257,7 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
       </div>
 
       {/* Financial summary cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -300,6 +326,68 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
             )}
           </CardContent>
         </Card>
+
+        {/* Margem de lucro */}
+        {(() => {
+          const color = margemColor(precoCalculado.margemLucro)
+          const colorClass =
+            color === 'green'
+              ? 'border-green-200 bg-green-50'
+              : color === 'yellow'
+                ? 'border-yellow-200 bg-yellow-50'
+                : color === 'red'
+                  ? 'border-red-200 bg-red-50'
+                  : ''
+          const textClass =
+            color === 'green'
+              ? 'text-green-800'
+              : color === 'yellow'
+                ? 'text-yellow-800'
+                : color === 'red'
+                  ? 'text-red-800'
+                  : 'text-muted-foreground'
+          return (
+            <Card className={cn(color !== null && colorClass)}>
+              <CardHeader className="pb-2">
+                <CardTitle className={cn('text-sm font-medium', color !== null ? textClass : 'text-muted-foreground')}>
+                  Margem de Lucro
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {precoCalculado.margemLucro !== null ? (
+                  <>
+                    <p className={cn('text-xl font-bold tabular-nums', textClass)}>
+                      {(precoCalculado.margemLucro * 100).toFixed(1)}%
+                    </p>
+                    <p className={cn('text-xs mt-1', textClass)}>
+                      {color === 'green' ? 'Acima de 30%' : color === 'yellow' ? 'Abaixo de 30%' : 'Abaixo de 10%'}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-lg text-muted-foreground">—</p>
+                    <p className="text-xs text-muted-foreground mt-1">Defina o preço de venda</p>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          )
+        })()}
+
+        {/* Preço mínimo para 30% */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Mínimo p/ 30%
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xl font-bold tabular-nums">
+              {formatBRL(precoCalculado.precoMinimoParaMargem30)}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">após impostos e cartão</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Tempo de execução */}
@@ -363,6 +451,63 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
             >
               <Edit2 className="h-4 w-4 mr-2" />
               Editar Tempo
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Preço de venda */}
+      <div className="border rounded-lg p-4">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h2 className="font-semibold">Preço de Venda</h2>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {editingPreco ? (
+                'Quanto você cobra por este procedimento'
+              ) : procedimento.precoVenda != null ? (
+                <span className="text-foreground font-medium">{formatBRL(procedimento.precoVenda)}</span>
+              ) : (
+                'Não configurado — defina para ver sua margem real'
+              )}
+            </p>
+          </div>
+          {editingPreco ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">R$</span>
+              <Input
+                type="text"
+                inputMode="decimal"
+                value={precoValue}
+                onChange={(e) => setPrecoValue(e.target.value)}
+                className="w-28"
+                placeholder="ex: 280,00"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSavePreco()
+                  if (e.key === 'Escape') {
+                    setEditingPreco(false)
+                    setPrecoValue(procedimento.precoVenda != null ? String(procedimento.precoVenda).replace('.', ',') : '')
+                  }
+                }}
+                autoFocus
+              />
+              <Button size="icon" variant="ghost" onClick={handleSavePreco} disabled={isPending}>
+                <Check className="h-4 w-4 text-green-600" />
+              </Button>
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={() => {
+                  setEditingPreco(false)
+                  setPrecoValue(procedimento.precoVenda != null ? String(procedimento.precoVenda).replace('.', ',') : '')
+                }}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
+            <Button variant="outline" size="sm" onClick={() => setEditingPreco(true)}>
+              <Edit2 className="h-4 w-4 mr-2" />
+              {procedimento.precoVenda != null ? 'Editar Preço' : 'Definir Preço'}
             </Button>
           )}
         </div>

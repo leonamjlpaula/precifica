@@ -4,7 +4,7 @@ import { prisma } from '@/lib/db'
 import {
   getDashboardStats,
   getTopProcedimentos,
-  getBottomProcedimentosVRPO,
+  getProcedimentosNoVermelho,
 } from '@/application/usecases/dashboardActions'
 import { DashboardPage } from '@/presentation/components/dashboard/DashboardPage'
 
@@ -14,10 +14,10 @@ export default async function DashboardRoute() {
 
   
 
-  const [stats, topProcedimentos, bottomVRPO, profile] = await Promise.all([
+  const [stats, topProcedimentos, procedimentosNoVermelho, profile] = await Promise.all([
     getDashboardStats(userId),
     getTopProcedimentos(userId, 5),
-    getBottomProcedimentosVRPO(userId, 5),
+    getProcedimentosNoVermelho(userId, 5),
     prisma.user.findUnique({ where: { id: userId }, select: { onboardingCompleted: true } }),
   ])
 
@@ -26,7 +26,7 @@ export default async function DashboardRoute() {
       userId={userId}
       stats={stats}
       topProcedimentos={topProcedimentos}
-      bottomVRPO={bottomVRPO}
+      procedimentosNoVermelho={procedimentosNoVermelho}
       lastUpdate={stats.lastUpdate}
       onboardingCompleted={profile?.onboardingCompleted ?? true}
     />
