@@ -13,21 +13,25 @@ export class CustoFixoPorMinuto {
   /**
    * Calculate the fixed cost per minute using the CNCC/VRPO methodology.
    *
-   * Formula:
+   * Formula (verified against CNCC spreadsheet custos_consultorio.xlsx, rows 244–256):
    *   minutosUteis   = diasUteis * horasTrabalho * 60 * (1 - percOciosidade / 100)
+   *   minutosAnuais  = minutosUteis * 11   (CNCC: 11 months/year, 1 month vacation)
    *   custoFixoBase  = totalItens / (minutosUteis * numeroCadeiras)
-   *   depreciacao    = investimento / (anosDepreciacao * 11 * minutosUteis)
-   *   remuneracao    = salarioBase * (1 + fundoReserva% + insalubridade% + imprevistos%)
+   *   depreciacao    = investimento / (anosDepreciacao * minutosAnuais)
+   *   remuneracao    = salarioBase * (1 + fundoReserva% + insalubridade% + imprevistos%
+   *                                     + 4/36          ← férias 1/12 + adicional 1/3
+   *                                     + 1/12)         ← 13º salário
    *                    / minutosUteis
-   *   taxaRetorno    = investimento * taxaRetorno%
-   *                    / (anosRetorno * 11 * minutosUteis)
+   *   taxaRetorno    = investimento / (anosRetorno * minutosAnuais)
+   *                    ← NO percentage multiplier; CNCC recovers the full investment
+   *                       over N years. taxaRetornoPerc is stored for display only.
    *
    *   result = custoFixoBase + depreciacao + remuneracao + taxaRetorno
    *
+   * Validation: with CNCC reference data (investimento = 29969.28, custos = 13528.36,
+   *   salario = 6000, 22 dias, 8h, 1 cadeira, 0% ociosidade) → R$ 2,475/min ✓
+   *
    * Notes:
-   *   - 11 months/year per CNCC (1 month vacation excluded from depreciation/return)
-   *   - numeroCadeiras divides fixed costs among active chairs in the clinic
-   *   - percOciosidade reduces effective working minutes (e.g. 20% = 80% occupancy)
    *   - percImpostos and percTaxaCartao are NOT used here; they affect margin (Fase 2)
    */
   static calculate(config: CustoFixoConfig, items: CustoFixoItem[]): number {
@@ -44,7 +48,6 @@ export class CustoFixoPorMinuto {
       percFundoReserva,
       percInsalubridade,
       percImprevistos,
-      taxaRetornoPerc,
       anosRetorno,
       numeroCadeiras,
       percOciosidade,
@@ -66,13 +69,24 @@ export class CustoFixoPorMinuto {
     const depreciacao = investimentoEquipamentos / (anosDepreciacao * minutosAnuais)
 
     // 3. Professional remuneration (salary + social charges)
+    //    Mandatory CLT charges added per CNCC spreadsheet (rows 248–252):
+    //      - férias: 1/12 + adicional 1/3 = 4/36 ≈ 11.11%
+    //      - 13º salário: 1/12 ≈ 8.33%
     const proLaboreMensal =
-      salarioBase * (1 + percFundoReserva / 100 + percInsalubridade / 100 + percImprevistos / 100)
+      salarioBase *
+      (1 +
+        percFundoReserva / 100 +
+        percInsalubridade / 100 +
+        percImprevistos / 100 +
+        4 / 36 + // férias (1/12) + adicional de férias (1/3 de 1/12)
+        1 / 12) // 13º salário
     const remuneracao = proLaboreMensal / minutosUteis
 
-    // 4. Return on investment — CNCC uses 11 months/year
-    const taxaRetorno =
-      (investimentoEquipamentos * (taxaRetornoPerc / 100)) / (anosRetorno * minutosAnuais)
+    // 4. Return on investment — CNCC uses 11 months/year.
+    //    The formula divides the full investment by the number of years (no % multiplier).
+    //    "Taxa de retorno de 3% em 3 anos" = recover investment in 3 years; taxaRetornoPerc
+    //    is NOT applied here — verified in planilha CNCC row 255: 29969.28 ÷ 3 ÷ 11 ÷ … = 0.086.
+    const taxaRetorno = investimentoEquipamentos / (anosRetorno * minutosAnuais)
 
     const porMinutoSemProLabore = custoFixoBase + depreciacao + taxaRetorno
     const porMinuto = porMinutoSemProLabore + remuneracao
