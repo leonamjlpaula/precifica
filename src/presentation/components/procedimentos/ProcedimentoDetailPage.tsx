@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useTransition, useMemo } from 'react'
+import { useState, useTransition } from 'react'
+import { MaterialCombobox } from '@/presentation/components/ui/material-combobox'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Edit2, Trash2, Plus, Check, X } from 'lucide-react'
@@ -185,21 +186,16 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
 
   // ─── Add material form ────────────────────────────────────────────────────
   const [showAddMaterial, setShowAddMaterial] = useState(false)
-  const [matSearch, setMatSearch] = useState('')
   const [selectedMatId, setSelectedMatId] = useState('')
   const [addConsumo, setAddConsumo] = useState('1')
   const [addDivisor, setAddDivisor] = useState('1')
-
-  const filteredMateriais = useMemo(
-    () => materiais.filter((m) => m.nome.toLowerCase().includes(matSearch.toLowerCase())),
-    [materiais, matSearch]
-  )
+  const [comboboxKey, setComboboxKey] = useState(0)
 
   function resetAddForm() {
-    setMatSearch('')
     setSelectedMatId('')
     setAddConsumo('1')
     setAddDivisor('1')
+    setComboboxKey((k) => k + 1)
   }
 
   function handleAddMaterial() {
@@ -750,31 +746,16 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
           <div className="border rounded-lg p-4 space-y-4 bg-muted/20">
             <h3 className="font-medium">Adicionar Material</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Buscar material</Label>
-                <Input
-                  placeholder="Filtrar por nome..."
-                  value={matSearch}
-                  onChange={(e) => {
-                    setMatSearch(e.target.value)
-                    setSelectedMatId('')
-                  }}
-                />
-              </div>
-              <div className="space-y-2">
+              <div className="space-y-2 sm:col-span-2">
                 <Label>Material</Label>
-                <select
-                  value={selectedMatId}
-                  onChange={(e) => setSelectedMatId(e.target.value)}
-                  className="w-full border rounded-md px-3 py-2 text-sm bg-background"
-                >
-                  <option value="">Selecione...</option>
-                  {filteredMateriais.map((m) => (
-                    <option key={m.id} value={m.id}>
-                      {m.nome} ({m.unidade}) — {formatBRL(m.preco)}
-                    </option>
-                  ))}
-                </select>
+                <MaterialCombobox
+                  key={comboboxKey}
+                  options={materiais}
+                  onSelect={(id) => setSelectedMatId(id)}
+                  onClear={() => setSelectedMatId('')}
+                  placeholder="Buscar material..."
+                  disabled={isPending}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Consumo por uso</Label>
