@@ -597,20 +597,16 @@ export async function createDefaultDataForUser(userId: string): Promise<void> {
 
   if (!config) throw new Error('Failed to create CustoFixoConfig')
 
-  // 2. Create default materials (isDefault: true)
-  const createdMateriais = await Promise.all(
-    DEFAULT_MATERIAIS.map((mat) =>
-      prisma.material.create({
-        data: {
-          userId,
-          nome: mat.nome,
-          unidade: mat.unidade,
-          preco: mat.preco,
-          isDefault: true,
-        },
-      })
-    )
-  )
+  // 2. Create default materials (isDefault: true) — single query to avoid connection pool exhaustion
+  const createdMateriais = await prisma.material.createManyAndReturn({
+    data: DEFAULT_MATERIAIS.map((mat) => ({
+      userId,
+      nome: mat.nome,
+      unidade: mat.unidade,
+      preco: mat.preco,
+      isDefault: true,
+    })),
+  })
 
   // Build a name → id lookup for materials
   const materialByNome = new Map(createdMateriais.map((m) => [m.nome, m.id]))
@@ -619,32 +615,38 @@ export async function createDefaultDataForUser(userId: string): Promise<void> {
   const especialidades = await prisma.especialidade.findMany()
   const especialidadeByCodigo = new Map(especialidades.map((e) => [e.codigo, e.id]))
 
-  // 4. Create default procedures
-  for (const proc of DEFAULT_PROCEDIMENTOS) {
-    const especialidadeId = especialidadeByCodigo.get(proc.especialidadeCodigo)
-    if (!especialidadeId) continue // skip if specialty not seeded yet
+  // 4. Create all procedures in a single query
+  const createdProcedimentos = await prisma.procedimento.createManyAndReturn({
+    data: DEFAULT_PROCEDIMENTOS
+      .filter((proc) => especialidadeByCodigo.has(proc.especialidadeCodigo))
+      .map((proc) => ({
+        userId,
+        codigo: proc.codigo,
+        nome: proc.nome,
+        especialidadeId: especialidadeByCodigo.get(proc.especialidadeCodigo)!,
+        tempoMinutos: proc.tempoMinutos,
+        isCustom: false,
+      })),
+  })
 
-    const materiaisData = proc.materiais
+  // 5. Create all procedure-material links in a single query
+  const procedimentoByCodigo = new Map(createdProcedimentos.map((p) => [p.codigo, p.id]))
+
+  const procedimentoMateriais = DEFAULT_PROCEDIMENTOS.flatMap((proc) => {
+    const procedimentoId = procedimentoByCodigo.get(proc.codigo)
+    if (!procedimentoId) return []
+    return proc.materiais
       .filter((m) => materialByNome.has(m.materialNome))
       .map((m) => ({
+        procedimentoId,
         materialId: materialByNome.get(m.materialNome)!,
         consumo: m.consumo,
         divisor: m.divisor,
         ordem: m.ordem,
       }))
+  })
 
-    await prisma.procedimento.create({
-      data: {
-        userId,
-        codigo: proc.codigo,
-        nome: proc.nome,
-        especialidadeId,
-        tempoMinutos: proc.tempoMinutos,
-        isCustom: false,
-        materiais: {
-          create: materiaisData,
-        },
-      },
-    })
+  if (procedimentoMateriais.length > 0) {
+    await prisma.procedimentoMaterial.createMany({ data: procedimentoMateriais })
   }
 }

@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect, useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { signIn } from 'next-auth/react'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/presentation/components/ui/button'
 import { Input } from '@/presentation/components/ui/input'
 import { PasswordInput } from '@/presentation/components/ui/password-input'
@@ -15,6 +15,7 @@ export default function LoginPage() {
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const defaultPassword = 'password'
   const successMessage = searchParams.get('success')
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -25,16 +26,14 @@ export default function LoginPage() {
     const password = formData.get('password') as string
 
     startTransition(async () => {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      })
+      const supabase = createClient()
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
 
-      if (result?.error) {
+      if (error) {
         setError('Email ou senha inválidos.')
       } else {
         router.push('/dashboard')
+        router.refresh()
       }
     })
   }
@@ -74,6 +73,7 @@ export default function LoginPage() {
                 id="password"
                 name="password"
                 placeholder="Sua senha"
+                defaultValue={defaultPassword}
                 required
                 disabled={isPending}
               />
@@ -83,8 +83,8 @@ export default function LoginPage() {
               <p className="text-sm text-destructive">{error}</p>
             )}
 
-            <Button type="submit" className="w-full" disabled={isPending}>
-              {isPending ? 'Entrando...' : 'Entrar'}
+            <Button type="submit" className="w-full" loading={isPending}>
+              Entrar
             </Button>
           </form>
 

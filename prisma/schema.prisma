@@ -6,33 +6,22 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id                   String                @id @default(cuid())
+  id                   String          @id
   nome                 String
-  email                String                @unique
-  passwordHash         String
-  onboardingCompleted  Boolean               @default(false)
-  createdAt            DateTime              @default(now())
-  updatedAt            DateTime              @updatedAt
+  email                String          @unique
+  onboardingCompleted  Boolean         @default(false)
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
   custoFixoConfig      CustoFixoConfig?
   materiais            Material[]
   procedimentos        Procedimento[]
   snapshots            Snapshot[]
-  passwordResetTokens  PasswordResetToken[]
-}
-
-model PasswordResetToken {
-  id        String    @id @default(cuid())
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  token     String    @unique
-  expiresAt DateTime
-  usedAt    DateTime?
-  createdAt DateTime  @default(now())
 }
 
 model CustoFixoConfig {
@@ -78,6 +67,8 @@ model Material {
   createdAt     DateTime              @default(now())
   updatedAt     DateTime              @updatedAt
   procedimentos ProcedimentoMaterial[]
+
+  @@index([userId])
 }
 
 model Especialidade {
@@ -104,6 +95,8 @@ model Procedimento {
   materiais       ProcedimentoMaterial[]
 
   @@unique([userId, codigo])
+  @@index([userId])
+  @@index([userId, especialidadeId])
 }
 
 model ProcedimentoMaterial {
@@ -111,10 +104,13 @@ model ProcedimentoMaterial {
   procedimentoId  String
   procedimento    Procedimento @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
   materialId      String
-  material        Material     @relation(fields: [materialId], references: [id])
+  material        Material     @relation(fields: [materialId], references: [id], onDelete: Cascade)
   consumo         String
   divisor         Float
   ordem           Int
+
+  @@index([procedimentoId])
+  @@index([materialId])
 }
 
 model VRPOReferencia {
@@ -132,4 +128,6 @@ model Snapshot {
   dados               Json
   custoFixoPorMinuto  Float
   createdAt           DateTime @default(now())
+
+  @@index([userId])
 }

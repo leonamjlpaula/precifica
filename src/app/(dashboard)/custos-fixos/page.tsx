@@ -1,14 +1,13 @@
-import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { authOptions } from '@/lib/auth'
+import { getAuthUserId } from '@/lib/supabase/server'
 import { getCustoFixoConfig } from '@/application/usecases/custoFixoActions'
 import { CustosFixosForm } from '@/presentation/components/custos-fixos/CustosFixosForm'
 
 export default async function CustosFixosPage() {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) redirect('/login')
+  const userId = await getAuthUserId()
+  if (!userId) redirect('/login')
 
-  const userId = session.user.id
+  
   const data = await getCustoFixoConfig(userId)
 
   if (!data) {

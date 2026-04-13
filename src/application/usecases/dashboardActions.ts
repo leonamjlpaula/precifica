@@ -1,5 +1,6 @@
 'use server'
 
+import { cache } from 'react'
 import { prisma } from '@/lib/db'
 import { CustoFixoPorMinuto } from '@/domain/value-objects/CustoFixoPorMinuto'
 import { calcularCustoFixoPorMinuto } from './calcularCustoFixoPorMinuto'
@@ -19,6 +20,7 @@ export type DashboardStats = {
     proLaboreMensal: number
   }
   ociosidadeNaoConfigurada: boolean
+  lastUpdate: Date | null
 }
 
 export type TopProcedimento = {
@@ -44,7 +46,7 @@ export type BottomVRPOProcedimento = {
 
 // ─── Helper ────────────────────────────────────────────────────────────────────
 
-async function getAllProcedimentos(userId: string): Promise<ProcedimentoWithMateriais[]> {
+const getAllProcedimentos = cache(async function getAllProcedimentos(userId: string): Promise<ProcedimentoWithMateriais[]> {
   return prisma.procedimento.findMany({
     where: { userId },
     include: {
@@ -55,7 +57,7 @@ async function getAllProcedimentos(userId: string): Promise<ProcedimentoWithMate
       },
     },
   }) as Promise<ProcedimentoWithMateriais[]>
-}
+})
 
 // ─── getDashboardStats ─────────────────────────────────────────────────────────
 
@@ -91,6 +93,7 @@ export async function getDashboardStats(userId: string): Promise<DashboardStats>
     totalMateriais,
     breakEven,
     ociosidadeNaoConfigurada: config?.percOciosidade === 0,
+    lastUpdate: config?.updatedAt ?? null,
   }
 }
 
@@ -168,12 +171,3 @@ export async function getBottomProcedimentosVRPO(
   return comDiferenca.slice(0, limit)
 }
 
-// ─── getLastUpdateInfo ─────────────────────────────────────────────────────────
-
-export async function getLastUpdateInfo(userId: string): Promise<Date | null> {
-  const config = await prisma.custoFixoConfig.findUnique({
-    where: { userId },
-    select: { updatedAt: true },
-  })
-  return config?.updatedAt ?? null
-}

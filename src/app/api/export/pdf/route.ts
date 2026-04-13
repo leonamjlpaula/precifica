@@ -1,6 +1,5 @@
 import { NextRequest } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/db'
 import { calcularCustoFixoPorMinuto } from '@/application/usecases/calcularCustoFixoPorMinuto'
 import { calcularPrecoProcedimento } from '@/application/usecases/calcularPrecoProcedimento'
@@ -8,17 +7,16 @@ import type { ProcedimentoWithMateriais } from '@/application/interfaces/IProced
 import { PdfExportService, type ProcedimentoExport } from '@/infrastructure/services/PdfExportService'
 
 export async function GET(request: NextRequest) {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) {
-    return new Response('Unauthorized', { status: 401 })
-  }
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return new Response('Unauthorized', { status: 401 })
 
   const { searchParams } = request.nextUrl
   const especialidade = searchParams.get('especialidade') ?? 'all'
   const tipo = searchParams.get('tipo') ?? 'all'
 
-  const userId = session.user.id
-  const userName = session.user.name ?? 'Usuário'
+  const userId = user.id
+  const userName = user.user_metadata?.nome ?? user.email ?? 'Usuário'
 
   // Build dynamic where clause
   const where: { userId: string; especialidadeId?: string; isCustom?: boolean } = { userId }

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { signOut } from 'next-auth/react'
+import { createClient } from '@/lib/supabase/client'
 import {
   LayoutDashboard,
   DollarSign,
@@ -60,7 +60,9 @@ export function DashboardLayout({ children, userName }: DashboardLayoutProps) {
   }
 
   async function handleLogout() {
-    await signOut({ callbackUrl: '/login' })
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    window.location.href = '/login'
   }
 
   return (

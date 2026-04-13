@@ -1,6 +1,5 @@
-import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { authOptions } from '@/lib/auth'
+import { getAuthUserId } from '@/lib/supabase/server'
 import { prisma } from '@/lib/db'
 import {
   getProcedimentosByEspecialidade,
@@ -15,14 +14,13 @@ export default async function Page({
   params: Promise<{ especialidade: string }>
   searchParams: Promise<{ q?: string }>
 }) {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) redirect('/login')
+  const userId = await getAuthUserId()
+  if (!userId) redirect('/login')
 
-  const userId = session.user.id
+  
   const { especialidade: especialidadeSlug } = await params
   const { q: searchQuery } = await searchParams
 
-  // Fetch all especialidades for sidebar navigation
   const especialidades = await prisma.especialidade.findMany({
     orderBy: { faixaInicio: 'asc' },
   })
@@ -30,7 +28,6 @@ export default async function Page({
   const currentEspecialidade = especialidades.find((e) => e.codigo === especialidadeSlug)
   if (!currentEspecialidade) redirect('/procedimentos/diagnostico')
 
-  // Get procedure counts per especialidade for sidebar badges
   const counts = await prisma.procedimento.groupBy({
     by: ['especialidadeId'],
     where: { userId },
@@ -43,7 +40,6 @@ export default async function Page({
     count: countMap.get(e.id) ?? 0,
   }))
 
-  // Fetch procedures: search across all specialties or list by current specialty
   const procedimentos = searchQuery
     ? await searchProcedimentos(userId, searchQuery)
     : await getProcedimentosByEspecialidade(userId, especialidadeSlug)

@@ -1,26 +1,23 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import { getAuthUserId } from '@/lib/supabase/server'
 import { prisma } from '@/lib/db'
 import {
   getDashboardStats,
   getTopProcedimentos,
   getBottomProcedimentosVRPO,
-  getLastUpdateInfo,
 } from '@/application/usecases/dashboardActions'
 import { DashboardPage } from '@/presentation/components/dashboard/DashboardPage'
 
 export default async function DashboardRoute() {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) redirect('/login')
+  const userId = await getAuthUserId()
+  if (!userId) redirect('/login')
 
-  const userId = session.user.id
+  
 
-  const [stats, topProcedimentos, bottomVRPO, lastUpdate, user] = await Promise.all([
+  const [stats, topProcedimentos, bottomVRPO, profile] = await Promise.all([
     getDashboardStats(userId),
     getTopProcedimentos(userId, 5),
     getBottomProcedimentosVRPO(userId, 5),
-    getLastUpdateInfo(userId),
     prisma.user.findUnique({ where: { id: userId }, select: { onboardingCompleted: true } }),
   ])
 
@@ -30,8 +27,8 @@ export default async function DashboardRoute() {
       stats={stats}
       topProcedimentos={topProcedimentos}
       bottomVRPO={bottomVRPO}
-      lastUpdate={lastUpdate}
-      onboardingCompleted={user?.onboardingCompleted ?? true}
+      lastUpdate={stats.lastUpdate}
+      onboardingCompleted={profile?.onboardingCompleted ?? true}
     />
   )
 }

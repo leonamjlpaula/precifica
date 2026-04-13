@@ -1,14 +1,13 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import { getAuthUserId } from '@/lib/supabase/server'
 import { listSnapshots } from '@/application/usecases/snapshotActions'
 import { HistoricoPage } from '@/presentation/components/historico/HistoricoPage'
 
 export default async function HistoricoRoute() {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) redirect('/login')
+  const userId = await getAuthUserId()
+  if (!userId) redirect('/login')
 
-  const snapshots = await listSnapshots(session.user.id)
+  const snapshots = await listSnapshots(userId)
 
-  return <HistoricoPage userId={session.user.id} initialSnapshots={snapshots} />
+  return <HistoricoPage userId={userId} initialSnapshots={snapshots} />
 }

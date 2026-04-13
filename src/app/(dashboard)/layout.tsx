@@ -1,6 +1,5 @@
-import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { authOptions } from '@/lib/auth'
+import { getAuthUser } from '@/lib/supabase/server'
 import { DashboardLayout } from '@/presentation/components/layout/DashboardLayout'
 
 export default async function DashboardRouteLayout({
@@ -8,13 +7,13 @@ export default async function DashboardRouteLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await getServerSession(authOptions)
+  const user = await getAuthUser()
 
-  if (!session) {
+  if (!user) {
     redirect('/login')
   }
 
-  const userName = session.user?.name ?? 'Usuário'
+  const userName = user.user_metadata?.nome ?? user.email ?? 'Usuário'
 
   return (
     <DashboardLayout userName={userName}>

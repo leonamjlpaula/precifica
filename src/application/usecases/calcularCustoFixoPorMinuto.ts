@@ -1,7 +1,8 @@
+import { cache } from 'react'
 import { prisma } from '@/lib/db'
 import { CustoFixoPorMinuto } from '@/domain/value-objects/CustoFixoPorMinuto'
 
-export async function calcularCustoFixoPorMinuto(userId: string): Promise<number> {
+export const calcularCustoFixoPorMinuto = cache(async function calcularCustoFixoPorMinuto(userId: string): Promise<number> {
   const config = await prisma.custoFixoConfig.findUnique({
     where: { userId },
     include: { items: true },
@@ -10,4 +11,4 @@ export async function calcularCustoFixoPorMinuto(userId: string): Promise<number
   if (!config) return 0
 
   return CustoFixoPorMinuto.calculate(config, config.items)
-}
+})

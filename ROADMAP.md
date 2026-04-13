@@ -66,6 +66,8 @@ Fases 1 e 3 podem rodar em paralelo — cálculo é código, seed é curadoria d
 
 **Critério de "feito":** Dentista generalista cria conta e encontra pelo menos 80% dos seus procedimentos do dia-a-dia pré-configurados, com margem calculada automaticamente sem entrada manual além dos custos fixos.
 
+**Atenção pós-Fase 3:** Com 200+ procedimentos e 130+ materiais, as páginas de Materiais e Comparativo VRPO passam a carregar listas longas em uma única query sem limite. Antes de publicar o seed completo, adicionar paginação (scroll infinito ou paginação por página) nessas duas telas e remover o `findMany` sem `take` nos respectivos repositórios.
+
 ---
 
 ## Fase 4 — Onboarding Adaptativo e Dashboard de Diagnóstico
@@ -103,6 +105,19 @@ Fases 1 e 3 podem rodar em paralelo — cálculo é código, seed é curadoria d
 **Dependências:** Fase 4.
 
 **Critério de "feito":** Dentista ajusta aluguel no simulador e vê imediatamente quantos procedimentos cruzam para o vermelho, sem salvar. PDF de credenciamento aprovado em revisão por dentista que negocia com convênios.
+
+---
+
+## Pré-lançamento — Infraestrutura de Produção
+
+**Objetivo:** Garantir que a infraestrutura está otimizada para usuários brasileiros antes do lançamento público.
+
+**Entregáveis:**
+
+1. Confirmar índices no banco para `procedimento.userId`, `material.userId` e `procedimento.especialidadeId` — são os filtros presentes em todas as queries principais e precisam de índice explícito no schema Prisma para não degradar com crescimento de dados.
+2. Consolidar query redundante no dashboard: `getLastUpdateInfo` faz uma query separada em `custoFixoConfig` que poderia ser eliminada reutilizando o resultado já buscado em `getDashboardStats`.
+
+**Dependências:** Feito antes do deploy de produção, após desenvolvimento estável.
 
 ---
 

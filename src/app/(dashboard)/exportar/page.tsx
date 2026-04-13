@@ -1,14 +1,13 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import { getAuthUserId } from '@/lib/supabase/server'
 import { getExportData } from '@/application/usecases/exportActions'
 import { ExportarPage } from '@/presentation/components/exportar/ExportarPage'
 
 export default async function ExportarRoute() {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) redirect('/login')
+  const userId = await getAuthUserId()
+  if (!userId) redirect('/login')
 
-  const data = await getExportData(session.user.id)
+  const data = await getExportData(userId)
 
   return <ExportarPage data={data} />
 }

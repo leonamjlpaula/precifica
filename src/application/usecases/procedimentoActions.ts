@@ -75,6 +75,7 @@ export async function searchProcedimentos(
       },
     },
     orderBy: { codigo: 'asc' },
+    take: 50,
   })) as ProcedimentoWithMateriais[]
 
   const custoFixoPorMinuto = await calcularCustoFixoPorMinuto(userId)
