@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/presentation/components/ui/button'
+import { NavigationProgress } from '@/presentation/components/ui/NavigationProgress'
 
 const navItems = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -67,6 +68,7 @@ export function DashboardLayout({ children, userName }: DashboardLayoutProps) {
 
   return (
     <div className="flex h-screen bg-background">
+      <NavigationProgress />
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex w-64 flex-col bg-card border-r shrink-0">
         {/* Logo */}

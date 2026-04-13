@@ -15,6 +15,17 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      keyframes: {
+        'nav-progress': {
+          '0%':   { width: '0%' },
+          '20%':  { width: '40%' },
+          '60%':  { width: '70%' },
+          '100%': { width: '85%' },
+        },
+      },
+      animation: {
+        'nav-progress': 'nav-progress 8s cubic-bezier(0.1, 0.4, 0.2, 1) forwards',
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
