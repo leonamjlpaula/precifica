@@ -15,8 +15,8 @@ export default function CadastroPage() {
   const [state, action, isPending] = useActionState(createUser, initialState)
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('password')
-  const [confirmSenha, setConfirmSenha] = useState('password')
+  const [senha, setSenha] = useState('')
+  const [confirmSenha, setConfirmSenha] = useState('')
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">

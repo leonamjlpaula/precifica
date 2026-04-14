@@ -15,7 +15,6 @@ function LoginForm() {
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
-  const defaultPassword = 'password'
   const successMessage = searchParams.get('success')
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -65,7 +64,6 @@ function LoginForm() {
             id="password"
             name="password"
             placeholder="Sua senha"
-            defaultValue={defaultPassword}
             required
             disabled={isPending}
           />
