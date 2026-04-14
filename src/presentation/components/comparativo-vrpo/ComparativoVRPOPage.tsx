@@ -122,22 +122,6 @@ export function ComparativoVRPOPage({ data }: Props) {
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <div className="flex items-center gap-2">
-          <label htmlFor="filter-situacao" className="text-sm font-medium">
-            Situação:
-          </label>
-          <select
-            id="filter-situacao"
-            value={situacaoFilter}
-            onChange={(e) => handleSituacaoChange(e.target.value)}
-            className="rounded-md border border-input bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-          >
-            <option value="todos">Todos</option>
-            <option value="abaixo">Margem reduzida (abaixo da VRPO)</option>
-            <option value="acima">Com folga (acima da VRPO)</option>
-            <option value="sem_referencia">Sem referência</option>
-          </select>
-        </div>
-        <div className="flex items-center gap-2">
           <label htmlFor="filter-especialidade" className="text-sm font-medium">
             Especialidade:
           </label>

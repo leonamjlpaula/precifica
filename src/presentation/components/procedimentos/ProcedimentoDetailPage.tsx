@@ -420,6 +420,63 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
         </Card>
       </div>
 
+      {/* Preço de venda */}
+      <div className="border rounded-lg p-4">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h2 className="font-semibold">Preço de Venda</h2>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {editingPreco ? (
+                'Quanto você cobra por este procedimento'
+              ) : procedimento.precoVenda != null ? (
+                <span className="text-foreground font-medium">{formatBRL(procedimento.precoVenda)}</span>
+              ) : (
+                'Não configurado — defina para ver sua margem real'
+              )}
+            </p>
+          </div>
+          {editingPreco ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">R$</span>
+              <Input
+                type="text"
+                inputMode="decimal"
+                value={precoValue}
+                onChange={(e) => setPrecoValue(e.target.value)}
+                className="w-28"
+                placeholder="ex: 280,00"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSavePreco()
+                  if (e.key === 'Escape') {
+                    setEditingPreco(false)
+                    setPrecoValue(procedimento.precoVenda != null ? String(procedimento.precoVenda).replace('.', ',') : '')
+                  }
+                }}
+                autoFocus
+              />
+              <Button size="icon" variant="ghost" onClick={handleSavePreco} disabled={isPending}>
+                <Check className="h-4 w-4 text-green-600" />
+              </Button>
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={() => {
+                  setEditingPreco(false)
+                  setPrecoValue(procedimento.precoVenda != null ? String(procedimento.precoVenda).replace('.', ',') : '')
+                }}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
+            <Button variant="outline" size="sm" onClick={() => setEditingPreco(true)}>
+              <Edit2 className="h-4 w-4 mr-2" />
+              {procedimento.precoVenda != null ? 'Editar Preço' : 'Definir Preço'}
+            </Button>
+          )}
+        </div>
+      </div>
+
       {/* Tempo de execução */}
       <div className="border rounded-lg p-4">
         <div className="flex items-center justify-between gap-4">
@@ -481,63 +538,6 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
             >
               <Edit2 className="h-4 w-4 mr-2" />
               Editar Tempo
-            </Button>
-          )}
-        </div>
-      </div>
-
-      {/* Preço de venda */}
-      <div className="border rounded-lg p-4">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <h2 className="font-semibold">Preço de Venda</h2>
-            <p className="text-sm text-muted-foreground mt-0.5">
-              {editingPreco ? (
-                'Quanto você cobra por este procedimento'
-              ) : procedimento.precoVenda != null ? (
-                <span className="text-foreground font-medium">{formatBRL(procedimento.precoVenda)}</span>
-              ) : (
-                'Não configurado — defina para ver sua margem real'
-              )}
-            </p>
-          </div>
-          {editingPreco ? (
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">R$</span>
-              <Input
-                type="text"
-                inputMode="decimal"
-                value={precoValue}
-                onChange={(e) => setPrecoValue(e.target.value)}
-                className="w-28"
-                placeholder="ex: 280,00"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleSavePreco()
-                  if (e.key === 'Escape') {
-                    setEditingPreco(false)
-                    setPrecoValue(procedimento.precoVenda != null ? String(procedimento.precoVenda).replace('.', ',') : '')
-                  }
-                }}
-                autoFocus
-              />
-              <Button size="icon" variant="ghost" onClick={handleSavePreco} disabled={isPending}>
-                <Check className="h-4 w-4 text-green-600" />
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                onClick={() => {
-                  setEditingPreco(false)
-                  setPrecoValue(procedimento.precoVenda != null ? String(procedimento.precoVenda).replace('.', ',') : '')
-                }}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          ) : (
-            <Button variant="outline" size="sm" onClick={() => setEditingPreco(true)}>
-              <Edit2 className="h-4 w-4 mr-2" />
-              {procedimento.precoVenda != null ? 'Editar Preço' : 'Definir Preço'}
             </Button>
           )}
         </div>

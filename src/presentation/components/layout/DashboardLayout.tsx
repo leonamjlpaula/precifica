@@ -20,6 +20,8 @@ import {
 import { cn } from '@/lib/utils'
 import { Button } from '@/presentation/components/ui/button'
 import { NavigationProgress } from '@/presentation/components/ui/NavigationProgress'
+import Image from 'next/image'
+import banner from '@/assets/odonto_valor_banner.png'
 
 const navItems = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -75,9 +77,8 @@ export function DashboardLayout({ children, userName }: DashboardLayoutProps) {
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex w-64 flex-col bg-card border-r shrink-0">
         {/* Logo */}
-        <div className="p-6 border-b">
-          <h1 className="text-xl font-bold text-primary">Precifica</h1>
-          <p className="text-xs text-muted-foreground mt-1">Precificação Odontológica</p>
+        <div className="px-6 py-3 border-b">
+          <Image src={banner} alt="Odonto Valor" className="w-full h-auto" priority />
         </div>
 
         {/* Navigation */}
