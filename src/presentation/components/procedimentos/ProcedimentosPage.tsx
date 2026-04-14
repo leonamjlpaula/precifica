@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Search, Plus, X } from 'lucide-react'
 import type { Especialidade } from '@prisma/client'
-import type { ProcedimentoComPreco } from '@/application/usecases/procedimentoActions'
+import type { ProcedimentoComPrecoLista } from '@/application/usecases/procedimentoActions'
 import { createProcedimentoCustomizado } from '@/application/usecases/procedimentoActions'
 import { margemColor } from '@/application/usecases/calcularPrecoProcedimento'
 import { useToast } from '@/presentation/hooks/use-toast'
@@ -28,7 +28,7 @@ interface Props {
   userId: string
   especialidades: EspecialidadeWithCount[]
   currentEspecialidade: Especialidade
-  initialProcedimentos: ProcedimentoComPreco[]
+  initialProcedimentos: ProcedimentoComPrecoLista[]
   initialSearchQuery: string
 }
 

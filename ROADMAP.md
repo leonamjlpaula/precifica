@@ -1,8 +1,6 @@
-# Roadmap do Precifica
+# Roadmap do OdontoValor
 
 Priorização em dois eixos: **correção do produto** (bugs de cálculo que produzem números errados) e **retenção do primeiro usuário** (dentista que cria conta e não encontra seus procedimentos vai embora antes de sentir o valor). Fases independentes e entregáveis de forma isolada.
-
-Fases 1 e 3 podem rodar em paralelo — cálculo é código, seed é curadoria de dados. Fase 2 depende da 1. Fase 4 depende da 2 e da 3. Fase 5 depende da 4.
 
 ---
 
@@ -60,11 +58,6 @@ Fases 1 e 3 podem rodar em paralelo — cálculo é código, seed é curadoria d
 5. ✅ Campo `custoLaboratorio` em `Procedimento` (migration aplicada) + valores de referência em prótese (coroas PFM/Zircônia, PPF, PPR, overdenture, facetas), endodontia (espigão de fibra) e ortodontia (aparelhos, mantenedor de espaço).
 6. ⏭ Script de importação a partir de planilha — adiado; não é bloqueador para o lançamento.
 
-**Correções de performance aplicadas junto à Fase 3:**
-- `contarProcedimentosNoVermelho` reescrito com `select` mínimo e `Promise.all` — elimina o carregamento do grafo completo de 200+ procedimentos a cada save de material.
-- `getProcedimentosNoVermelho` teve a query de config movida para dentro do `Promise.all`, eliminando round-trip serial desnecessário.
-- Paginação client-side (50/página) já existia em Materiais e Comparativo VRPO — sem regressão.
-
 **Critério de "feito":** ✅ Dentista generalista cria conta e encontra seus procedimentos do dia-a-dia pré-configurados, com margem calculada automaticamente sem entrada manual além dos custos fixos.
 
 ---
@@ -107,25 +100,159 @@ Fases 1 e 3 podem rodar em paralelo — cálculo é código, seed é curadoria d
 
 ---
 
-## Pré-lançamento — Infraestrutura de Produção
+## Fase 6 — Qualidade, Segurança e Observabilidade
 
-**Objetivo:** Garantir que a infraestrutura está otimizada para usuários brasileiros antes do lançamento público.
+**Objetivo:** Garantir que a aplicação é segura, observável e em conformidade com LGPD antes de qualquer usuário real externo.
+
+**Esforço estimado:** 3–5 dias
 
 **Entregáveis:**
 
-1. Confirmar índices no banco para `procedimento.userId`, `material.userId` e `procedimento.especialidadeId` — são os filtros presentes em todas as queries principais e precisam de índice explícito no schema Prisma para não degradar com crescimento de dados.
-2. Consolidar query redundante no dashboard: `getLastUpdateInfo` faz uma query separada em `custoFixoConfig` que poderia ser eliminada reutilizando o resultado já buscado em `getDashboardStats`.
-3. **Otimizar `contarProcedimentosNoVermelho`** (identificado na revisão da Fase 2): a função é chamada após cada save de custo fixo e atualização de preço de material, e traz todos os procedimentos do usuário em memória para contar os em vermelho. Com o seed completo da Fase 3 (200+ procedimentos), isso ficará perceptível. Substituir por uma query enxuta que traga apenas `id`, `precoVenda`, `tempoMinutos` e os materiais necessários para o cálculo, descartando campos irrelevantes.
-4. **Eliminar query duplicada de config em `getProcedimentosNoVermelho`** (`dashboardActions.ts`): a função busca `percImpostos`/`percTaxaCartao` em query separada, mas `calcularCustoFixoPorMinuto` já busca o mesmo registro internamente. Consolidar em um único `Promise.all` usando o helper `getPercConfig` já existente em `procedimentoActions.ts` — ou extraí-lo para módulo compartilhado.
-5. **Extrair `getPercConfig` para módulo compartilhado**: o helper que lê `percImpostos`/`percTaxaCartao` do config está definido inline em `procedimentoActions.ts` e replicado manualmente em `dashboardActions.ts`. Mover para `src/lib/` ou `src/application/usecases/calcularCustoFixoPorMinuto.ts`.
+*Infraestrutura e performance:*
+1. Índices Prisma explícitos em `procedimento.userId`, `material.userId` e `procedimento.especialidadeId` — são os filtros presentes em todas as queries principais.
+2. Consolidar `getLastUpdateInfo` no dashboard reutilizando resultado já buscado em `getDashboardStats`, eliminando query redundante.
+3. Extrair `getPercConfig` para módulo compartilhado em `src/lib/` — o helper lê `percImpostos`/`percTaxaCartao` e está duplicado em `procedimentoActions.ts` e `dashboardActions.ts`.
 
-**Dependências:** Feito antes do deploy de produção, após desenvolvimento estável.
+*Segurança:*
+4. Headers HTTP de segurança em `next.config.ts`: `Content-Security-Policy`, `X-Frame-Options`, `Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy`.
+5. Auditoria sistemática de IDOR: revisar todos os server actions e route handlers — confirmar que toda operação de leitura e escrita valida `userId` da sessão antes de acessar o banco.
+6. Rate limiting no endpoint de autenticação (Upstash Ratelimit ou middleware Vercel) para proteção contra brute force.
+7. Confirmar que `SUPABASE_SECRET_KEY` nunca é referenciada em código de client component nem em variável com prefixo `NEXT_PUBLIC_`.
+
+*LGPD e compliance:*
+8. Feature de exclusão de conta e dados (direito ao esquecimento): server action que deleta em cascata todos os dados do usuário — procedimentos, materiais, configurações, snapshots — e então remove o registro `User` e o usuário no Supabase Auth.
+9. Cookie consent banner obrigatório antes de ativar cookies de terceiros (necessário para Posthog). Deve persistir preferência do usuário.
+10. Documentar no schema Prisma quais campos de `User` são dados pessoais e por quanto tempo são retidos após cancelamento/exclusão.
+
+*Observabilidade:*
+11. Setup Sentry (`@sentry/nextjs`): captura de exceções em server actions e route handlers com contexto de usuário (sem PII sensível).
+12. Setup Vercel Analytics: ativar no projeto Vercel (zero-config, sem código adicional).
+13. Setup Posthog: identificar usuário após login (`posthog.identify`), capturar eventos em ações-chave — procedimento criado, custo salvo, PDF exportado, simulador usado, snapshot gerado.
+
+**Dependências:** Nenhuma (pode rodar imediatamente após Fase 5).
+
+**Critério de "feito":** Headers de segurança verificáveis via securityheaders.com com nota ≥ B; Sentry recebendo eventos de erro de teste; Posthog registrando sessão e eventos de usuário de teste; feature de exclusão de conta remove todos os dados em cascata; cookie consent funcional.
 
 ---
 
-## Fase 6 — Nice-to-Haves de Alto Valor
+## Fase 7 — Autenticação Social, Suporte e Engajamento
 
-Sem data comprometida. Ordem de execução determinada pela demanda dos usuários.
+**Objetivo:** Reduzir fricção no cadastro, criar canal direto de contato com usuários e sinalizar que o produto está em evolução ativa.
+
+**Esforço estimado:** 2–3 dias
+
+**Entregáveis:**
+
+1. **Login social com Google** via Supabase OAuth: botão "Entrar com Google" nas telas de login e cadastro; no primeiro login social, criar registro em `User` com `nome` vindo do perfil Google e `onboardingCompleted: false` para acionar o wizard normalmente.
+2. **Área de suporte** (`/suporte`) acessível pela sidebar e pela futura área do usuário:
+   - Formulário com campos: nome (pré-preenchido), email (pré-preenchido), categoria (Problema técnico / Dúvida / Sugestão / Solicitar nova funcionalidade), mensagem livre.
+   - Envio via API route para email de suporte (Resend ou Supabase Edge Function).
+   - Link alternativo para WhatsApp (canal preferido por profissionais de saúde brasileiros).
+3. **Seção "Em breve"** como página `/em-breve` ou seção do dashboard:
+   - Cards visuais com os itens da Fase 10 (nice-to-haves do produto).
+   - Botão "Me avise quando estiver pronto" por card — registra evento no Posthog com nome da feature para medir demanda.
+   - Comunica que o produto está sendo desenvolvido ativamente.
+
+**Dependências:** Fase 6 (Posthog deve estar configurado para capturar eventos de interesse).
+
+**Critério de "feito":** Login com Google funcional em produção (inclusive no fluxo de onboarding); formulário de suporte envia email e exibe confirmação; seção "Em breve" no ar com pelo menos 5 features listadas e rastreamento de interesse ativo.
+
+---
+
+## Fase 8 — Monetização
+
+**Objetivo:** Transformar o produto em um negócio — fluxo de trial, cobrança automática, gestão de assinatura e área da conta do usuário.
+
+**Esforço estimado:** 6–10 dias
+
+**Processador de pagamento:** Stripe — suporta BRL, tem o melhor sistema nativo de trial + renovação automática para SaaS, SDK TypeScript de primeira classe para Next.js.
+
+**Modelo:** Trial gratuito de 14 dias com cartão de crédito obrigatório no cadastro → cobrança automática ao fim do trial. Cartão de crédito como único meio de pagamento (garante renovação automática sem intervenção). Preço: R$ 79/mês ou R$ 708/ano (~25% de desconto).
+
+**Entregáveis:**
+
+*Stripe e infraestrutura:*
+1. Criar produto e preços no Stripe Dashboard: `price_monthly` (R$ 79/mês recorrente) e `price_annual` (R$ 708/ano recorrente).
+2. Instalar SDK `stripe` e configurar variáveis de ambiente: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`.
+
+*Schema Prisma — novos campos em `User`:*
+3. Migration adicionando:
+   - `stripeCustomerId String? @unique` — ID do customer no Stripe
+   - `stripeSubscriptionId String? @unique` — ID da assinatura ativa
+   - `subscriptionStatus String?` — `trialing` | `active` | `past_due` | `canceled` | `incomplete`
+   - `trialEndsAt DateTime?` — data de fim do trial
+   - `currentPeriodEnd DateTime?` — data da próxima cobrança
+
+*Fluxo de cadastro com trial:*
+4. Ao criar conta: criar customer no Stripe → criar subscription com `trial_period_days: 14` e coleta de cartão via Stripe Checkout (modo subscription) ou Stripe Elements.
+5. Middleware de proteção por status de assinatura: redirecionar para `/assinar` se `subscriptionStatus` não for `trialing` ou `active`.
+6. Página `/assinar` para usuários com trial expirado, cancelado ou sem assinatura: exibe pricing, tabela mensal/anual e CTA de reativação.
+7. Banner de aviso no dashboard durante o trial exibindo dias restantes e link para gerenciar assinatura.
+
+*Webhooks:*
+8. Route handler `POST /api/stripe/webhook` com verificação de assinatura HMAC:
+   - `customer.subscription.updated` → atualiza `subscriptionStatus` e `currentPeriodEnd`
+   - `customer.subscription.deleted` → marca como `canceled`
+   - `invoice.payment_failed` → marca como `past_due`
+   - `invoice.payment_succeeded` → confirma `active`
+
+*Área do usuário (`/conta`):*
+9. Página `/conta` acessível pela sidebar (novo item de navegação):
+   - **Dados pessoais:** editar nome; visualizar email; alterar senha (redireciona para fluxo Supabase).
+   - **Assinatura:** plano atual, status, próxima cobrança, link para portal do cliente Stripe.
+   - **Zona de perigo:** excluir conta e todos os dados (usa server action da Fase 6).
+10. Integração com portal do cliente Stripe (`stripe.billingPortal.sessions.create`): permite ao usuário trocar cartão, ver histórico de faturas e cancelar sem necessidade de UI customizada.
+
+**Dependências:** Fases 6 e 7 (segurança e LGPD devem estar prontos antes de coletar dados de pagamento; Posthog para rastrear eventos de conversão do trial).
+
+**Critério de "feito":** Usuário consegue se cadastrar com cartão, usar o app por 14 dias em trial, ser cobrado automaticamente ao fim do trial, e gerenciar/cancelar a assinatura pelo portal Stripe. Webhook atualiza `subscriptionStatus` em tempo real. Acesso bloqueado para assinaturas expiradas.
+
+---
+
+## Fase 9 — Aquisição
+
+**Objetivo:** Criar a presença pública do produto — landing page que converte visitantes em trials, documentos legais obrigatórios para operação comercial e estratégia de marketing documentada.
+
+**Esforço estimado:** 4–6 dias
+
+**Entregáveis:**
+
+*Landing page (`/`):*
+1. Redesenho completo da rota `/` com seções:
+   - **Hero:** headline principal + subheadline + CTA primário "Começar grátis por 14 dias".
+   - **Problema:** "Você sabe se está no lucro em cada procedimento?"
+   - **Solução:** 3–4 features principais com screenshots reais do app.
+   - **Como funciona:** passo a passo em 3 etapas (configure → calcule → decida).
+   - **Pricing:** plano único com alternância mensal/anual + CTA + nota sobre trial de 14 dias.
+   - **FAQ:** 5–7 perguntas frequentes (cancelamento, segurança dos dados, metodologia de cálculo).
+   - **Rodapé:** links para Termos de Uso, Política de Privacidade, suporte e redes sociais.
+2. Meta tags Open Graph para compartilhamento em redes sociais (título, descrição, imagem).
+3. Structured data `schema.org/SoftwareApplication` para SEO.
+
+*Documentos legais:*
+4. Página `/termos-de-uso`: Termos de Uso para SaaS brasileiro — condições do trial, cobrança automática, cancelamento, limitação de responsabilidade, lei aplicável (Brasil).
+5. Página `/politica-de-privacidade`: Política de Privacidade em conformidade com LGPD — dados coletados, finalidade, retenção, direitos do titular (acesso, correção, exclusão, portabilidade), contato do responsável pelo tratamento.
+6. Checkbox de aceite nos formulários de cadastro e login: "Li e aceito os [Termos de Uso] e a [Política de Privacidade]".
+
+*Marketing:*
+7. Arquivo `MARKETING.md` na raiz do projeto com estratégia completa de lançamento:
+   - Público-alvo e personas (dentista solo, sócio de clínica, recém-formado)
+   - Canais prioritários: Instagram, YouTube (educacional), grupos WhatsApp de dentistas, LinkedIn
+   - Estratégia de conteúdo por canal (frequência, formatos, temas)
+   - Copy de anúncios (Google Ads: palavras-chave; Meta Ads: criativos)
+   - Sequência de email marketing: onboarding (dias 1/3/7), engajamento (dia 10), conversão de trial (dias 12/13/14)
+   - Estratégia de obtenção de leads: lead magnet (planilha gratuita de referência VRPO), SEO, parcerias com CROs e faculdades de odontologia
+   - Métricas de sucesso: CAC, MRR, taxa de conversão trial→pago, churn mensal
+
+**Dependências:** Fase 8 (o CTA da landing page aponta para o cadastro com Stripe; os Termos devem referenciar as condições reais do trial e do plano de preços).
+
+**Critério de "feito":** Landing page no ar em produção com Lighthouse Performance ≥ 85; Termos de Uso e Política de Privacidade publicados e linkados no rodapé, no cadastro e no login; `MARKETING.md` revisado e aprovado pelo responsável pelo produto.
+
+---
+
+## Fase 10 — Nice-to-haves de Produto (sob demanda)
+
+Sem data comprometida. Ordem de execução determinada pela demanda medida via Posthog e pelos botões "Me avise" da seção "Em breve" (Fase 7).
 
 | Item | Valor |
 |---|---|
@@ -143,11 +270,15 @@ Sem data comprometida. Ordem de execução determinada pela demanda dos usuário
 
 ## Resumo
 
-| Fase | Foco | Esforço | Valor | Pode rodar com |
+| Fase | Foco | Esforço | Status | Depende de |
 |---|---|---|---|---|
-| 1 | Correções de cálculo | 1–2 dias | Crítico ✅ | Fase 3 (paralelo) |
-| 2 | Margem visível + alertas | 3–4 dias | Alto ✅ | Após Fase 1 |
-| 3 | Seed completo | 5–8 dias | Crítico ✅ | Fase 1 (paralelo) |
-| 4 | Onboarding + dashboard | 3–4 dias | Alto ✅ | Após Fases 1+2+3 |
-| 5 | Simulador + PDF profissional | 4–6 dias | Diferencial ✅ | Após Fase 4 |
-| 6 | Nice-to-haves | Variável | Incremental | Qualquer ordem |
+| 1 | Correções de cálculo | 1–2d | ✅ | — |
+| 2 | Margem visível + alertas | 3–4d | ✅ | 1 |
+| 3 | Seed completo | 5–8d | ✅ | 1 |
+| 4 | Onboarding + dashboard | 3–4d | ✅ | 1+2+3 |
+| 5 | Simulador + PDF profissional | 4–6d | ✅ | 4 |
+| 6 | Segurança + LGPD + analytics | 3–5d | Pendente | — |
+| 7 | Google login + suporte + "em breve" | 2–3d | Pendente | 6 |
+| 8 | Stripe + trial + assinatura + /conta | 6–10d | Pendente | 6+7 |
+| 9 | Landing page + legal + marketing | 4–6d | Pendente | 8 |
+| 10 | Nice-to-haves de produto | Variável | Backlog | Qualquer ordem |

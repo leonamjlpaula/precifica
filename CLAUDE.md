@@ -158,11 +158,6 @@ src/
 | Variável | Dev (Docker) | Prod (Supabase) |
 |---|---|---|
 | `DATABASE_URL` | `postgresql://postgres:postgres@localhost:5432/precifica` | connection string do Supabase |
-| `SMTP_HOST` | `localhost` (Mailhog) | `smtp.resend.com` |
-| `SMTP_PORT` | `1025` | `465` |
-| `SMTP_SECURE` | `false` | `true` |
-| `SMTP_USER` | _(vazio)_ | `resend` |
-| `SMTP_PASS` | _(vazio)_ | API key do Resend |
 
 **Setup dev local:**
 ```bash
@@ -173,7 +168,7 @@ npx prisma db seed
 npm run dev
 ```
 
-Emails em dev são capturados pelo Mailhog em **http://localhost:8025**.
+**Email em produção:** O envio de email de confirmação de cadastro é gerenciado pelo próprio Supabase Auth — não há SMTP customizado no app. Para configurar o provedor de email em produção, acesse `Supabase Dashboard → Project Settings → Auth → SMTP Settings`.
 
 ---
 

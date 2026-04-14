@@ -29,6 +29,22 @@ export type ProcedimentoComPreco = {
   vrpoReferencia: number | null
 }
 
+/** Lean type for the list view — strips materiais to reduce RSC payload size. */
+export type ProcedimentoListItem = {
+  id: string
+  codigo: string
+  nome: string
+  tempoMinutos: number
+  isCustom: boolean
+  especialidade: { codigo: string }
+}
+
+export type ProcedimentoComPrecoLista = {
+  procedimento: ProcedimentoListItem
+  precoCalculado: PrecoCalculado
+  vrpoReferencia: number | null
+}
+
 export type CreateProcedimentoResult = {
   success: boolean
   procedimento?: ProcedimentoWithMateriais
@@ -40,14 +56,15 @@ export type CreateProcedimentoResult = {
 export async function getProcedimentosByEspecialidade(
   userId: string,
   especialidadeSlug: string
-): Promise<ProcedimentoComPreco[]> {
+): Promise<ProcedimentoComPrecoLista[]> {
   const especialidade = await prisma.especialidade.findUnique({
     where: { codigo: especialidadeSlug },
   })
   if (!especialidade) return []
 
-  const procedimentos = await repository.listByUserAndEspecialidade(userId, especialidade.id)
-  const [custoFixoPorMinuto, { percImpostos, percTaxaCartao }] = await Promise.all([
+  // All three queries are independent — run in parallel
+  const [procedimentos, custoFixoPorMinuto, { percImpostos, percTaxaCartao }] = await Promise.all([
+    repository.listByUserAndEspecialidade(userId, especialidade.id),
     calcularCustoFixoPorMinuto(userId),
     getPercConfig(userId),
   ])
@@ -60,7 +77,15 @@ export async function getProcedimentosByEspecialidade(
   const vrpoMap = new Map(vrpoRefs.map((v) => [v.codigo, v.valorReferencia]))
 
   return procedimentos.map((procedimento) => ({
-    procedimento,
+    // Strip materiais — used for calculation only; list view never renders them
+    procedimento: {
+      id: procedimento.id,
+      codigo: procedimento.codigo,
+      nome: procedimento.nome,
+      tempoMinutos: procedimento.tempoMinutos,
+      isCustom: procedimento.isCustom,
+      especialidade: { codigo: procedimento.especialidade.codigo },
+    },
     precoCalculado: calcularPrecoProcedimento(procedimento, custoFixoPorMinuto, percImpostos, percTaxaCartao),
     vrpoReferencia: vrpoMap.get(procedimento.codigo) ?? null,
   }))
@@ -71,29 +96,28 @@ export async function getProcedimentosByEspecialidade(
 export async function searchProcedimentos(
   userId: string,
   query: string
-): Promise<ProcedimentoComPreco[]> {
+): Promise<ProcedimentoComPrecoLista[]> {
   if (!query.trim()) return []
 
-  const procedimentos = (await prisma.procedimento.findMany({
-    where: {
-      userId,
-      OR: [
-        { nome: { contains: query, mode: 'insensitive' } },
-        { codigo: { contains: query, mode: 'insensitive' } },
-      ],
-    },
-    include: {
-      especialidade: true,
-      materiais: {
-        include: { material: true },
-        orderBy: { ordem: 'asc' },
+  const [procedimentos, custoFixoPorMinuto, { percImpostos, percTaxaCartao }] = await Promise.all([
+    prisma.procedimento.findMany({
+      where: {
+        userId,
+        OR: [
+          { nome: { contains: query, mode: 'insensitive' } },
+          { codigo: { contains: query, mode: 'insensitive' } },
+        ],
       },
-    },
-    orderBy: { codigo: 'asc' },
-    take: 50,
-  })) as ProcedimentoWithMateriais[]
-
-  const [custoFixoPorMinuto, { percImpostos, percTaxaCartao }] = await Promise.all([
+      include: {
+        especialidade: true,
+        materiais: {
+          include: { material: true },
+          orderBy: { ordem: 'asc' },
+        },
+      },
+      orderBy: { codigo: 'asc' },
+      take: 50,
+    }) as Promise<ProcedimentoWithMateriais[]>,
     calcularCustoFixoPorMinuto(userId),
     getPercConfig(userId),
   ])
@@ -105,7 +129,14 @@ export async function searchProcedimentos(
   const vrpoMap = new Map(vrpoRefs.map((v) => [v.codigo, v.valorReferencia]))
 
   return procedimentos.map((procedimento) => ({
-    procedimento,
+    procedimento: {
+      id: procedimento.id,
+      codigo: procedimento.codigo,
+      nome: procedimento.nome,
+      tempoMinutos: procedimento.tempoMinutos,
+      isCustom: procedimento.isCustom,
+      especialidade: { codigo: procedimento.especialidade.codigo },
+    },
     precoCalculado: calcularPrecoProcedimento(procedimento, custoFixoPorMinuto, percImpostos, percTaxaCartao),
     vrpoReferencia: vrpoMap.get(procedimento.codigo) ?? null,
   }))
