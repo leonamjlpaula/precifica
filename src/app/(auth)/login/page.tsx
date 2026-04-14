@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { Suspense, useState, useTransition } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
@@ -10,7 +10,7 @@ import { PasswordInput } from '@/presentation/components/ui/password-input'
 import { Label } from '@/presentation/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/presentation/components/ui/card'
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
@@ -39,6 +39,52 @@ export default function LoginPage() {
   }
 
   return (
+    <>
+      {successMessage && (
+        <div className="mb-4 p-3 rounded-md bg-green-50 border border-green-200 text-green-700 text-sm">
+          {successMessage}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="joao@consultorio.com"
+            required
+            disabled={isPending}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="password">Senha</Label>
+          <PasswordInput
+            id="password"
+            name="password"
+            placeholder="Sua senha"
+            defaultValue={defaultPassword}
+            required
+            disabled={isPending}
+          />
+        </div>
+
+        {error && (
+          <p className="text-sm text-destructive">{error}</p>
+        )}
+
+        <Button type="submit" className="w-full" loading={isPending}>
+          Entrar
+        </Button>
+      </form>
+    </>
+  )
+}
+
+export default function LoginPage() {
+  return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
@@ -48,45 +94,9 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {successMessage && (
-            <div className="mb-4 p-3 rounded-md bg-green-50 border border-green-200 text-green-700 text-sm">
-              {successMessage}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="joao@consultorio.com"
-                required
-                disabled={isPending}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">Senha</Label>
-              <PasswordInput
-                id="password"
-                name="password"
-                placeholder="Sua senha"
-                defaultValue={defaultPassword}
-                required
-                disabled={isPending}
-              />
-            </div>
-
-            {error && (
-              <p className="text-sm text-destructive">{error}</p>
-            )}
-
-            <Button type="submit" className="w-full" loading={isPending}>
-              Entrar
-            </Button>
-          </form>
+          <Suspense>
+            <LoginForm />
+          </Suspense>
 
           <div className="mt-4 text-center">
             <Link href="/esqueci-senha" className="text-xs text-muted-foreground hover:underline underline-offset-4">

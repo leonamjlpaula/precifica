@@ -11,7 +11,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "dotenv -e .env.local -- prisma migrate dev",
     "prisma:seed": "dotenv -e .env.local -- ts-node --project tsconfig.seed.json prisma/seed.ts",
-    "seed:import": "ts-node --project tsconfig.seed.json scripts/import-seed-data.ts"
+    "seed:import": "ts-node --project tsconfig.seed.json scripts/import-seed-data.ts",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "dotenv -e .env.local -- ts-node --project tsconfig.seed.json prisma/seed.ts"
