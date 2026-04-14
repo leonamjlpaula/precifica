@@ -1,4 +1,4 @@
-# Precifica — CLAUDE.md
+# OdontoValor — CLAUDE.md
 
 SaaS de precificação para consultórios odontológicos brasileiros. Posicionamento central: **"Configure em 10 minutos e saiba se está no lucro ou no prejuízo em cada procedimento."**
 
@@ -19,8 +19,8 @@ Antes de qualquer tarefa de produto, leia:
 
 - **Framework**: Next.js 15 (App Router, React 19)
 - **Linguagem**: TypeScript estrito
-- **Banco de dados**: PostgreSQL via Prisma 6
-- **Autenticação**: NextAuth.js v4 (Credentials provider)
+- **Banco de dados**: PostgreSQL via Prisma 6 + Supabase (PgBouncer transaction pooler na porta 6543)
+- **Autenticação**: Supabase Auth (`@supabase/ssr` + `@supabase/supabase-js`)
 - **UI**: Tailwind CSS + shadcn/ui + Radix UI primitives
 - **Validação**: Zod
 - **Exportação**: @react-pdf/renderer (PDF) + xlsx/SheetJS (Excel)
@@ -85,7 +85,8 @@ src/
 ├── presentation/
 │   ├── components/               # componentes React (client components)
 │   └── hooks/                    # hooks customizados
-├── lib/                          # utilitários compartilhados (db.ts, auth.ts, utils.ts)
+├── lib/                          # utilitários compartilhados (db.ts, supabase/server.ts, utils.ts)
+│   └── referenceData.ts          # getEspecialidades + getVrpoRefs com unstable_cache (24h)
 └── types/                        # augmentações de tipos globais
 ```
 
@@ -96,7 +97,13 @@ src/
 ### Pages vs Components
 - **Pages** (`app/**/page.tsx`): server components. Verificam sessão, buscam dados, passam para client component.
 - **Client components**: ficam em `src/presentation/components/`. Recebem dados via props, gerenciam estado local.
-- Padrão típico de page: `getServerSession` → redirect se não autenticado → `Promise.all([...actions])` → renderiza client component.
+- Padrão típico de page: `getAuthUserId()` → redirect se não autenticado → `Promise.all([...actions])` → renderiza client component.
+
+### Caching
+- **`React cache()`** — deduplicação por request. Usado em `calcularCustoFixoPorMinuto` e `getPercConfig`.
+- **`unstable_cache` (next/cache)** — persistência cross-request (Data Cache). Usado em `src/lib/referenceData.ts` (especialidades e refs VRPO, TTL 24h) e na config do usuário (por userId, invalidada via `revalidateTag`).
+- **Padrão de invalidação**: mutations em `custoFixoActions.ts` chamam `revalidateTag('config-{userId}')` para forçar recálculo no próximo request.
+- Dados globais (`Especialidade`, `VRPOReferencia`) nunca mudam em produção — cacheados sem tag, apenas TTL.
 
 ### Server Actions
 - Ficam em `src/application/usecases/*Actions.ts` com `'use server'` no topo.
@@ -110,9 +117,10 @@ src/
 - Server actions instanciam o repositório diretamente (sem injeção de dependência formal).
 
 ### Autenticação
-- `getServerSession(authOptions)` em server components/actions para obter userId.
-- Middleware em `src/middleware.ts` protege `/dashboard/:path*`.
-- Sessão JWT contém `userId` e `name`.
+- `getAuthUserId()` de `@/lib/supabase/server` em server components/actions para obter userId.
+- Middleware em `src/middleware.ts` protege todas as rotas autenticadas: `/dashboard`, `/custos-fixos`, `/materiais`, `/procedimentos`, `/comparativo-vrpo`, `/historico`, `/exportar`, `/primeiros-passos`, `/simulador`, `/conta`.
+- Middleware usa `supabase.auth.getSession()` (lê JWT do cookie sem roundtrip). Server components usam `getAuthUserId()` que chama `getUser()` para validação segura com o servidor Supabase.
+- Variáveis necessárias: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`.
 
 ---
 
@@ -146,29 +154,33 @@ src/
 - **Fase 4 ✅** — Onboarding adaptativo: wizard com passo 0 de perfil (solo/clínica), passo explicativo de rateio por cadeiras para clínicas. Dashboard: seção "Atenção necessária" (procedimentos no vermelho, custos desatualizados, ociosidade não configurada), card de faturamento mínimo semanal (break-even ÷ 4), framing do comparativo VRPO como margem de negociação.
 - **Fase 5 ✅** — Simulador de cenários (`/simulador`): ajuste client-side de custo fixo total, cadeiras, ociosidade, impostos e taxa de cartão com impacto em tempo real no custo/min e margem por procedimento. PDF de credenciamento com memória completa de cálculo (itens, depreciação, remuneração, retorno) e metodologia CNCC referenciada. Histórico: diff estruturado dos itens de custo fixo entre snapshots. Correção: query duplicada em `compareSnapshotWithCurrent` eliminada (usava `currentData.custoFixoItems` retornado por `gerarSnapshot`).
 
-**Próximo passo (Pré-lançamento):**
-- Confirmar índices no banco para `procedimento.userId`, `material.userId` e `procedimento.especialidadeId`
-- Consolidar query redundante de config no dashboard (`getLastUpdateInfo`)
-- Extrair `getPercConfig` para módulo compartilhado
+**Próximo passo:** ver `ROADMAP.md` — Fase 6 (Segurança + LGPD + Analytics).
 
 ---
 
 ## Ambientes
 
-| Variável | Dev (Docker) | Prod (Supabase) |
-|---|---|---|
-| `DATABASE_URL` | `postgresql://postgres:postgres@localhost:5432/precifica` | connection string do Supabase |
+Dev e prod apontam para o **mesmo Supabase** — não há banco Docker local para o app. O Docker Compose sobe um PostgreSQL auxiliar para testes locais sem Supabase, mas o fluxo padrão usa Supabase direto.
 
-**Setup dev local:**
+| Variável | Descrição |
+|---|---|
+| `DATABASE_URL` | Transaction Pooler porta 6543 — `?pgbouncer=true&connection_limit=1` obrigatório |
+| `DIRECT_URL` | Direct connection porta 5432 — usado pelo `prisma migrate` |
+| `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase (`https://xxxx.supabase.co`) |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Publishable key (prefixo `sb_publishable_`) |
+| `SUPABASE_SECRET_KEY` | Secret key — **nunca expor no client** nem em variável `NEXT_PUBLIC_` |
+
+**Setup dev:**
 ```bash
-cp .env.local.example .env.local
-docker compose up -d          # PostgreSQL na :5432, Mailhog na :8025
+cp .env.example .env.local   # preencher com valores do painel Supabase
 npx prisma migrate dev
 npx prisma db seed
 npm run dev
 ```
 
-**Email em produção:** O envio de email de confirmação de cadastro é gerenciado pelo próprio Supabase Auth — não há SMTP customizado no app. Para configurar o provedor de email em produção, acesse `Supabase Dashboard → Project Settings → Auth → SMTP Settings`.
+**Email:** Confirmação de cadastro gerenciada pelo Supabase Auth. Para configurar provedor custom: `Supabase Dashboard → Project Settings → Auth → SMTP Settings`.
+
+**Deploy:** `vercel.json` com `regions: ["gru1"]` (São Paulo) — co-localizado com Supabase `aws-1-sa-east-1`.
 
 ---
 

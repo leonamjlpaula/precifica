@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition, useEffect } from 'react'
+import { useState, useTransition, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/presentation/components/ui/button'
@@ -35,16 +35,11 @@ export function DashboardShell({ userId, onboardingCompleted, perfilConsultorio 
   const [snapNome, setSnapNome] = useState('')
   const [snapDesc, setSnapDesc] = useState('')
   const [snapError, setSnapError] = useState<string | null>(null)
-  const [guiaBannerVisivel, setGuiaBannerVisivel] = useState(false)
-
-  useEffect(() => {
-    const dispensado = localStorage.getItem(GUIA_BANNER_KEY)
-    if (!dispensado) setGuiaBannerVisivel(true)
-  }, [])
+  const guiaBannerRef = useRef<HTMLDivElement>(null)
 
   function dispensarGuiaBanner() {
     localStorage.setItem(GUIA_BANNER_KEY, '1')
-    setGuiaBannerVisivel(false)
+    if (guiaBannerRef.current) guiaBannerRef.current.style.display = 'none'
   }
 
   function handleSnapshotOpen() {
@@ -77,29 +72,40 @@ export function DashboardShell({ userId, onboardingCompleted, perfilConsultorio 
         <OnboardingWizard userId={userId} perfilConsultorio={perfilConsultorio} />
       )}
 
-      {guiaBannerVisivel && (
-        <div className="flex items-start gap-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-4">
-          <BookOpen className="h-5 w-5 shrink-0 text-primary mt-0.5" aria-hidden="true" />
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground">Novo por aqui? Veja o guia de primeiros passos</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              Configure seus custos, materiais e preços de venda em poucos minutos.
-            </p>
-            <Button asChild size="sm" variant="default" className="mt-3">
-              <Link href="/primeiros-passos" onClick={dispensarGuiaBanner}>
-                Ver guia <ArrowRight className="ml-1 h-3 w-3" aria-hidden="true" />
-              </Link>
-            </Button>
-          </div>
-          <button
-            onClick={dispensarGuiaBanner}
-            className="shrink-0 rounded-md p-1 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label="Dispensar guia"
-          >
-            <X className="h-4 w-4" />
-          </button>
+      {/* Banner rendered hidden on SSR; inline script shows it before hydration if not dismissed */}
+      <div
+        ref={guiaBannerRef}
+        id="guia-banner-primeiros-passos"
+        style={{ display: 'none' }}
+        suppressHydrationWarning
+        className="flex items-start gap-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-4"
+      >
+        <BookOpen className="h-5 w-5 shrink-0 text-primary mt-0.5" aria-hidden="true" />
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-foreground">Novo por aqui? Veja o guia de primeiros passos</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            Configure seus custos, materiais e preços de venda em poucos minutos.
+          </p>
+          <Button asChild size="sm" variant="default" className="mt-3">
+            <Link href="/primeiros-passos" onClick={dispensarGuiaBanner}>
+              Ver guia <ArrowRight className="ml-1 h-3 w-3" aria-hidden="true" />
+            </Link>
+          </Button>
         </div>
-      )}
+        <button
+          onClick={dispensarGuiaBanner}
+          className="shrink-0 rounded-md p-1 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          aria-label="Dispensar guia"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+      {/* Static inline script — content is a compile-time constant, no user input, no XSS risk */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: "(function(){try{if(!localStorage.getItem('odontovalor_guia_dispensado')){var b=document.getElementById('guia-banner-primeiros-passos');if(b)b.style.display=''}}catch(e){}})();",
+        }}
+      />
 
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Dashboard</h1>

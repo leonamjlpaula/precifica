@@ -1,8 +1,10 @@
 'use client'
 
 import { useActionState, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/presentation/components/ui/button'
+import banner from '@/assets/odonto_valor_banner.png'
 import { Input } from '@/presentation/components/ui/input'
 import { PasswordInput } from '@/presentation/components/ui/password-input'
 import { Label } from '@/presentation/components/ui/label'
@@ -21,6 +23,14 @@ export default function CadastroPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
+        <div className="px-6 pt-6">
+          <Image
+            src={banner}
+            alt="OdontoValor"
+            className="w-full h-auto rounded-md"
+            priority
+          />
+        </div>
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Criar conta</CardTitle>
           <CardDescription className="text-center">
