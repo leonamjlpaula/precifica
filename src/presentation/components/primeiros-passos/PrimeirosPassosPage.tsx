@@ -34,7 +34,7 @@ const steps = [
 
 const extras = [
   {
-    title: 'Salve snapshots',
+    title: 'Registre sua precificação',
     description: 'Guarda o estado atual dos preços para comparar com versões futuras.',
     href: '/historico',
     label: 'Ir para Histórico',

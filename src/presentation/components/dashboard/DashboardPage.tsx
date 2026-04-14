@@ -22,6 +22,7 @@ import {
 import { Input } from '@/presentation/components/ui/input'
 import { Label } from '@/presentation/components/ui/label'
 import { useToast } from '@/presentation/hooks/use-toast'
+import { Camera } from 'lucide-react'
 import { createSnapshot } from '@/application/usecases/snapshotActions'
 import { OnboardingWizard } from '@/presentation/components/layout/OnboardingWizard'
 import type { DashboardStats, TopProcedimento, ProcedimentoNoVermelho } from '@/application/usecases/dashboardActions'
@@ -84,11 +85,11 @@ export function DashboardPage({
     startTransition(async () => {
       const result = await createSnapshot(userId, snapNome.trim(), snapDesc.trim() || undefined)
       if (!result.success) {
-        setSnapError(result.error ?? 'Erro ao salvar snapshot')
+        setSnapError(result.error ?? 'Erro ao salvar registro')
         return
       }
       setSnapshotOpen(false)
-      toast({ title: 'Snapshot salvo!', description: 'Acesse o Histórico para visualizá-lo.' })
+      toast({ title: 'Registro salvo!', description: 'Acesse o Histórico para visualizá-lo.' })
       router.refresh()
     })
   }
@@ -102,7 +103,8 @@ export function DashboardPage({
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <Button variant="outline" onClick={handleSnapshotOpen} disabled={isPending}>
-          Salvar Snapshot Atual
+          <Camera className="mr-2 h-4 w-4" />
+          Registrar Precificação Atual
         </Button>
       </div>
 
@@ -110,7 +112,7 @@ export function DashboardPage({
       <Dialog open={snapshotOpen} onOpenChange={setSnapshotOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Salvar Snapshot Atual</DialogTitle>
+            <DialogTitle>Registrar Precificação Atual</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">

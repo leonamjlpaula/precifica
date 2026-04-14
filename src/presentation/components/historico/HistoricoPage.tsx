@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { PlusCircle, Eye, Trash2, ArrowLeft, GitCompare } from 'lucide-react'
+import { PlusCircle, Eye, Trash2, ArrowLeft, GitCompare, Camera } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/presentation/components/ui/button'
 import {
@@ -101,7 +101,7 @@ export function HistoricoPage({ userId, initialSnapshots }: Props) {
         return
       }
       setCreateOpen(false)
-      toast({ title: 'Snapshot salvo com sucesso!' })
+      toast({ title: 'Registro salvo com sucesso!' })
       router.refresh()
       // Refresh local list
       const { listSnapshots } = await import('@/application/usecases/snapshotActions')
@@ -114,7 +114,7 @@ export function HistoricoPage({ userId, initialSnapshots }: Props) {
     startTransition(async () => {
       const snapshot = await getSnapshot(id, userId)
       if (!snapshot) {
-        toast({ title: 'Snapshot não encontrado', variant: 'destructive' })
+        toast({ title: 'Registro não encontrado', variant: 'destructive' })
         return
       }
       setSelectedSnapshot(snapshot)
@@ -130,7 +130,7 @@ export function HistoricoPage({ userId, initialSnapshots }: Props) {
         compareSnapshotWithCurrent(id, userId),
       ])
       if (!snapshot) {
-        toast({ title: 'Snapshot não encontrado', variant: 'destructive' })
+        toast({ title: 'Registro não encontrado', variant: 'destructive' })
         return
       }
       setSelectedSnapshot(snapshot)
@@ -147,10 +147,10 @@ export function HistoricoPage({ userId, initialSnapshots }: Props) {
     startTransition(async () => {
       const result = await deleteSnapshot(id, userId)
       if (!result.success) {
-        toast({ title: result.error ?? 'Erro ao excluir snapshot', variant: 'destructive' })
+        toast({ title: result.error ?? 'Erro ao excluir registro', variant: 'destructive' })
         return
       }
-      toast({ title: 'Snapshot excluído' })
+      toast({ title: 'Registro excluído' })
       setSnapshots((prev) => prev.filter((s) => s.id !== id))
       if (selectedSnapshot?.id === id) {
         setViewMode('list')
@@ -172,14 +172,14 @@ export function HistoricoPage({ userId, initialSnapshots }: Props) {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Histórico de Snapshots</h1>
+          <h1 className="text-2xl font-bold">Histórico de Registros</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Salve versões da sua precificação e compare sua evolução ao longo do tempo.
+            Registre versões da sua precificação e compare sua evolução ao longo do tempo.
           </p>
         </div>
         <Button onClick={handleCreateOpen} disabled={snapshots.length >= SNAPSHOT_LIMIT || isPending}>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Salvar Snapshot Atual
+          <Camera className="mr-2 h-4 w-4" />
+          Registrar Precificação Atual
         </Button>
       </div>
 
@@ -191,7 +191,7 @@ export function HistoricoPage({ userId, initialSnapshots }: Props) {
             snapshots.length >= SNAPSHOT_LIMIT ? 'text-destructive' : 'text-foreground'
           )}
         >
-          {snapshots.length}/{SNAPSHOT_LIMIT} snapshots
+          {snapshots.length}/{SNAPSHOT_LIMIT} registros
         </span>{' '}
         {snapshots.length >= SNAPSHOT_LIMIT && (
           <span className="text-destructive">— limite atingido. Exclua um para criar outro.</span>
@@ -231,7 +231,7 @@ export function HistoricoPage({ userId, initialSnapshots }: Props) {
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Salvar Snapshot Atual</DialogTitle>
+            <DialogTitle>Registrar Precificação Atual</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
@@ -275,10 +275,10 @@ export function HistoricoPage({ userId, initialSnapshots }: Props) {
       <Dialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Excluir snapshot?</DialogTitle>
+            <DialogTitle>Excluir registro?</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
-            Esta ação não pode ser desfeita. O snapshot será removido permanentemente.
+            Esta ação não pode ser desfeita. O registro será removido permanentemente.
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteId(null)} disabled={isPending}>
@@ -309,7 +309,7 @@ function SnapshotList({ snapshots, isPending, onView, onCompare, onDelete }: Sna
     return (
       <div className="rounded-md border border-dashed p-12 text-center">
         <p className="text-muted-foreground">
-          Nenhum snapshot salvo. Salve o estado atual da sua precificação.
+          Nenhum registro salvo. Registre o estado atual da sua precificação.
         </p>
       </div>
     )
@@ -347,7 +347,7 @@ function SnapshotList({ snapshots, isPending, onView, onCompare, onDelete }: Sna
                     variant="ghost"
                     onClick={() => onView(snapshot.id)}
                     disabled={isPending}
-                    title="Ver snapshot"
+                    title="Ver registro"
                   >
                     <Eye className="h-4 w-4" />
                     <span className="sr-only">Ver</span>
@@ -367,7 +367,7 @@ function SnapshotList({ snapshots, isPending, onView, onCompare, onDelete }: Sna
                     variant="ghost"
                     onClick={() => onDelete(snapshot.id)}
                     disabled={isPending}
-                    title="Excluir snapshot"
+                    title="Excluir registro"
                     className="text-destructive hover:text-destructive"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -470,7 +470,7 @@ function SnapshotView({ snapshot, isPending, onBack, onCompare, onDelete }: Snap
         </div>
       </div>
       <p className="text-xs text-muted-foreground">
-        {snapshot.dados.procedimentos.length} procedimentos neste snapshot
+        {snapshot.dados.procedimentos.length} procedimentos neste registro
       </p>
     </div>
   )
@@ -504,7 +504,7 @@ function ComparisonView({ snapshot, result, onBack }: ComparisonViewProps) {
           Comparativo: <span className="text-muted-foreground">{snapshot.nome}</span> vs. Atual
         </h2>
         <p className="mt-0.5 text-sm text-muted-foreground">
-          Snapshot de {formatDate(snapshot.createdAt)}
+          Registro de {formatDate(snapshot.createdAt)}
         </p>
       </div>
 
@@ -598,7 +598,7 @@ function CustoItemsDiffSection({ items }: { items: CustoItemDiff[] }) {
       <div className="px-4 py-3 border-b bg-muted/30">
         <h3 className="text-sm font-semibold">Variações nos custos fixos</h3>
         <p className="text-xs text-muted-foreground mt-0.5">
-          Itens que mudaram de valor entre o snapshot e o estado atual
+          Itens que mudaram de valor entre este registro e o estado atual
         </p>
       </div>
       <div className="overflow-x-auto">
@@ -606,7 +606,7 @@ function CustoItemsDiffSection({ items }: { items: CustoItemDiff[] }) {
           <thead>
             <tr className="border-b text-xs text-muted-foreground">
               <th className="px-4 py-2 text-left font-medium">Item</th>
-              <th className="px-4 py-2 text-right font-medium">Valor no snapshot</th>
+              <th className="px-4 py-2 text-right font-medium">Valor no registro</th>
               <th className="px-4 py-2 text-right font-medium">Valor atual</th>
               <th className="px-4 py-2 text-right font-medium">Variação</th>
             </tr>
