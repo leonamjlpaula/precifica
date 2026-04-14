@@ -15,7 +15,7 @@ interface MaterialOption {
 
 interface MaterialComboboxProps {
   options: MaterialOption[]
-  onSelect: (id: string, divisorPadrao: number) => void
+  onSelect: (id: string, divisorPadrao: number, unidade: string) => void
   onClear: () => void
   placeholder?: string
   disabled?: boolean
@@ -69,7 +69,7 @@ export function MaterialCombobox({
     setQuery(option.nome)
     setOpen(false)
     setActiveIdx(-1)
-    onSelect(option.id, option.divisorPadrao)
+    onSelect(option.id, option.divisorPadrao, option.unidade)
   }
 
   function handleClear(e: React.MouseEvent) {

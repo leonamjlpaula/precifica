@@ -136,33 +136,28 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
   // ─── Material row editing ─────────────────────────────────────────────────
   const [editingPmaId, setEditingPmaId] = useState<string | null>(null)
   const [editConsumo, setEditConsumo] = useState('')
-  const [editDivisor, setEditDivisor] = useState('')
+  const [editDivisor, setEditDivisor] = useState(0)
 
   function startEditMaterial(pmaId: string, consumo: number, divisor: number) {
     setEditingPmaId(pmaId)
     setEditConsumo(String(consumo))
-    setEditDivisor(String(divisor))
+    setEditDivisor(divisor)
   }
 
   function cancelEditMaterial() {
     setEditingPmaId(null)
     setEditConsumo('')
-    setEditDivisor('')
+    setEditDivisor(0)
   }
 
   function handleSaveMaterial(pmaId: string) {
     const consumo = parseFloat(editConsumo.replace(',', '.'))
-    const divisor = parseFloat(editDivisor.replace(',', '.'))
     if (isNaN(consumo) || consumo <= 0) {
       toast({ title: 'Consumo inválido', description: 'Informe um valor maior que zero.', variant: 'destructive' })
       return
     }
-    if (isNaN(divisor) || divisor <= 0) {
-      toast({ title: 'Divisor inválido', description: 'Informe um valor maior que zero.', variant: 'destructive' })
-      return
-    }
     startTransition(async () => {
-      const result = await updateProcedimentoMaterial(pmaId, userId, consumo, divisor)
+      const result = await updateProcedimentoMaterial(pmaId, userId, consumo, editDivisor)
       if (result.success) {
         cancelEditMaterial()
         toast({ title: 'Material atualizado!' })
@@ -189,13 +184,13 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
   const [showAddMaterial, setShowAddMaterial] = useState(false)
   const [selectedMatId, setSelectedMatId] = useState('')
   const [addConsumo, setAddConsumo] = useState('1')
-  const [addDivisor, setAddDivisor] = useState('1')
+  const [addMatInfo, setAddMatInfo] = useState<{ unidade: string; divisorPadrao: number } | null>(null)
   const [comboboxKey, setComboboxKey] = useState(0)
 
   function resetAddForm() {
     setSelectedMatId('')
     setAddConsumo('1')
-    setAddDivisor('1')
+    setAddMatInfo(null)
     setComboboxKey((k) => k + 1)
   }
 
@@ -205,13 +200,9 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
       return
     }
     const consumo = parseFloat(addConsumo.replace(',', '.'))
-    const divisor = parseFloat(addDivisor.replace(',', '.'))
+    const divisor = addMatInfo?.divisorPadrao ?? 1
     if (isNaN(consumo) || consumo <= 0) {
       toast({ title: 'Consumo inválido', description: 'Informe um valor maior que zero.', variant: 'destructive' })
-      return
-    }
-    if (isNaN(divisor) || divisor <= 0) {
-      toast({ title: 'Divisor inválido', description: 'Informe um valor maior que zero.', variant: 'destructive' })
       return
     }
     startTransition(async () => {
@@ -635,7 +626,7 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
                   <th className="text-left px-4 py-3 font-medium text-muted-foreground">Material</th>
                   <th className="text-left px-4 py-3 font-medium text-muted-foreground">Embalagem</th>
                   <th className="text-right px-4 py-3 font-medium text-muted-foreground">Consumo</th>
-                  <th className="text-right px-4 py-3 font-medium text-muted-foreground">Divisor</th>
+                  <th className="text-right px-4 py-3 font-medium text-muted-foreground">Divisor (usos/embalagem)</th>
                   <th className="text-right px-4 py-3 font-medium text-muted-foreground">Preço</th>
                   <th className="text-right px-4 py-3 font-medium text-muted-foreground">Custo/Uso</th>
                   <th className="px-4 py-3 w-24"></th>
@@ -672,19 +663,8 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
                             <span className="tabular-nums">{pma.consumo}</span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-right">
-                          {isEditing ? (
-                            <Input
-                              type="number"
-                              value={editDivisor}
-                              onChange={(e) => setEditDivisor(e.target.value)}
-                              className="w-20 ml-auto text-right"
-                              min={1}
-                              step={1}
-                            />
-                          ) : (
-                            <span className="tabular-nums">{pma.divisor}</span>
-                          )}
+                        <td className="px-4 py-3 text-right tabular-nums text-muted-foreground">
+                          {pma.divisor}
                         </td>
                         <td className="px-4 py-3 text-right tabular-nums">
                           {formatBRL(pma.material.preco)}
@@ -748,26 +728,32 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
         {showAddMaterial && (
           <div className="border rounded-lg p-4 space-y-4 bg-muted/20">
             <h3 className="font-medium">Adicionar Material</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2 sm:col-span-2">
+            <div className="space-y-4">
+              <div className="space-y-2">
                 <Label>Material</Label>
                 <MaterialCombobox
                   key={comboboxKey}
                   options={materiais}
-                  onSelect={(id, divisorPadrao) => {
+                  onSelect={(id, divisorPadrao, unidade) => {
                     setSelectedMatId(id)
-                    setAddDivisor(String(divisorPadrao))
+                    setAddMatInfo({ divisorPadrao, unidade })
                   }}
                   onClear={() => {
                     setSelectedMatId('')
-                    setAddDivisor('1')
+                    setAddMatInfo(null)
                   }}
                   placeholder="Buscar material..."
                   disabled={isPending}
                 />
               </div>
+              {addMatInfo && (
+                <div className="flex gap-4 text-sm text-muted-foreground">
+                  <span>Unidade: <strong className="text-foreground">{addMatInfo.unidade}</strong></span>
+                  <span>Usos/embalagem: <strong className="text-foreground">{addMatInfo.divisorPadrao}</strong></span>
+                </div>
+              )}
               <div className="space-y-2">
-                <Label>Consumo por uso</Label>
+                <Label>Quantidade utilizada por procedimento</Label>
                 <Input
                   type="number"
                   placeholder="ex: 1"
@@ -775,17 +761,6 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
                   onChange={(e) => setAddConsumo(e.target.value)}
                   min={0.01}
                   step={0.01}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Divisor (usos por embalagem)</Label>
-                <Input
-                  type="number"
-                  placeholder="ex: 50"
-                  value={addDivisor}
-                  onChange={(e) => setAddDivisor(e.target.value)}
-                  min={1}
-                  step={1}
                 />
               </div>
             </div>
