@@ -23,16 +23,6 @@ export type PrecoCalculado = {
   precoMinimoParaMargem30: number
 }
 
-/**
- * Parse numeric value from consumo string.
- * Examples: "1 par" → 1, "2 tubetes" → 2, "0,5ml" → 0.5, "cobertura" → 1
- */
-export function parseConsumoNumerico(consumo: string): number {
-  // Replace Brazilian decimal comma with period
-  const normalized = consumo.replace(',', '.')
-  const match = normalized.match(/^(\d+(?:\.\d+)?)/)
-  return match ? parseFloat(match[1]) : 1
-}
 
 /**
  * Determine the margin badge color based on margemLucro.
@@ -62,9 +52,8 @@ export function calcularPrecoProcedimento(
   percTaxaCartao: number = 4,
 ): PrecoCalculado {
   const custoMateriais = procedimento.materiais.reduce((sum, pma) => {
-    const consumoNumerico = parseConsumoNumerico(pma.consumo)
     const custoPorUnidade = pma.material.preco / pma.divisor
-    return sum + custoPorUnidade * consumoNumerico
+    return sum + custoPorUnidade * pma.consumo
   }, 0)
   const custoVariavel = custoMateriais + (procedimento.custoLaboratorio ?? 0)
 

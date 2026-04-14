@@ -4,6 +4,7 @@ export type CreateMaterialData = {
   nome: string
   unidade: string
   preco: number
+  divisorPadrao: number
 }
 
 export interface IMaterialRepository {

@@ -131,16 +131,16 @@ export const DEFAULT_MATERIAIS = [
   { nome: 'Selante Ionomérico de Fossas e Fissuras', unidade: 'frasco 7g', preco: 48.0 },
   { nome: 'Coroa de Policarbonato Provisória', unidade: 'kit 6 tamanhos', preco: 22.0 },
   // EPI e biossegurança (7)
-  { nome: 'Luvas de Procedimento M', unidade: 'caixa 100 un', preco: 28.0 },
-  { nome: 'Luvas de Procedimento P', unidade: 'caixa 100 un', preco: 28.0 },
-  { nome: 'Luvas de Procedimento G', unidade: 'caixa 100 un', preco: 28.0 },
-  { nome: 'Máscara Cirúrgica Tripla', unidade: 'caixa 50 un', preco: 18.0 },
-  { nome: 'Barreira de Proteção Universal', unidade: 'rolo 150m', preco: 42.0 },
-  { nome: 'Gorro Descartável', unidade: 'pacote 100 un', preco: 18.0 },
-  { nome: 'Óculos de Proteção (descartável)', unidade: 'un', preco: 2.5 },
+  { nome: 'Luvas de Procedimento M', unidade: 'caixa 100 un', preco: 28.0, divisorPadrao: 100 },
+  { nome: 'Luvas de Procedimento P', unidade: 'caixa 100 un', preco: 28.0, divisorPadrao: 100 },
+  { nome: 'Luvas de Procedimento G', unidade: 'caixa 100 un', preco: 28.0, divisorPadrao: 100 },
+  { nome: 'Máscara Cirúrgica Tripla', unidade: 'caixa 50 un', preco: 18.0, divisorPadrao: 50 },
+  { nome: 'Barreira de Proteção Universal', unidade: 'rolo 150m', preco: 42.0, divisorPadrao: 150 },
+  { nome: 'Gorro Descartável', unidade: 'pacote 100 un', preco: 18.0, divisorPadrao: 100 },
+  { nome: 'Óculos de Proteção (descartável)', unidade: 'un', preco: 2.5, divisorPadrao: 1 },
   // Consumíveis gerais (16)
-  { nome: 'Sugador Descartável', unidade: 'pacote 40 un', preco: 12.0 },
-  { nome: 'Película Radiográfica Periapical', unidade: 'pacote 150 un', preco: 85.0 },
+  { nome: 'Sugador Descartável', unidade: 'pacote 40 un', preco: 12.0, divisorPadrao: 40 },
+  { nome: 'Película Radiográfica Periapical', unidade: 'pacote 150 un', preco: 85.0, divisorPadrao: 150 },
   { nome: 'Isolante Absoluto (dique de borracha)', unidade: 'pacote 36 folhas', preco: 45.0 },
   { nome: 'Amálgama', unidade: 'pote 50 cápsulas', preco: 120.0 },
   { nome: 'Cunha Interdental de Plástico', unidade: 'caixa 100 un', preco: 18.0 },
@@ -183,7 +183,7 @@ type ProcedimentoData = {
   custoLaboratorio?: number
   materiais: Array<{
     materialNome: string
-    consumo: string
+    consumo: number
     divisor: number
     ordem: number
   }>
@@ -199,8 +199,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'diagnostico',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
     ],
   },
   {
@@ -209,8 +209,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'diagnostico',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
     ],
   },
   {
@@ -219,8 +219,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'diagnostico',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
     ],
   },
   {
@@ -229,8 +229,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'diagnostico',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
     ],
   },
   {
@@ -239,7 +239,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'diagnostico',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -248,7 +248,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'diagnostico',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -257,7 +257,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'diagnostico',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -266,7 +266,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'diagnostico',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   // ── RADIOLOGIA (12) ──────────────────────────────────────────────────────────
@@ -276,8 +276,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'radiologia',
     tempoMinutos: 15,
     materiais: [
-      { materialNome: 'Película Radiográfica Periapical', consumo: '1 película', divisor: 150, ordem: 1 },
-      { materialNome: 'Barreira de Proteção Universal', consumo: 'cobertura', divisor: 150, ordem: 2 },
+      { materialNome: 'Película Radiográfica Periapical', consumo: 1, divisor: 150, ordem: 1 },
+      { materialNome: 'Barreira de Proteção Universal', consumo: 1, divisor: 150, ordem: 2 },
     ],
   },
   {
@@ -286,8 +286,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'radiologia',
     tempoMinutos: 15,
     materiais: [
-      { materialNome: 'Película Radiográfica Periapical', consumo: '2 películas', divisor: 75, ordem: 1 },
-      { materialNome: 'Barreira de Proteção Universal', consumo: 'cobertura', divisor: 150, ordem: 2 },
+      { materialNome: 'Película Radiográfica Periapical', consumo: 2, divisor: 75, ordem: 1 },
+      { materialNome: 'Barreira de Proteção Universal', consumo: 1, divisor: 150, ordem: 2 },
     ],
   },
   {
@@ -296,7 +296,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'radiologia',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Película Radiográfica Periapical', consumo: '1 película', divisor: 150, ordem: 1 },
+      { materialNome: 'Película Radiográfica Periapical', consumo: 1, divisor: 150, ordem: 1 },
     ],
   },
   {
@@ -305,7 +305,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'radiologia',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -314,7 +314,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'radiologia',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -323,8 +323,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'radiologia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Película Radiográfica Periapical', consumo: '4 películas', divisor: 37, ordem: 1 },
-      { materialNome: 'Barreira de Proteção Universal', consumo: 'cobertura', divisor: 150, ordem: 2 },
+      { materialNome: 'Película Radiográfica Periapical', consumo: 4, divisor: 37, ordem: 1 },
+      { materialNome: 'Barreira de Proteção Universal', consumo: 1, divisor: 150, ordem: 2 },
     ],
   },
   {
@@ -333,7 +333,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'radiologia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -342,8 +342,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'radiologia',
     tempoMinutos: 15,
     materiais: [
-      { materialNome: 'Barreira de Proteção Universal', consumo: 'cobertura sensor', divisor: 150, ordem: 1 },
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 2 },
+      { materialNome: 'Barreira de Proteção Universal', consumo: 1, divisor: 150, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 2 },
     ],
   },
   {
@@ -352,7 +352,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'radiologia',
     tempoMinutos: 15,
     materiais: [
-      { materialNome: 'Película Radiográfica Periapical', consumo: '1 película', divisor: 150, ordem: 1 },
+      { materialNome: 'Película Radiográfica Periapical', consumo: 1, divisor: 150, ordem: 1 },
     ],
   },
   {
@@ -361,7 +361,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'radiologia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -370,7 +370,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'radiologia',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -379,8 +379,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'radiologia',
     tempoMinutos: 40,
     materiais: [
-      { materialNome: 'Película Radiográfica Periapical', consumo: '8 películas', divisor: 18, ordem: 1 },
-      { materialNome: 'Barreira de Proteção Universal', consumo: 'cobertura', divisor: 150, ordem: 2 },
+      { materialNome: 'Película Radiográfica Periapical', consumo: 8, divisor: 18, ordem: 1 },
+      { materialNome: 'Barreira de Proteção Universal', consumo: 1, divisor: 150, ordem: 2 },
     ],
   },
   // ── TESTES E EXAMES (7) ───────────────────────────────────────────────────────
@@ -390,8 +390,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'testes-exames',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Algodão em Rolo', consumo: '2 rolos', divisor: 100, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Algodão em Rolo', consumo: 2, divisor: 100, ordem: 2 },
     ],
   },
   {
@@ -400,7 +400,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'testes-exames',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -409,8 +409,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'testes-exames',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
     ],
   },
   {
@@ -419,7 +419,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'testes-exames',
     tempoMinutos: 15,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -428,7 +428,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'testes-exames',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -437,9 +437,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'testes-exames',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Alginato', consumo: '50g', divisor: 10, ordem: 2 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '150g', divisor: 6, ordem: 3 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Alginato', consumo: 50, divisor: 10, ordem: 2 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 150, divisor: 6, ordem: 3 },
     ],
   },
   {
@@ -448,7 +448,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'testes-exames',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   // ── PREVENÇÃO (12) ────────────────────────────────────────────────────────────
@@ -458,10 +458,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'prevencao',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
-      { materialNome: 'Sugador Descartável', consumo: '1 un', divisor: 40, ordem: 3 },
-      { materialNome: 'Pasta Profilática com Flúor', consumo: '5g', divisor: 40, ordem: 4 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
+      { materialNome: 'Sugador Descartável', consumo: 1, divisor: 40, ordem: 3 },
+      { materialNome: 'Pasta Profilática com Flúor', consumo: 5, divisor: 40, ordem: 4 },
     ],
   },
   {
@@ -470,10 +470,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'prevencao',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
-      { materialNome: 'Sugador Descartável', consumo: '1 un', divisor: 40, ordem: 3 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '5ml', divisor: 50, ordem: 4 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
+      { materialNome: 'Sugador Descartável', consumo: 1, divisor: 40, ordem: 3 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 5, divisor: 50, ordem: 4 },
     ],
   },
   {
@@ -482,8 +482,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'prevencao',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Verniz Fluorado', consumo: '0,5ml', divisor: 20, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Verniz Fluorado', consumo: 0.5, divisor: 20, ordem: 2 },
     ],
   },
   {
@@ -492,10 +492,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'prevencao',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 2 },
-      { materialNome: 'Microbrush Aplicador', consumo: '2 un', divisor: 50, ordem: 3 },
-      { materialNome: 'Selante Resinoso (fotoativado)', consumo: '0,5ml', divisor: 10, ordem: 4 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 2 },
+      { materialNome: 'Microbrush Aplicador', consumo: 2, divisor: 50, ordem: 3 },
+      { materialNome: 'Selante Resinoso (fotoativado)', consumo: 0.5, divisor: 10, ordem: 4 },
     ],
   },
   {
@@ -504,7 +504,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'prevencao',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -513,9 +513,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'prevencao',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Microbrush Aplicador', consumo: '2 un', divisor: 50, ordem: 2 },
-      { materialNome: 'Verniz Fluorado', consumo: '0,3ml', divisor: 33, ordem: 3 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Microbrush Aplicador', consumo: 2, divisor: 50, ordem: 2 },
+      { materialNome: 'Verniz Fluorado', consumo: 0.3, divisor: 33, ordem: 3 },
     ],
   },
   {
@@ -524,10 +524,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'prevencao',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
-      { materialNome: 'Óculos de Proteção (descartável)', consumo: '1 un', divisor: 1, ordem: 3 },
-      { materialNome: 'Sugador Descartável', consumo: '1 un', divisor: 40, ordem: 4 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
+      { materialNome: 'Óculos de Proteção (descartável)', consumo: 1, divisor: 1, ordem: 3 },
+      { materialNome: 'Sugador Descartável', consumo: 1, divisor: 40, ordem: 4 },
     ],
   },
   {
@@ -536,10 +536,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'prevencao',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
-      { materialNome: 'Sugador Descartável', consumo: '2 un', divisor: 40, ordem: 3 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '15ml', divisor: 16, ordem: 4 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
+      { materialNome: 'Sugador Descartável', consumo: 2, divisor: 40, ordem: 3 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 15, divisor: 16, ordem: 4 },
     ],
   },
   {
@@ -548,11 +548,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'prevencao',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
-      { materialNome: 'Sugador Descartável', consumo: '2 un', divisor: 40, ordem: 3 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '20ml', divisor: 12, ordem: 4 },
-      { materialNome: 'Pasta Profilática com Flúor', consumo: '5g', divisor: 40, ordem: 5 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
+      { materialNome: 'Sugador Descartável', consumo: 2, divisor: 40, ordem: 3 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 20, divisor: 12, ordem: 4 },
+      { materialNome: 'Pasta Profilática com Flúor', consumo: 5, divisor: 40, ordem: 5 },
     ],
   },
   {
@@ -561,9 +561,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'prevencao',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Verniz Fluorado', consumo: '1ml', divisor: 10, ordem: 2 },
-      { materialNome: 'Alginato', consumo: '50g', divisor: 10, ordem: 3 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Verniz Fluorado', consumo: 1, divisor: 10, ordem: 2 },
+      { materialNome: 'Alginato', consumo: 50, divisor: 10, ordem: 3 },
     ],
   },
   {
@@ -572,7 +572,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'prevencao',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -581,11 +581,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'prevencao',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
-      { materialNome: 'Sugador Descartável', consumo: '1 un', divisor: 40, ordem: 3 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '5ml', divisor: 50, ordem: 4 },
-      { materialNome: 'Pasta Profilática com Flúor', consumo: '5g', divisor: 40, ordem: 5 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
+      { materialNome: 'Sugador Descartável', consumo: 1, divisor: 40, ordem: 3 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 5, divisor: 50, ordem: 4 },
+      { materialNome: 'Pasta Profilática com Flúor', consumo: 5, divisor: 40, ordem: 5 },
     ],
   },
   // ── ODONTOPEDIATRIA (20) ──────────────────────────────────────────────────────
@@ -595,8 +595,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
     ],
   },
   {
@@ -605,13 +605,13 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Tinta Detectora de Cárie', consumo: '1 gota', divisor: 100, ordem: 3 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 4 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 5 },
-      { materialNome: 'Resina Composta A2', consumo: '1g', divisor: 4, ordem: 6 },
-      { materialNome: 'Microbrush Aplicador', consumo: '2 un', divisor: 50, ordem: 7 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Tinta Detectora de Cárie', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 4 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 5 },
+      { materialNome: 'Resina Composta A2', consumo: 1, divisor: 4, ordem: 6 },
+      { materialNome: 'Microbrush Aplicador', consumo: 2, divisor: 50, ordem: 7 },
     ],
   },
   {
@@ -620,12 +620,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 3 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 4 },
-      { materialNome: 'Resina Composta A2', consumo: '2g', divisor: 4, ordem: 5 },
-      { materialNome: 'Microbrush Aplicador', consumo: '2 un', divisor: 50, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 3 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 4 },
+      { materialNome: 'Resina Composta A2', consumo: 2, divisor: 4, ordem: 5 },
+      { materialNome: 'Microbrush Aplicador', consumo: 2, divisor: 50, ordem: 6 },
     ],
   },
   {
@@ -634,11 +634,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Formocresol Diluído', consumo: '1 gota', divisor: 100, ordem: 3 },
-      { materialNome: 'Hidróxido de Cálcio', consumo: '0,5g', divisor: 5, ordem: 4 },
-      { materialNome: 'Cimento de Ionômero de Vidro', consumo: '1g', divisor: 15, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Formocresol Diluído', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Hidróxido de Cálcio', consumo: 0.5, divisor: 5, ordem: 4 },
+      { materialNome: 'Cimento de Ionômero de Vidro', consumo: 1, divisor: 15, ordem: 5 },
     ],
   },
   {
@@ -647,12 +647,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Limas K Manuais (kit 6)', consumo: '1/5 kit', divisor: 5, ordem: 3 },
-      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: '5ml', divisor: 200, ordem: 4 },
-      { materialNome: 'Pasta Vitapex', consumo: '0,2g', divisor: 11, ordem: 5 },
-      { materialNome: 'Cimento de Ionômero de Vidro', consumo: '1g', divisor: 15, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Limas K Manuais (kit 6)', consumo: 1, divisor: 5, ordem: 3 },
+      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: 5, divisor: 200, ordem: 4 },
+      { materialNome: 'Pasta Vitapex', consumo: 0.2, divisor: 11, ordem: 5 },
+      { materialNome: 'Cimento de Ionômero de Vidro', consumo: 1, divisor: 15, ordem: 6 },
     ],
   },
   {
@@ -661,9 +661,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '2 gazes', divisor: 250, ordem: 3 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 2, divisor: 250, ordem: 3 },
     ],
   },
   {
@@ -672,10 +672,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 40,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Alginato', consumo: '50g', divisor: 10, ordem: 2 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '100g', divisor: 10, ordem: 3 },
-      { materialNome: 'Verniz Fluorado', consumo: '1ml', divisor: 10, ordem: 4 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Alginato', consumo: 50, divisor: 10, ordem: 2 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 100, divisor: 10, ordem: 3 },
+      { materialNome: 'Verniz Fluorado', consumo: 1, divisor: 10, ordem: 4 },
     ],
   },
   {
@@ -684,10 +684,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 2 },
-      { materialNome: 'Microbrush Aplicador', consumo: '2 un', divisor: 50, ordem: 3 },
-      { materialNome: 'Selante Resinoso (fotoativado)', consumo: '0,5ml', divisor: 10, ordem: 4 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 2 },
+      { materialNome: 'Microbrush Aplicador', consumo: 2, divisor: 50, ordem: 3 },
+      { materialNome: 'Selante Resinoso (fotoativado)', consumo: 0.5, divisor: 10, ordem: 4 },
     ],
   },
   {
@@ -696,10 +696,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Coroa de Aço Inoxidável Decídua', consumo: '1 coroa', divisor: 1, ordem: 3 },
-      { materialNome: 'Cimento de Ionômero para Cimentação', consumo: '1g', divisor: 68, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Coroa de Aço Inoxidável Decídua', consumo: 1, divisor: 1, ordem: 3 },
+      { materialNome: 'Cimento de Ionômero para Cimentação', consumo: 1, divisor: 68, ordem: 4 },
     ],
   },
   {
@@ -708,8 +708,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Verniz Fluorado', consumo: '0,5ml', divisor: 20, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Verniz Fluorado', consumo: 0.5, divisor: 20, ordem: 2 },
     ],
   },
   {
@@ -718,9 +718,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Verniz Fluorado', consumo: '1ml', divisor: 10, ordem: 2 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '5ml', divisor: 50, ordem: 3 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Verniz Fluorado', consumo: 1, divisor: 10, ordem: 2 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 5, divisor: 50, ordem: 3 },
     ],
   },
   {
@@ -730,10 +730,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 60,
     custoLaboratorio: 120.0,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Cimento de Ionômero para Cimentação', consumo: '1g', divisor: 68, ordem: 3 },
-      { materialNome: 'Alginato', consumo: '50g', divisor: 10, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Cimento de Ionômero para Cimentação', consumo: 1, divisor: 68, ordem: 3 },
+      { materialNome: 'Alginato', consumo: 50, divisor: 10, ordem: 4 },
     ],
   },
   {
@@ -742,7 +742,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -751,10 +751,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '4 gazes', divisor: 125, ordem: 3 },
-      { materialNome: 'Esponja de Colágeno Hemostática', consumo: '1 un', divisor: 1, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 4, divisor: 125, ordem: 3 },
+      { materialNome: 'Esponja de Colágeno Hemostática', consumo: 1, divisor: 1, ordem: 4 },
     ],
   },
   {
@@ -763,9 +763,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 40,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Cimento de Ionômero de Vidro', consumo: '1g', divisor: 15, ordem: 3 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Cimento de Ionômero de Vidro', consumo: 1, divisor: 15, ordem: 3 },
     ],
   },
   {
@@ -774,11 +774,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Coroa de Policarbonato Provisória', consumo: '1 coroa', divisor: 6, ordem: 3 },
-      { materialNome: 'Resina Bisacrílica Provisória', consumo: '3g', divisor: 25, ordem: 4 },
-      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: '0,5g', divisor: 64, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Coroa de Policarbonato Provisória', consumo: 1, divisor: 6, ordem: 3 },
+      { materialNome: 'Resina Bisacrílica Provisória', consumo: 3, divisor: 25, ordem: 4 },
+      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: 0.5, divisor: 64, ordem: 5 },
     ],
   },
   {
@@ -787,8 +787,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Selante Ionomérico de Fossas e Fissuras', consumo: '0,5g', divisor: 14, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Selante Ionomérico de Fossas e Fissuras', consumo: 0.5, divisor: 14, ordem: 2 },
     ],
   },
   {
@@ -797,7 +797,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -806,7 +806,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -815,8 +815,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'odontopediatria',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Máscara Cirúrgica Tripla', consumo: '1 un', divisor: 50, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Máscara Cirúrgica Tripla', consumo: 1, divisor: 50, ordem: 2 },
     ],
   },
   // ── DENTÍSTICA (32) ───────────────────────────────────────────────────────────
@@ -826,14 +826,14 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Tinta Detectora de Cárie', consumo: '1 gota', divisor: 100, ordem: 3 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 4 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 5 },
-      { materialNome: 'Resina Composta A2', consumo: '1g', divisor: 4, ordem: 6 },
-      { materialNome: 'Microbrush Aplicador', consumo: '2 un', divisor: 50, ordem: 7 },
-      { materialNome: 'Disco de Polimento Alumínio Óxido', consumo: '2 discos', divisor: 25, ordem: 8 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Tinta Detectora de Cárie', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 4 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 5 },
+      { materialNome: 'Resina Composta A2', consumo: 1, divisor: 4, ordem: 6 },
+      { materialNome: 'Microbrush Aplicador', consumo: 2, divisor: 50, ordem: 7 },
+      { materialNome: 'Disco de Polimento Alumínio Óxido', consumo: 2, divisor: 25, ordem: 8 },
     ],
   },
   {
@@ -842,14 +842,14 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 3 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 4 },
-      { materialNome: 'Resina Composta A2', consumo: '2g', divisor: 4, ordem: 5 },
-      { materialNome: 'Microbrush Aplicador', consumo: '2 un', divisor: 50, ordem: 6 },
-      { materialNome: 'Cunha Interdental de Plástico', consumo: '2 un', divisor: 50, ordem: 7 },
-      { materialNome: 'Matriz Metálica Tofflemire', consumo: '1 banda', divisor: 50, ordem: 8 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 3 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 4 },
+      { materialNome: 'Resina Composta A2', consumo: 2, divisor: 4, ordem: 5 },
+      { materialNome: 'Microbrush Aplicador', consumo: 2, divisor: 50, ordem: 6 },
+      { materialNome: 'Cunha Interdental de Plástico', consumo: 2, divisor: 50, ordem: 7 },
+      { materialNome: 'Matriz Metálica Tofflemire', consumo: 1, divisor: 50, ordem: 8 },
     ],
   },
   {
@@ -858,14 +858,14 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 75,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 3 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 4 },
-      { materialNome: 'Resina Composta A2', consumo: '3g', divisor: 4, ordem: 5 },
-      { materialNome: 'Microbrush Aplicador', consumo: '2 un', divisor: 50, ordem: 6 },
-      { materialNome: 'Cunha Interdental de Plástico', consumo: '2 un', divisor: 50, ordem: 7 },
-      { materialNome: 'Fita Matriz Banda Stripes', consumo: '1 banda', divisor: 10, ordem: 8 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 3 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 4 },
+      { materialNome: 'Resina Composta A2', consumo: 3, divisor: 4, ordem: 5 },
+      { materialNome: 'Microbrush Aplicador', consumo: 2, divisor: 50, ordem: 6 },
+      { materialNome: 'Cunha Interdental de Plástico', consumo: 2, divisor: 50, ordem: 7 },
+      { materialNome: 'Fita Matriz Banda Stripes', consumo: 1, divisor: 10, ordem: 8 },
     ],
   },
   {
@@ -874,14 +874,14 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 3 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 4 },
-      { materialNome: 'Resina Composta A2', consumo: '3g', divisor: 4, ordem: 5 },
-      { materialNome: 'Resina Composta Esmalte', consumo: '1g', divisor: 4, ordem: 6 },
-      { materialNome: 'Microbrush Aplicador', consumo: '3 un', divisor: 50, ordem: 7 },
-      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: '1 folha', divisor: 36, ordem: 8 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 3 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 4 },
+      { materialNome: 'Resina Composta A2', consumo: 3, divisor: 4, ordem: 5 },
+      { materialNome: 'Resina Composta Esmalte', consumo: 1, divisor: 4, ordem: 6 },
+      { materialNome: 'Microbrush Aplicador', consumo: 3, divisor: 50, ordem: 7 },
+      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: 1, divisor: 36, ordem: 8 },
     ],
   },
   {
@@ -890,9 +890,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 40,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Amálgama', consumo: '1 cápsula', divisor: 50, ordem: 3 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Amálgama', consumo: 1, divisor: 50, ordem: 3 },
     ],
   },
   {
@@ -901,9 +901,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 50,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Amálgama', consumo: '2 cápsulas', divisor: 50, ordem: 3 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Amálgama', consumo: 2, divisor: 50, ordem: 3 },
     ],
   },
   {
@@ -912,9 +912,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Amálgama', consumo: '3 cápsulas', divisor: 50, ordem: 3 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Amálgama', consumo: 3, divisor: 50, ordem: 3 },
     ],
   },
   {
@@ -923,9 +923,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Alginato', consumo: '50g', divisor: 10, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '200g', divisor: 5, ordem: 2 },
-      { materialNome: 'Gel Clareador 16% (caseiro)', consumo: '3 seringas', divisor: 1, ordem: 3 },
+      { materialNome: 'Alginato', consumo: 50, divisor: 10, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 200, divisor: 5, ordem: 2 },
+      { materialNome: 'Gel Clareador 16% (caseiro)', consumo: 3, divisor: 1, ordem: 3 },
     ],
   },
   {
@@ -934,9 +934,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Gel Clareador 35% (consultório)', consumo: '3 seringas', divisor: 1, ordem: 1 },
-      { materialNome: 'Barreira Gengival Fotopolimerizável', consumo: '1 seringa', divisor: 1, ordem: 2 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '4 gazes', divisor: 125, ordem: 3 },
+      { materialNome: 'Gel Clareador 35% (consultório)', consumo: 3, divisor: 1, ordem: 1 },
+      { materialNome: 'Barreira Gengival Fotopolimerizável', consumo: 1, divisor: 1, ordem: 2 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 4, divisor: 125, ordem: 3 },
     ],
   },
   {
@@ -945,9 +945,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Cimento de Ionômero de Vidro', consumo: '2g', divisor: 7, ordem: 3 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Cimento de Ionômero de Vidro', consumo: 2, divisor: 7, ordem: 3 },
     ],
   },
   {
@@ -956,12 +956,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 1 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 2 },
-      { materialNome: 'Resina Composta A1', consumo: '2g', divisor: 4, ordem: 3 },
-      { materialNome: 'Resina Composta Esmalte', consumo: '1g', divisor: 4, ordem: 4 },
-      { materialNome: 'Microbrush Aplicador', consumo: '4 un', divisor: 50, ordem: 5 },
-      { materialNome: 'Disco de Polimento Alumínio Óxido', consumo: '4 discos', divisor: 12, ordem: 6 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 1 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Resina Composta A1', consumo: 2, divisor: 4, ordem: 3 },
+      { materialNome: 'Resina Composta Esmalte', consumo: 1, divisor: 4, ordem: 4 },
+      { materialNome: 'Microbrush Aplicador', consumo: 4, divisor: 50, ordem: 5 },
+      { materialNome: 'Disco de Polimento Alumínio Óxido', consumo: 4, divisor: 12, ordem: 6 },
     ],
   },
   {
@@ -971,12 +971,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 60,
     custoLaboratorio: 650.0,
     materiais: [
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 1 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 2 },
-      { materialNome: 'Silano', consumo: '1 gota', divisor: 65, ordem: 3 },
-      { materialNome: 'Cimento Resinoso Dual', consumo: '0,5g', divisor: 148, ordem: 4 },
-      { materialNome: 'Microbrush Aplicador', consumo: '4 un', divisor: 50, ordem: 5 },
-      { materialNome: 'Fio Retrator de Gengiva nº 0', consumo: '5cm', divisor: 50, ordem: 6 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 1 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Silano', consumo: 1, divisor: 65, ordem: 3 },
+      { materialNome: 'Cimento Resinoso Dual', consumo: 0.5, divisor: 148, ordem: 4 },
+      { materialNome: 'Microbrush Aplicador', consumo: 4, divisor: 50, ordem: 5 },
+      { materialNome: 'Fio Retrator de Gengiva nº 0', consumo: 5, divisor: 50, ordem: 6 },
     ],
   },
   {
@@ -985,10 +985,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'MTA (Agregado Trióxido Mineral)', consumo: '0,1g', divisor: 5, ordem: 3 },
-      { materialNome: 'Cimento de Ionômero de Vidro', consumo: '1g', divisor: 15, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'MTA (Agregado Trióxido Mineral)', consumo: 0.1, divisor: 5, ordem: 3 },
+      { materialNome: 'Cimento de Ionômero de Vidro', consumo: 1, divisor: 15, ordem: 4 },
     ],
   },
   {
@@ -997,10 +997,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Hidróxido de Cálcio', consumo: '0,3g', divisor: 8, ordem: 3 },
-      { materialNome: 'Cimento de Ionômero de Vidro', consumo: '0,5g', divisor: 30, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Hidróxido de Cálcio', consumo: 0.3, divisor: 8, ordem: 3 },
+      { materialNome: 'Cimento de Ionômero de Vidro', consumo: 0.5, divisor: 30, ordem: 4 },
     ],
   },
   {
@@ -1009,11 +1009,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 1 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 2 },
-      { materialNome: 'Resina Composta A1', consumo: '2g', divisor: 4, ordem: 3 },
-      { materialNome: 'Resina Composta Esmalte', consumo: '1g', divisor: 4, ordem: 4 },
-      { materialNome: 'Microbrush Aplicador', consumo: '3 un', divisor: 50, ordem: 5 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 1 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Resina Composta A1', consumo: 2, divisor: 4, ordem: 3 },
+      { materialNome: 'Resina Composta Esmalte', consumo: 1, divisor: 4, ordem: 4 },
+      { materialNome: 'Microbrush Aplicador', consumo: 3, divisor: 50, ordem: 5 },
     ],
   },
   {
@@ -1022,12 +1022,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 3 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 4 },
-      { materialNome: 'Resina Flowável A2', consumo: '1g', divisor: 4, ordem: 5 },
-      { materialNome: 'Microbrush Aplicador', consumo: '2 un', divisor: 50, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 3 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 4 },
+      { materialNome: 'Resina Flowável A2', consumo: 1, divisor: 4, ordem: 5 },
+      { materialNome: 'Microbrush Aplicador', consumo: 2, divisor: 50, ordem: 6 },
     ],
   },
   {
@@ -1037,10 +1037,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 60,
     custoLaboratorio: 550.0,
     materiais: [
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 1 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 2 },
-      { materialNome: 'Cimento Resinoso Dual', consumo: '0,5g', divisor: 148, ordem: 3 },
-      { materialNome: 'Microbrush Aplicador', consumo: '3 un', divisor: 50, ordem: 4 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 1 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Cimento Resinoso Dual', consumo: 0.5, divisor: 148, ordem: 3 },
+      { materialNome: 'Microbrush Aplicador', consumo: 3, divisor: 50, ordem: 4 },
     ],
   },
   {
@@ -1049,11 +1049,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 3 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 4 },
-      { materialNome: 'Resina Composta A3', consumo: '3g', divisor: 4, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 3 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 4 },
+      { materialNome: 'Resina Composta A3', consumo: 3, divisor: 4, ordem: 5 },
     ],
   },
   {
@@ -1062,10 +1062,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Espigão de Fibra de Vidro', consumo: '1 espigão', divisor: 5, ordem: 1 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 2 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 3 },
-      { materialNome: 'Cimento Resinoso Dual', consumo: '0,3g', divisor: 148, ordem: 4 },
+      { materialNome: 'Espigão de Fibra de Vidro', consumo: 1, divisor: 5, ordem: 1 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 2 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Cimento Resinoso Dual', consumo: 0.3, divisor: 148, ordem: 4 },
     ],
   },
   {
@@ -1074,9 +1074,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Gel Clareador 35% (consultório)', consumo: '0,5 seringa', divisor: 2, ordem: 2 },
-      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: '0,5g', divisor: 64, ordem: 3 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Gel Clareador 35% (consultório)', consumo: 0.5, divisor: 2, ordem: 2 },
+      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: 0.5, divisor: 64, ordem: 3 },
     ],
   },
   {
@@ -1085,12 +1085,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 3 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 4 },
-      { materialNome: 'Resina Composta A2', consumo: '2g', divisor: 4, ordem: 5 },
-      { materialNome: 'Microbrush Aplicador', consumo: '2 un', divisor: 50, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 3 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 4 },
+      { materialNome: 'Resina Composta A2', consumo: 2, divisor: 4, ordem: 5 },
+      { materialNome: 'Microbrush Aplicador', consumo: 2, divisor: 50, ordem: 6 },
     ],
   },
   {
@@ -1099,8 +1099,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: '1g', divisor: 32, ordem: 1 },
-      { materialNome: 'Algodão em Rolo', consumo: '2 rolos', divisor: 100, ordem: 2 },
+      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: 1, divisor: 32, ordem: 1 },
+      { materialNome: 'Algodão em Rolo', consumo: 2, divisor: 100, ordem: 2 },
     ],
   },
   {
@@ -1109,9 +1109,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Cimento de Ionômero de Vidro Modificado por Resina', consumo: '1,5g', divisor: 58, ordem: 3 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Cimento de Ionômero de Vidro Modificado por Resina', consumo: 1.5, divisor: 58, ordem: 3 },
     ],
   },
   {
@@ -1120,9 +1120,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Microbrush Aplicador', consumo: '2 un', divisor: 50, ordem: 2 },
-      { materialNome: 'Verniz Fluorado', consumo: '0,5ml', divisor: 20, ordem: 3 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Microbrush Aplicador', consumo: 2, divisor: 50, ordem: 2 },
+      { materialNome: 'Verniz Fluorado', consumo: 0.5, divisor: 20, ordem: 3 },
     ],
   },
   {
@@ -1131,11 +1131,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 3 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 4 },
-      { materialNome: 'Resina Flowável A2', consumo: '1g', divisor: 4, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 3 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 4 },
+      { materialNome: 'Resina Flowável A2', consumo: 1, divisor: 4, ordem: 5 },
     ],
   },
   {
@@ -1144,12 +1144,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 120,
     materiais: [
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '2 aplicações', divisor: 5, ordem: 1 },
-      { materialNome: 'Adesivo Universal', consumo: '2 gotas', divisor: 100, ordem: 2 },
-      { materialNome: 'Resina Composta A1', consumo: '2g', divisor: 4, ordem: 3 },
-      { materialNome: 'Resina Composta A2', consumo: '2g', divisor: 4, ordem: 4 },
-      { materialNome: 'Resina Composta Esmalte', consumo: '2g', divisor: 4, ordem: 5 },
-      { materialNome: 'Microbrush Aplicador', consumo: '6 un', divisor: 50, ordem: 6 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 2, divisor: 5, ordem: 1 },
+      { materialNome: 'Adesivo Universal', consumo: 2, divisor: 100, ordem: 2 },
+      { materialNome: 'Resina Composta A1', consumo: 2, divisor: 4, ordem: 3 },
+      { materialNome: 'Resina Composta A2', consumo: 2, divisor: 4, ordem: 4 },
+      { materialNome: 'Resina Composta Esmalte', consumo: 2, divisor: 4, ordem: 5 },
+      { materialNome: 'Microbrush Aplicador', consumo: 6, divisor: 50, ordem: 6 },
     ],
   },
   {
@@ -1158,9 +1158,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Gel Clareador 35% (consultório)', consumo: '1 seringa', divisor: 1, ordem: 1 },
-      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: '0,5g', divisor: 64, ordem: 2 },
-      { materialNome: 'Barreira Gengival Fotopolimerizável', consumo: '0,3g', divisor: 6, ordem: 3 },
+      { materialNome: 'Gel Clareador 35% (consultório)', consumo: 1, divisor: 1, ordem: 1 },
+      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: 0.5, divisor: 64, ordem: 2 },
+      { materialNome: 'Barreira Gengival Fotopolimerizável', consumo: 0.3, divisor: 6, ordem: 3 },
     ],
   },
   {
@@ -1170,11 +1170,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 75,
     custoLaboratorio: 480.0,
     materiais: [
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 1 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 2 },
-      { materialNome: 'Silano', consumo: '1 gota', divisor: 65, ordem: 3 },
-      { materialNome: 'Cimento Resinoso Dual', consumo: '0,5g', divisor: 148, ordem: 4 },
-      { materialNome: 'Microbrush Aplicador', consumo: '3 un', divisor: 50, ordem: 5 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 1 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Silano', consumo: 1, divisor: 65, ordem: 3 },
+      { materialNome: 'Cimento Resinoso Dual', consumo: 0.5, divisor: 148, ordem: 4 },
+      { materialNome: 'Microbrush Aplicador', consumo: 3, divisor: 50, ordem: 5 },
     ],
   },
   {
@@ -1183,9 +1183,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Resina Bisacrílica Provisória', consumo: '4g', divisor: 25, ordem: 1 },
-      { materialNome: 'Cimento Provisório sem Eugenol', consumo: '0,5g', divisor: 76, ordem: 2 },
-      { materialNome: 'Acrílico Autopolimerizável Rosa', consumo: '2g', divisor: 500, ordem: 3 },
+      { materialNome: 'Resina Bisacrílica Provisória', consumo: 4, divisor: 25, ordem: 1 },
+      { materialNome: 'Cimento Provisório sem Eugenol', consumo: 0.5, divisor: 76, ordem: 2 },
+      { materialNome: 'Acrílico Autopolimerizável Rosa', consumo: 2, divisor: 500, ordem: 3 },
     ],
   },
   {
@@ -1194,8 +1194,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Espigão Metálico Pré-fabricado', consumo: '1 un', divisor: 1, ordem: 1 },
-      { materialNome: 'Cimento Resinoso Dual', consumo: '0,3g', divisor: 148, ordem: 2 },
+      { materialNome: 'Espigão Metálico Pré-fabricado', consumo: 1, divisor: 1, ordem: 1 },
+      { materialNome: 'Cimento Resinoso Dual', consumo: 0.3, divisor: 148, ordem: 2 },
     ],
   },
   {
@@ -1204,7 +1204,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -1213,9 +1213,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'dentistica',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Pasta Profilática sem Flúor', consumo: '5g', divisor: 40, ordem: 2 },
-      { materialNome: 'Barreira Gengival Fotopolimerizável', consumo: '0,3g', divisor: 6, ordem: 3 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Pasta Profilática sem Flúor', consumo: 5, divisor: 40, ordem: 2 },
+      { materialNome: 'Barreira Gengival Fotopolimerizável', consumo: 0.3, divisor: 6, ordem: 3 },
     ],
   },
   // ── ENDODONTIA (20) ───────────────────────────────────────────────────────────
@@ -1225,16 +1225,16 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: '1 folha', divisor: 36, ordem: 3 },
-      { materialNome: 'Limas K Manuais (kit 6)', consumo: '1/5 kit', divisor: 5, ordem: 4 },
-      { materialNome: 'Limas Rotatórias NiTi (kit 6)', consumo: '1/8 kit', divisor: 8, ordem: 5 },
-      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: '20ml', divisor: 50, ordem: 6 },
-      { materialNome: 'EDTA Líquido 17%', consumo: '5ml', divisor: 24, ordem: 7 },
-      { materialNome: 'Cones de Papel Absorvente', consumo: '5 cones', divisor: 40, ordem: 8 },
-      { materialNome: 'Guta-Percha (cones)', consumo: '5 cones', divisor: 12, ordem: 9 },
-      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: '1/10 kit', divisor: 10, ordem: 10 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: 1, divisor: 36, ordem: 3 },
+      { materialNome: 'Limas K Manuais (kit 6)', consumo: 1, divisor: 5, ordem: 4 },
+      { materialNome: 'Limas Rotatórias NiTi (kit 6)', consumo: 1, divisor: 8, ordem: 5 },
+      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: 20, divisor: 50, ordem: 6 },
+      { materialNome: 'EDTA Líquido 17%', consumo: 5, divisor: 24, ordem: 7 },
+      { materialNome: 'Cones de Papel Absorvente', consumo: 5, divisor: 40, ordem: 8 },
+      { materialNome: 'Guta-Percha (cones)', consumo: 5, divisor: 12, ordem: 9 },
+      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: 1, divisor: 10, ordem: 10 },
     ],
   },
   {
@@ -1243,16 +1243,16 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 120,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: '1 folha', divisor: 36, ordem: 3 },
-      { materialNome: 'Limas K Manuais (kit 6)', consumo: '1/4 kit', divisor: 4, ordem: 4 },
-      { materialNome: 'Limas Rotatórias NiTi (kit 6)', consumo: '1/6 kit', divisor: 6, ordem: 5 },
-      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: '30ml', divisor: 33, ordem: 6 },
-      { materialNome: 'EDTA Líquido 17%', consumo: '8ml', divisor: 15, ordem: 7 },
-      { materialNome: 'Cones de Papel Absorvente', consumo: '10 cones', divisor: 20, ordem: 8 },
-      { materialNome: 'Guta-Percha (cones)', consumo: '10 cones', divisor: 6, ordem: 9 },
-      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: '1/10 kit', divisor: 10, ordem: 10 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: 1, divisor: 36, ordem: 3 },
+      { materialNome: 'Limas K Manuais (kit 6)', consumo: 1, divisor: 4, ordem: 4 },
+      { materialNome: 'Limas Rotatórias NiTi (kit 6)', consumo: 1, divisor: 6, ordem: 5 },
+      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: 30, divisor: 33, ordem: 6 },
+      { materialNome: 'EDTA Líquido 17%', consumo: 8, divisor: 15, ordem: 7 },
+      { materialNome: 'Cones de Papel Absorvente', consumo: 10, divisor: 20, ordem: 8 },
+      { materialNome: 'Guta-Percha (cones)', consumo: 10, divisor: 6, ordem: 9 },
+      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: 1, divisor: 10, ordem: 10 },
     ],
   },
   {
@@ -1261,16 +1261,16 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 150,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: '1 folha', divisor: 36, ordem: 3 },
-      { materialNome: 'Limas K Manuais (kit 6)', consumo: '1/3 kit', divisor: 3, ordem: 4 },
-      { materialNome: 'Limas Rotatórias NiTi (kit 6)', consumo: '1/5 kit', divisor: 5, ordem: 5 },
-      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: '40ml', divisor: 25, ordem: 6 },
-      { materialNome: 'EDTA Líquido 17%', consumo: '10ml', divisor: 12, ordem: 7 },
-      { materialNome: 'Cones de Papel Absorvente', consumo: '15 cones', divisor: 13, ordem: 8 },
-      { materialNome: 'Guta-Percha (cones)', consumo: '15 cones', divisor: 4, ordem: 9 },
-      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: '1/10 kit', divisor: 10, ordem: 10 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: 1, divisor: 36, ordem: 3 },
+      { materialNome: 'Limas K Manuais (kit 6)', consumo: 1, divisor: 3, ordem: 4 },
+      { materialNome: 'Limas Rotatórias NiTi (kit 6)', consumo: 1, divisor: 5, ordem: 5 },
+      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: 40, divisor: 25, ordem: 6 },
+      { materialNome: 'EDTA Líquido 17%', consumo: 10, divisor: 12, ordem: 7 },
+      { materialNome: 'Cones de Papel Absorvente', consumo: 15, divisor: 13, ordem: 8 },
+      { materialNome: 'Guta-Percha (cones)', consumo: 15, divisor: 4, ordem: 9 },
+      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: 1, divisor: 10, ordem: 10 },
     ],
   },
   {
@@ -1279,16 +1279,16 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 180,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: '1 folha', divisor: 36, ordem: 3 },
-      { materialNome: 'Limas K Manuais (kit 6)', consumo: '1/2 kit', divisor: 2, ordem: 4 },
-      { materialNome: 'Limas Rotatórias NiTi (kit 6)', consumo: '1/4 kit', divisor: 4, ordem: 5 },
-      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: '50ml', divisor: 20, ordem: 6 },
-      { materialNome: 'EDTA Líquido 17%', consumo: '12ml', divisor: 10, ordem: 7 },
-      { materialNome: 'Cones de Papel Absorvente', consumo: '20 cones', divisor: 10, ordem: 8 },
-      { materialNome: 'Guta-Percha (cones)', consumo: '20 cones', divisor: 3, ordem: 9 },
-      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: '1/8 kit', divisor: 8, ordem: 10 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: 1, divisor: 36, ordem: 3 },
+      { materialNome: 'Limas K Manuais (kit 6)', consumo: 1, divisor: 2, ordem: 4 },
+      { materialNome: 'Limas Rotatórias NiTi (kit 6)', consumo: 1, divisor: 4, ordem: 5 },
+      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: 50, divisor: 20, ordem: 6 },
+      { materialNome: 'EDTA Líquido 17%', consumo: 12, divisor: 10, ordem: 7 },
+      { materialNome: 'Cones de Papel Absorvente', consumo: 20, divisor: 10, ordem: 8 },
+      { materialNome: 'Guta-Percha (cones)', consumo: 20, divisor: 3, ordem: 9 },
+      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: 1, divisor: 8, ordem: 10 },
     ],
   },
   {
@@ -1297,14 +1297,14 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 120,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: '1 folha', divisor: 36, ordem: 3 },
-      { materialNome: 'Hipoclorito de Sódio 5,25%', consumo: '20ml', divisor: 50, ordem: 4 },
-      { materialNome: 'EDTA Líquido 17%', consumo: '5ml', divisor: 24, ordem: 5 },
-      { materialNome: 'Limas K Manuais (kit 6)', consumo: '1/4 kit', divisor: 4, ordem: 6 },
-      { materialNome: 'Guta-Percha (cones)', consumo: '5 cones', divisor: 12, ordem: 7 },
-      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: '1/10 kit', divisor: 10, ordem: 8 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: 1, divisor: 36, ordem: 3 },
+      { materialNome: 'Hipoclorito de Sódio 5,25%', consumo: 20, divisor: 50, ordem: 4 },
+      { materialNome: 'EDTA Líquido 17%', consumo: 5, divisor: 24, ordem: 5 },
+      { materialNome: 'Limas K Manuais (kit 6)', consumo: 1, divisor: 4, ordem: 6 },
+      { materialNome: 'Guta-Percha (cones)', consumo: 5, divisor: 12, ordem: 7 },
+      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: 1, divisor: 10, ordem: 8 },
     ],
   },
   {
@@ -1313,13 +1313,13 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 150,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: '1 folha', divisor: 36, ordem: 3 },
-      { materialNome: 'Hipoclorito de Sódio 5,25%', consumo: '30ml', divisor: 33, ordem: 4 },
-      { materialNome: 'EDTA Líquido 17%', consumo: '8ml', divisor: 15, ordem: 5 },
-      { materialNome: 'Guta-Percha (cones)', consumo: '10 cones', divisor: 6, ordem: 6 },
-      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: '1/10 kit', divisor: 10, ordem: 7 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: 1, divisor: 36, ordem: 3 },
+      { materialNome: 'Hipoclorito de Sódio 5,25%', consumo: 30, divisor: 33, ordem: 4 },
+      { materialNome: 'EDTA Líquido 17%', consumo: 8, divisor: 15, ordem: 5 },
+      { materialNome: 'Guta-Percha (cones)', consumo: 10, divisor: 6, ordem: 6 },
+      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: 1, divisor: 10, ordem: 7 },
     ],
   },
   {
@@ -1328,12 +1328,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 180,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: '1 folha', divisor: 36, ordem: 3 },
-      { materialNome: 'Hipoclorito de Sódio 5,25%', consumo: '40ml', divisor: 25, ordem: 4 },
-      { materialNome: 'Guta-Percha (cones)', consumo: '15 cones', divisor: 4, ordem: 5 },
-      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: '1/8 kit', divisor: 8, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: 1, divisor: 36, ordem: 3 },
+      { materialNome: 'Hipoclorito de Sódio 5,25%', consumo: 40, divisor: 25, ordem: 4 },
+      { materialNome: 'Guta-Percha (cones)', consumo: 15, divisor: 4, ordem: 5 },
+      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: 1, divisor: 8, ordem: 6 },
     ],
   },
   {
@@ -1342,12 +1342,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 210,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: '1 folha', divisor: 36, ordem: 3 },
-      { materialNome: 'Hipoclorito de Sódio 5,25%', consumo: '50ml', divisor: 20, ordem: 4 },
-      { materialNome: 'Guta-Percha (cones)', consumo: '20 cones', divisor: 3, ordem: 5 },
-      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: '1/8 kit', divisor: 8, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: 1, divisor: 36, ordem: 3 },
+      { materialNome: 'Hipoclorito de Sódio 5,25%', consumo: 50, divisor: 20, ordem: 4 },
+      { materialNome: 'Guta-Percha (cones)', consumo: 20, divisor: 3, ordem: 5 },
+      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: 1, divisor: 8, ordem: 6 },
     ],
   },
   {
@@ -1356,12 +1356,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'MTA (Agregado Trióxido Mineral)', consumo: '0,1g', divisor: 5, ordem: 4 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '1 un', divisor: 12, ordem: 5 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '4 gazes', divisor: 125, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'MTA (Agregado Trióxido Mineral)', consumo: 0.1, divisor: 5, ordem: 4 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 1, divisor: 12, ordem: 5 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 4, divisor: 125, ordem: 6 },
     ],
   },
   {
@@ -1370,11 +1370,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 120,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'MTA (Agregado Trióxido Mineral)', consumo: '0,2g', divisor: 5, ordem: 4 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '1 un', divisor: 12, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'MTA (Agregado Trióxido Mineral)', consumo: 0.2, divisor: 5, ordem: 4 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 1, divisor: 12, ordem: 5 },
     ],
   },
   {
@@ -1383,8 +1383,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'MTA (Agregado Trióxido Mineral)', consumo: '0,3g', divisor: 5, ordem: 1 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '2 gazes', divisor: 250, ordem: 2 },
+      { materialNome: 'MTA (Agregado Trióxido Mineral)', consumo: 0.3, divisor: 5, ordem: 1 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 2, divisor: 250, ordem: 2 },
     ],
   },
   {
@@ -1393,10 +1393,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: '10ml', divisor: 100, ordem: 3 },
-      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: '1g', divisor: 32, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: 10, divisor: 100, ordem: 3 },
+      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: 1, divisor: 32, ordem: 4 },
     ],
   },
   {
@@ -1405,10 +1405,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Pasta de Hidróxido de Cálcio (Calen)', consumo: '0,5g', divisor: 70, ordem: 3 },
-      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: '1g', divisor: 32, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Pasta de Hidróxido de Cálcio (Calen)', consumo: 0.5, divisor: 70, ordem: 3 },
+      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: 1, divisor: 32, ordem: 4 },
     ],
   },
   {
@@ -1417,12 +1417,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: '1 folha', divisor: 36, ordem: 3 },
-      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: '15ml', divisor: 66, ordem: 4 },
-      { materialNome: 'Hidróxido de Cálcio', consumo: '0,5g', divisor: 5, ordem: 5 },
-      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: '1g', divisor: 32, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Isolante Absoluto (dique de borracha)', consumo: 1, divisor: 36, ordem: 3 },
+      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: 15, divisor: 66, ordem: 4 },
+      { materialNome: 'Hidróxido de Cálcio', consumo: 0.5, divisor: 5, ordem: 5 },
+      { materialNome: 'Cimento Temporário (Óxido de Zinco e Eugenol)', consumo: 1, divisor: 32, ordem: 6 },
     ],
   },
   {
@@ -1431,10 +1431,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: '20ml', divisor: 50, ordem: 3 },
-      { materialNome: 'MTA (Agregado Trióxido Mineral)', consumo: '0,3g', divisor: 5, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: 20, divisor: 50, ordem: 3 },
+      { materialNome: 'MTA (Agregado Trióxido Mineral)', consumo: 0.3, divisor: 5, ordem: 4 },
     ],
   },
   {
@@ -1443,8 +1443,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Guta-Percha Termoplastificada', consumo: '1 cartucho', divisor: 1, ordem: 1 },
-      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: '1/10 kit', divisor: 10, ordem: 2 },
+      { materialNome: 'Guta-Percha Termoplastificada', consumo: 1, divisor: 1, ordem: 1 },
+      { materialNome: 'Cimento Endodôntico (AH Plus)', consumo: 1, divisor: 10, ordem: 2 },
     ],
   },
   {
@@ -1453,10 +1453,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '1 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 1, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -1465,9 +1465,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Espigão de Fibra de Vidro', consumo: '1 espigão', divisor: 5, ordem: 1 },
-      { materialNome: 'Cimento Resinoso Dual', consumo: '0,3g', divisor: 148, ordem: 2 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 3 },
+      { materialNome: 'Espigão de Fibra de Vidro', consumo: 1, divisor: 5, ordem: 1 },
+      { materialNome: 'Cimento Resinoso Dual', consumo: 0.3, divisor: 148, ordem: 2 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 3 },
     ],
   },
   {
@@ -1476,10 +1476,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'endodontia',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: '10ml', divisor: 100, ordem: 3 },
-      { materialNome: 'Pasta de Hidróxido de Cálcio (Calen)', consumo: '0,3g', divisor: 116, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Hipoclorito de Sódio 2,5%', consumo: 10, divisor: 100, ordem: 3 },
+      { materialNome: 'Pasta de Hidróxido de Cálcio (Calen)', consumo: 0.3, divisor: 116, ordem: 4 },
     ],
   },
   // ── PERIODONTIA (20) ──────────────────────────────────────────────────────────
@@ -1489,10 +1489,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Sugador Descartável', consumo: '2 un', divisor: 40, ordem: 3 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '10ml', divisor: 25, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Sugador Descartável', consumo: 2, divisor: 40, ordem: 3 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 10, divisor: 25, ordem: 4 },
     ],
   },
   {
@@ -1501,10 +1501,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 180,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '6 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '2 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Sugador Descartável', consumo: '4 un', divisor: 40, ordem: 3 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '50ml', divisor: 5, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 6, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 2, divisor: 100, ordem: 2 },
+      { materialNome: 'Sugador Descartável', consumo: 4, divisor: 40, ordem: 3 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 50, divisor: 5, ordem: 4 },
     ],
   },
   {
@@ -1513,12 +1513,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0', consumo: '1 un', divisor: 12, ordem: 4 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '15ml', divisor: 16, ordem: 5 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '4 gazes', divisor: 125, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0', consumo: 1, divisor: 12, ordem: 4 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 15, divisor: 16, ordem: 5 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 4, divisor: 125, ordem: 6 },
     ],
   },
   {
@@ -1527,10 +1527,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0', consumo: '1 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0', consumo: 1, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -1539,11 +1539,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 120,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 12', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 5-0 Absorvível', consumo: '2 un', divisor: 12, ordem: 4 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '6 gazes', divisor: 83, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 12', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 5-0 Absorvível', consumo: 2, divisor: 12, ordem: 4 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 6, divisor: 83, ordem: 5 },
     ],
   },
   {
@@ -1552,12 +1552,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 120,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Enxerto Ósseo em Partícula', consumo: '1 frasco', divisor: 1, ordem: 4 },
-      { materialNome: 'Membrana Reabsorvível de Colágeno', consumo: '1 membrana', divisor: 1, ordem: 5 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '2 un', divisor: 12, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Enxerto Ósseo em Partícula', consumo: 1, divisor: 1, ordem: 4 },
+      { materialNome: 'Membrana Reabsorvível de Colágeno', consumo: 1, divisor: 1, ordem: 5 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 2, divisor: 12, ordem: 6 },
     ],
   },
   {
@@ -1566,9 +1566,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '10ml', divisor: 25, ordem: 3 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 10, divisor: 25, ordem: 3 },
     ],
   },
   {
@@ -1577,8 +1577,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Clorexidina Gel 2%', consumo: '0,5g', divisor: 20, ordem: 1 },
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 2 },
+      { materialNome: 'Clorexidina Gel 2%', consumo: 0.5, divisor: 20, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 2 },
     ],
   },
   {
@@ -1587,10 +1587,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '2 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 2, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -1599,10 +1599,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0', consumo: '1 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0', consumo: 1, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -1611,10 +1611,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0', consumo: '1 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0', consumo: 1, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -1623,11 +1623,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 12', consumo: '2 lâminas', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 5-0 Absorvível', consumo: '3 un', divisor: 12, ordem: 4 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '6 gazes', divisor: 83, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 12', consumo: 2, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 5-0 Absorvível', consumo: 3, divisor: 12, ordem: 4 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 6, divisor: 83, ordem: 5 },
     ],
   },
   {
@@ -1636,10 +1636,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '1 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 1, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -1648,10 +1648,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Sugador Descartável', consumo: '1 un', divisor: 40, ordem: 2 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '10ml', divisor: 25, ordem: 3 },
-      { materialNome: 'Pasta Profilática com Flúor', consumo: '5g', divisor: 40, ordem: 4 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Sugador Descartável', consumo: 1, divisor: 40, ordem: 2 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 10, divisor: 25, ordem: 3 },
+      { materialNome: 'Pasta Profilática com Flúor', consumo: 5, divisor: 40, ordem: 4 },
     ],
   },
   {
@@ -1660,10 +1660,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Sugador Descartável', consumo: '2 un', divisor: 40, ordem: 3 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '20ml', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Sugador Descartável', consumo: 2, divisor: 40, ordem: 3 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 20, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -1672,10 +1672,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0', consumo: '2 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0', consumo: 2, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -1684,11 +1684,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Enxerto Ósseo em Partícula', consumo: '1 frasco', divisor: 1, ordem: 3 },
-      { materialNome: 'Sulfato de Cálcio para Regeneração', consumo: '1/4 kit', divisor: 4, ordem: 4 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '2 un', divisor: 12, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Enxerto Ósseo em Partícula', consumo: 1, divisor: 1, ordem: 3 },
+      { materialNome: 'Sulfato de Cálcio para Regeneração', consumo: 1, divisor: 4, ordem: 4 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 2, divisor: 12, ordem: 5 },
     ],
   },
   {
@@ -1697,10 +1697,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Proteína de Matriz de Esmalte (Emdogain)', consumo: '1 kit', divisor: 1, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '2 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Proteína de Matriz de Esmalte (Emdogain)', consumo: 1, divisor: 1, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 2, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -1709,9 +1709,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Clorexidina Gel 2%', consumo: '1g', divisor: 10, ordem: 3 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Clorexidina Gel 2%', consumo: 1, divisor: 10, ordem: 3 },
     ],
   },
   {
@@ -1720,8 +1720,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'periodontia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '5ml', divisor: 50, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 5, divisor: 50, ordem: 2 },
     ],
   },
   // ── PRÓTESE (25) ──────────────────────────────────────────────────────────────
@@ -1732,12 +1732,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 120,
     custoLaboratorio: 450.0,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Fio Retrator de Gengiva nº 0', consumo: '10cm', divisor: 25, ordem: 3 },
-      { materialNome: 'Alginato', consumo: '100g', divisor: 5, ordem: 4 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '300g', divisor: 3, ordem: 5 },
-      { materialNome: 'Cimento de Fosfato de Zinco', consumo: '1/6 kit', divisor: 6, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Fio Retrator de Gengiva nº 0', consumo: 10, divisor: 25, ordem: 3 },
+      { materialNome: 'Alginato', consumo: 100, divisor: 5, ordem: 4 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 300, divisor: 3, ordem: 5 },
+      { materialNome: 'Cimento de Fosfato de Zinco', consumo: 1, divisor: 6, ordem: 6 },
     ],
   },
   {
@@ -1747,12 +1747,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 120,
     custoLaboratorio: 650.0,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Fio Retrator de Gengiva nº 0', consumo: '10cm', divisor: 25, ordem: 3 },
-      { materialNome: 'Silicona por Adição (kit pesado/leve)', consumo: '1/4 kit', divisor: 4, ordem: 4 },
-      { materialNome: 'Gesso Tipo IV (extra-duro)', consumo: '300g', divisor: 3, ordem: 5 },
-      { materialNome: 'Cimento Resinoso Dual', consumo: '0,5g', divisor: 148, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Fio Retrator de Gengiva nº 0', consumo: 10, divisor: 25, ordem: 3 },
+      { materialNome: 'Silicona por Adição (kit pesado/leve)', consumo: 1, divisor: 4, ordem: 4 },
+      { materialNome: 'Gesso Tipo IV (extra-duro)', consumo: 300, divisor: 3, ordem: 5 },
+      { materialNome: 'Cimento Resinoso Dual', consumo: 0.5, divisor: 148, ordem: 6 },
     ],
   },
   {
@@ -1761,10 +1761,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'protese',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Resina Bisacrílica Provisória', consumo: '5g', divisor: 25, ordem: 3 },
-      { materialNome: 'Cimento Provisório sem Eugenol', consumo: '0,5g', divisor: 76, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Resina Bisacrílica Provisória', consumo: 5, divisor: 25, ordem: 3 },
+      { materialNome: 'Cimento Provisório sem Eugenol', consumo: 0.5, divisor: 76, ordem: 4 },
     ],
   },
   {
@@ -1774,12 +1774,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 120,
     custoLaboratorio: 1200.0,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Fio Retrator de Gengiva nº 0', consumo: '20cm', divisor: 12, ordem: 3 },
-      { materialNome: 'Silicona por Adição (kit pesado/leve)', consumo: '1/3 kit', divisor: 3, ordem: 4 },
-      { materialNome: 'Gesso Tipo IV (extra-duro)', consumo: '500g', divisor: 2, ordem: 5 },
-      { materialNome: 'Cimento de Ionômero para Cimentação', consumo: '2g', divisor: 34, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Fio Retrator de Gengiva nº 0', consumo: 20, divisor: 12, ordem: 3 },
+      { materialNome: 'Silicona por Adição (kit pesado/leve)', consumo: 1, divisor: 3, ordem: 4 },
+      { materialNome: 'Gesso Tipo IV (extra-duro)', consumo: 500, divisor: 2, ordem: 5 },
+      { materialNome: 'Cimento de Ionômero para Cimentação', consumo: 2, divisor: 34, ordem: 6 },
     ],
   },
   {
@@ -1789,10 +1789,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 180,
     custoLaboratorio: 650.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '200g', divisor: 2, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '500g', divisor: 2, ordem: 2 },
-      { materialNome: 'Cera para Rodetes Oclusais', consumo: '50g', divisor: 10, ordem: 3 },
-      { materialNome: 'Pasta de Óxido de Zinco (impressão)', consumo: '1/4 kit', divisor: 4, ordem: 4 },
+      { materialNome: 'Alginato', consumo: 200, divisor: 2, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 500, divisor: 2, ordem: 2 },
+      { materialNome: 'Cera para Rodetes Oclusais', consumo: 50, divisor: 10, ordem: 3 },
+      { materialNome: 'Pasta de Óxido de Zinco (impressão)', consumo: 1, divisor: 4, ordem: 4 },
     ],
   },
   {
@@ -1802,9 +1802,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 180,
     custoLaboratorio: 650.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '200g', divisor: 2, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '500g', divisor: 2, ordem: 2 },
-      { materialNome: 'Cera para Rodetes Oclusais', consumo: '50g', divisor: 10, ordem: 3 },
+      { materialNome: 'Alginato', consumo: 200, divisor: 2, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 500, divisor: 2, ordem: 2 },
+      { materialNome: 'Cera para Rodetes Oclusais', consumo: 50, divisor: 10, ordem: 3 },
     ],
   },
   {
@@ -1814,9 +1814,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 120,
     custoLaboratorio: 550.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '100g', divisor: 5, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '300g', divisor: 3, ordem: 2 },
-      { materialNome: 'Moldeira de Estoque Superior', consumo: '1 un', divisor: 1, ordem: 3 },
+      { materialNome: 'Alginato', consumo: 100, divisor: 5, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 300, divisor: 3, ordem: 2 },
+      { materialNome: 'Moldeira de Estoque Superior', consumo: 1, divisor: 1, ordem: 3 },
     ],
   },
   {
@@ -1826,9 +1826,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 120,
     custoLaboratorio: 750.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '100g', divisor: 5, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '300g', divisor: 3, ordem: 2 },
-      { materialNome: 'Moldeira de Estoque Superior', consumo: '1 un', divisor: 1, ordem: 3 },
+      { materialNome: 'Alginato', consumo: 100, divisor: 5, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 300, divisor: 3, ordem: 2 },
+      { materialNome: 'Moldeira de Estoque Superior', consumo: 1, divisor: 1, ordem: 3 },
     ],
   },
   {
@@ -1837,8 +1837,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'protese',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Reembasador de Prótese (kit)', consumo: '1 kit', divisor: 1, ordem: 1 },
-      { materialNome: 'Acrílico Autopolimerizável Rosa', consumo: '10g', divisor: 50, ordem: 2 },
+      { materialNome: 'Reembasador de Prótese (kit)', consumo: 1, divisor: 1, ordem: 1 },
+      { materialNome: 'Acrílico Autopolimerizável Rosa', consumo: 10, divisor: 50, ordem: 2 },
     ],
   },
   {
@@ -1847,8 +1847,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'protese',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Acrílico Autopolimerizável Rosa', consumo: '5g', divisor: 100, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '100g', divisor: 10, ordem: 2 },
+      { materialNome: 'Acrílico Autopolimerizável Rosa', consumo: 5, divisor: 100, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 100, divisor: 10, ordem: 2 },
     ],
   },
   {
@@ -1858,10 +1858,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 90,
     custoLaboratorio: 750.0,
     materiais: [
-      { materialNome: 'Pilar Protético Cone Morse (pré-fabricado)', consumo: '1 pilar', divisor: 1, ordem: 1 },
-      { materialNome: 'Transferente de Impressão de Implante', consumo: '1 un', divisor: 1, ordem: 2 },
-      { materialNome: 'Análogo de Implante', consumo: '1 un', divisor: 1, ordem: 3 },
-      { materialNome: 'Cimento de Ionômero para Cimentação', consumo: '1g', divisor: 68, ordem: 4 },
+      { materialNome: 'Pilar Protético Cone Morse (pré-fabricado)', consumo: 1, divisor: 1, ordem: 1 },
+      { materialNome: 'Transferente de Impressão de Implante', consumo: 1, divisor: 1, ordem: 2 },
+      { materialNome: 'Análogo de Implante', consumo: 1, divisor: 1, ordem: 3 },
+      { materialNome: 'Cimento de Ionômero para Cimentação', consumo: 1, divisor: 68, ordem: 4 },
     ],
   },
   {
@@ -1871,10 +1871,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 90,
     custoLaboratorio: 450.0,
     materiais: [
-      { materialNome: 'Pilar Protético UCLA', consumo: '1 pilar', divisor: 1, ordem: 1 },
-      { materialNome: 'Transferente de Impressão de Implante', consumo: '1 un', divisor: 1, ordem: 2 },
-      { materialNome: 'Análogo de Implante', consumo: '1 un', divisor: 1, ordem: 3 },
-      { materialNome: 'Cimento de Fosfato de Zinco', consumo: '1/6 kit', divisor: 6, ordem: 4 },
+      { materialNome: 'Pilar Protético UCLA', consumo: 1, divisor: 1, ordem: 1 },
+      { materialNome: 'Transferente de Impressão de Implante', consumo: 1, divisor: 1, ordem: 2 },
+      { materialNome: 'Análogo de Implante', consumo: 1, divisor: 1, ordem: 3 },
+      { materialNome: 'Cimento de Fosfato de Zinco', consumo: 1, divisor: 6, ordem: 4 },
     ],
   },
   {
@@ -1884,8 +1884,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 60,
     custoLaboratorio: 250.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '100g', divisor: 5, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '200g', divisor: 5, ordem: 2 },
+      { materialNome: 'Alginato', consumo: 100, divisor: 5, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 200, divisor: 5, ordem: 2 },
     ],
   },
   {
@@ -1895,8 +1895,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 30,
     custoLaboratorio: 80.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '50g', divisor: 10, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '150g', divisor: 6, ordem: 2 },
+      { materialNome: 'Alginato', consumo: 50, divisor: 10, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 150, divisor: 6, ordem: 2 },
     ],
   },
   {
@@ -1906,10 +1906,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 60,
     custoLaboratorio: 520.0,
     materiais: [
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 1 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 2 },
-      { materialNome: 'Silano', consumo: '1 gota', divisor: 65, ordem: 3 },
-      { materialNome: 'Cimento Resinoso Dual', consumo: '0,5g', divisor: 148, ordem: 4 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 1 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Silano', consumo: 1, divisor: 65, ordem: 3 },
+      { materialNome: 'Cimento Resinoso Dual', consumo: 0.5, divisor: 148, ordem: 4 },
     ],
   },
   {
@@ -1919,9 +1919,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 90,
     custoLaboratorio: 850.0,
     materiais: [
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 1 },
-      { materialNome: 'Adesivo Universal', consumo: '2 gotas', divisor: 100, ordem: 2 },
-      { materialNome: 'Cimento Resinoso Dual', consumo: '1g', divisor: 148, ordem: 3 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 1 },
+      { materialNome: 'Adesivo Universal', consumo: 2, divisor: 100, ordem: 2 },
+      { materialNome: 'Cimento Resinoso Dual', consumo: 1, divisor: 148, ordem: 3 },
     ],
   },
   {
@@ -1931,10 +1931,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 180,
     custoLaboratorio: 1200.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '200g', divisor: 2, ordem: 1 },
-      { materialNome: 'Gesso Tipo IV (extra-duro)', consumo: '500g', divisor: 2, ordem: 2 },
-      { materialNome: 'Transferente de Impressão de Implante', consumo: '2 un', divisor: 1, ordem: 3 },
-      { materialNome: 'Análogo de Implante', consumo: '2 un', divisor: 1, ordem: 4 },
+      { materialNome: 'Alginato', consumo: 200, divisor: 2, ordem: 1 },
+      { materialNome: 'Gesso Tipo IV (extra-duro)', consumo: 500, divisor: 2, ordem: 2 },
+      { materialNome: 'Transferente de Impressão de Implante', consumo: 2, divisor: 1, ordem: 3 },
+      { materialNome: 'Análogo de Implante', consumo: 2, divisor: 1, ordem: 4 },
     ],
   },
   {
@@ -1944,8 +1944,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 45,
     custoLaboratorio: 180.0,
     materiais: [
-      { materialNome: 'Cimento de Fosfato de Zinco', consumo: '1/6 kit', divisor: 6, ordem: 1 },
-      { materialNome: 'Fio Retrator de Gengiva nº 0', consumo: '5cm', divisor: 50, ordem: 2 },
+      { materialNome: 'Cimento de Fosfato de Zinco', consumo: 1, divisor: 6, ordem: 1 },
+      { materialNome: 'Fio Retrator de Gengiva nº 0', consumo: 5, divisor: 50, ordem: 2 },
     ],
   },
   {
@@ -1955,11 +1955,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 60,
     custoLaboratorio: 680.0,
     materiais: [
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 1 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 2 },
-      { materialNome: 'Silano', consumo: '1 gota', divisor: 65, ordem: 3 },
-      { materialNome: 'Cimento Resinoso Dual', consumo: '0,3g', divisor: 148, ordem: 4 },
-      { materialNome: 'Microbrush Aplicador', consumo: '3 un', divisor: 50, ordem: 5 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 1 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Silano', consumo: 1, divisor: 65, ordem: 3 },
+      { materialNome: 'Cimento Resinoso Dual', consumo: 0.3, divisor: 148, ordem: 4 },
+      { materialNome: 'Microbrush Aplicador', consumo: 3, divisor: 50, ordem: 5 },
     ],
   },
   {
@@ -1969,9 +1969,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 120,
     custoLaboratorio: 680.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '200g', divisor: 2, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '500g', divisor: 2, ordem: 2 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '4 gazes', divisor: 125, ordem: 3 },
+      { materialNome: 'Alginato', consumo: 200, divisor: 2, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 500, divisor: 2, ordem: 2 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 4, divisor: 125, ordem: 3 },
     ],
   },
   {
@@ -1981,9 +1981,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 180,
     custoLaboratorio: 1300.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '300g', divisor: 1, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '800g', divisor: 1, ordem: 2 },
-      { materialNome: 'Cera para Rodetes Oclusais', consumo: '100g', divisor: 5, ordem: 3 },
+      { materialNome: 'Alginato', consumo: 300, divisor: 1, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 800, divisor: 1, ordem: 2 },
+      { materialNome: 'Cera para Rodetes Oclusais', consumo: 100, divisor: 5, ordem: 3 },
     ],
   },
   {
@@ -1992,8 +1992,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'protese',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Cimento de Ionômero para Cimentação', consumo: '1g', divisor: 68, ordem: 1 },
-      { materialNome: 'Algodão em Rolo', consumo: '2 rolos', divisor: 100, ordem: 2 },
+      { materialNome: 'Cimento de Ionômero para Cimentação', consumo: 1, divisor: 68, ordem: 1 },
+      { materialNome: 'Algodão em Rolo', consumo: 2, divisor: 100, ordem: 2 },
     ],
   },
   {
@@ -2002,9 +2002,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'protese',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Resina Bisacrílica Provisória', consumo: '10g', divisor: 25, ordem: 1 },
-      { materialNome: 'Cimento Provisório sem Eugenol', consumo: '1g', divisor: 38, ordem: 2 },
-      { materialNome: 'Alginato', consumo: '50g', divisor: 10, ordem: 3 },
+      { materialNome: 'Resina Bisacrílica Provisória', consumo: 10, divisor: 25, ordem: 1 },
+      { materialNome: 'Cimento Provisório sem Eugenol', consumo: 1, divisor: 38, ordem: 2 },
+      { materialNome: 'Alginato', consumo: 50, divisor: 10, ordem: 3 },
     ],
   },
   {
@@ -2013,7 +2013,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'protese',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Reembasador de Prótese (kit)', consumo: '1 kit', divisor: 1, ordem: 1 },
+      { materialNome: 'Reembasador de Prótese (kit)', consumo: 1, divisor: 1, ordem: 1 },
     ],
   },
   {
@@ -2022,9 +2022,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'protese',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Fio Retrator de Gengiva nº 1', consumo: '10cm', divisor: 25, ordem: 1 },
-      { materialNome: 'Silicona por Adição (kit pesado/leve)', consumo: '1/3 kit', divisor: 3, ordem: 2 },
-      { materialNome: 'Moldeira de Estoque Superior', consumo: '1 un', divisor: 1, ordem: 3 },
+      { materialNome: 'Fio Retrator de Gengiva nº 1', consumo: 10, divisor: 25, ordem: 1 },
+      { materialNome: 'Silicona por Adição (kit pesado/leve)', consumo: 1, divisor: 3, ordem: 2 },
+      { materialNome: 'Moldeira de Estoque Superior', consumo: 1, divisor: 1, ordem: 3 },
     ],
   },
   // ── CIRURGIA (25) ─────────────────────────────────────────────────────────────
@@ -2034,9 +2034,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '4 gazes', divisor: 125, ordem: 3 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 4, divisor: 125, ordem: 3 },
     ],
   },
   {
@@ -2045,11 +2045,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 3-0', consumo: '1 un', divisor: 12, ordem: 4 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '6 gazes', divisor: 83, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 3-0', consumo: 1, divisor: 12, ordem: 4 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 6, divisor: 83, ordem: 5 },
     ],
   },
   {
@@ -2058,11 +2058,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '2 lâminas', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 3-0', consumo: '2 un', divisor: 12, ordem: 4 },
-      { materialNome: 'Esponja de Colágeno Hemostática', consumo: '1 un', divisor: 1, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 2, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 3-0', consumo: 2, divisor: 12, ordem: 4 },
+      { materialNome: 'Esponja de Colágeno Hemostática', consumo: 1, divisor: 1, ordem: 5 },
     ],
   },
   {
@@ -2071,12 +2071,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 120,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '2 lâminas', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 3-0', consumo: '3 un', divisor: 12, ordem: 4 },
-      { materialNome: 'Esponja de Colágeno Hemostática', consumo: '1 un', divisor: 1, ordem: 5 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '8 gazes', divisor: 62, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 2, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 3-0', consumo: 3, divisor: 12, ordem: 4 },
+      { materialNome: 'Esponja de Colágeno Hemostática', consumo: 1, divisor: 1, ordem: 5 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 8, divisor: 62, ordem: 6 },
     ],
   },
   {
@@ -2085,10 +2085,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0', consumo: '1 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0', consumo: 1, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -2097,10 +2097,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 3-0', consumo: '2 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 3-0', consumo: 2, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -2109,10 +2109,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '2 lâminas', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '2 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 2, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 2, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -2121,10 +2121,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '4 gazes', divisor: 125, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 4, divisor: 125, ordem: 4 },
     ],
   },
   {
@@ -2133,12 +2133,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Implante Dentário Cone Morse', consumo: '1 implante', divisor: 1, ordem: 3 },
-      { materialNome: 'Parafuso de Cobertura para Implante', consumo: '1 un', divisor: 1, ordem: 4 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '2 un', divisor: 12, ordem: 5 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '6 gazes', divisor: 83, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Implante Dentário Cone Morse', consumo: 1, divisor: 1, ordem: 3 },
+      { materialNome: 'Parafuso de Cobertura para Implante', consumo: 1, divisor: 1, ordem: 4 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 2, divisor: 12, ordem: 5 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 6, divisor: 83, ordem: 6 },
     ],
   },
   {
@@ -2147,10 +2147,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Cicatrizador de Implante 4mm', consumo: '1 un', divisor: 1, ordem: 3 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Cicatrizador de Implante 4mm', consumo: 1, divisor: 1, ordem: 3 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 4 },
     ],
   },
   {
@@ -2159,12 +2159,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 120,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '5 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '2 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '2 lâminas', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '4 un', divisor: 12, ordem: 4 },
-      { materialNome: 'Membrana Reabsorvível de Colágeno', consumo: '1 membrana', divisor: 1, ordem: 5 },
-      { materialNome: 'Cera para Osso (Bone Wax)', consumo: '1/3 tubo', divisor: 3, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 5, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 2, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 2, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 4, divisor: 12, ordem: 4 },
+      { materialNome: 'Membrana Reabsorvível de Colágeno', consumo: 1, divisor: 1, ordem: 5 },
+      { materialNome: 'Cera para Osso (Bone Wax)', consumo: 1, divisor: 3, ordem: 6 },
     ],
   },
   {
@@ -2173,10 +2173,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Enxerto Ósseo em Partícula', consumo: '1 frasco', divisor: 1, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '2 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Enxerto Ósseo em Partícula', consumo: 1, divisor: 1, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 2, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -2185,12 +2185,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 150,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '6 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '2 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '2 lâminas', divisor: 100, ordem: 3 },
-      { materialNome: 'Enxerto Ósseo em Partícula', consumo: '2 frascos', divisor: 1, ordem: 4 },
-      { materialNome: 'Membrana Reabsorvível de Colágeno', consumo: '1 membrana', divisor: 1, ordem: 5 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '4 un', divisor: 12, ordem: 6 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 6, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 2, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 2, divisor: 100, ordem: 3 },
+      { materialNome: 'Enxerto Ósseo em Partícula', consumo: 2, divisor: 1, ordem: 4 },
+      { materialNome: 'Membrana Reabsorvível de Colágeno', consumo: 1, divisor: 1, ordem: 5 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 4, divisor: 12, ordem: 6 },
     ],
   },
   {
@@ -2199,10 +2199,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '8 gazes', divisor: 62, ordem: 3 },
-      { materialNome: 'Esponja de Colágeno Hemostática', consumo: '2 un', divisor: 1, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 8, divisor: 62, ordem: 3 },
+      { materialNome: 'Esponja de Colágeno Hemostática', consumo: 2, divisor: 1, ordem: 4 },
     ],
   },
   {
@@ -2211,11 +2211,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '6 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '2 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '10 gazes', divisor: 50, ordem: 3 },
-      { materialNome: 'Esponja de Colágeno Hemostática', consumo: '3 un', divisor: 1, ordem: 4 },
-      { materialNome: 'Fio de Sutura 3-0', consumo: '2 un', divisor: 12, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 6, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 2, divisor: 100, ordem: 2 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 10, divisor: 50, ordem: 3 },
+      { materialNome: 'Esponja de Colágeno Hemostática', consumo: 3, divisor: 1, ordem: 4 },
+      { materialNome: 'Fio de Sutura 3-0', consumo: 2, divisor: 12, ordem: 5 },
     ],
   },
   {
@@ -2224,10 +2224,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0', consumo: '1 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0', consumo: 1, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -2236,11 +2236,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '2 lâminas', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '3 un', divisor: 12, ordem: 4 },
-      { materialNome: 'Cera para Osso (Bone Wax)', consumo: '1/3 tubo', divisor: 3, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 2, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 3, divisor: 12, ordem: 4 },
+      { materialNome: 'Cera para Osso (Bone Wax)', consumo: 1, divisor: 3, ordem: 5 },
     ],
   },
   {
@@ -2249,11 +2249,11 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '3 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '2 un', divisor: 12, ordem: 4 },
-      { materialNome: 'Cera para Osso (Bone Wax)', consumo: '1/3 tubo', divisor: 3, ordem: 5 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 3, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 2, divisor: 12, ordem: 4 },
+      { materialNome: 'Cera para Osso (Bone Wax)', consumo: 1, divisor: 3, ordem: 5 },
     ],
   },
   {
@@ -2262,10 +2262,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: '2 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0 Absorvível (Vicryl)', consumo: 2, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -2274,10 +2274,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Clorexidina 0,12%', consumo: '10ml', divisor: 25, ordem: 3 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '4 gazes', divisor: 125, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Clorexidina 0,12%', consumo: 10, divisor: 25, ordem: 3 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 4, divisor: 125, ordem: 4 },
     ],
   },
   {
@@ -2286,10 +2286,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0', consumo: '1 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0', consumo: 1, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -2298,10 +2298,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '4 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 12', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 5-0 Absorvível', consumo: '3 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 4, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 12', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 5-0 Absorvível', consumo: 3, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -2310,10 +2310,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 45,
     materiais: [
-      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: '2 tubetes', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Longa', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Fio de Sutura 4-0', consumo: '1 un', divisor: 12, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Articaína 4%)', consumo: 2, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Longa', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Fio de Sutura 4-0', consumo: 1, divisor: 12, ordem: 4 },
     ],
   },
   {
@@ -2322,10 +2322,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Lâmina de Bisturi nº 15', consumo: '1 lâmina', divisor: 100, ordem: 3 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '2 gazes', divisor: 250, ordem: 4 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Lâmina de Bisturi nº 15', consumo: 1, divisor: 100, ordem: 3 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 2, divisor: 250, ordem: 4 },
     ],
   },
   {
@@ -2334,9 +2334,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'cirurgia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: '1 tubete', divisor: 50, ordem: 1 },
-      { materialNome: 'Agulha Gengival Curta', consumo: '1 un', divisor: 100, ordem: 2 },
-      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: '2 gazes', divisor: 250, ordem: 3 },
+      { materialNome: 'Anestésico Dental (Mepivacaína 2%)', consumo: 1, divisor: 50, ordem: 1 },
+      { materialNome: 'Agulha Gengival Curta', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Compressa de Gaze 7,5x7,5cm', consumo: 2, divisor: 250, ordem: 3 },
     ],
   },
   // ── ORTODONTIA (20) ───────────────────────────────────────────────────────────
@@ -2346,12 +2346,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Braquete Metálico (kit 20 peças)', consumo: '1 kit', divisor: 1, ordem: 1 },
-      { materialNome: 'Tubo Molar com Gancho (par)', consumo: '2 pares', divisor: 1, ordem: 2 },
-      { materialNome: 'Adesivo para Braquete', consumo: '1 seringa', divisor: 1, ordem: 3 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '2 bisnagas', divisor: 1, ordem: 4 },
-      { materialNome: 'Fio Níquel-Titânio 0,014', consumo: '1 fio', divisor: 1, ordem: 5 },
-      { materialNome: 'Ligadura Elástica (rolo 1000 un)', consumo: '30 un', divisor: 33, ordem: 6 },
+      { materialNome: 'Braquete Metálico (kit 20 peças)', consumo: 1, divisor: 1, ordem: 1 },
+      { materialNome: 'Tubo Molar com Gancho (par)', consumo: 2, divisor: 1, ordem: 2 },
+      { materialNome: 'Adesivo para Braquete', consumo: 1, divisor: 1, ordem: 3 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 2, divisor: 1, ordem: 4 },
+      { materialNome: 'Fio Níquel-Titânio 0,014', consumo: 1, divisor: 1, ordem: 5 },
+      { materialNome: 'Ligadura Elástica (rolo 1000 un)', consumo: 30, divisor: 33, ordem: 6 },
     ],
   },
   {
@@ -2360,8 +2360,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Ligadura Elástica (rolo 1000 un)', consumo: '30 un', divisor: 33, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Ligadura Elástica (rolo 1000 un)', consumo: 30, divisor: 33, ordem: 2 },
     ],
   },
   {
@@ -2371,8 +2371,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 30,
     custoLaboratorio: 120.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '100g', divisor: 5, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '300g', divisor: 3, ordem: 2 },
+      { materialNome: 'Alginato', consumo: 100, divisor: 5, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 300, divisor: 3, ordem: 2 },
     ],
   },
   {
@@ -2382,8 +2382,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 60,
     custoLaboratorio: 350.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '150g', divisor: 3, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '400g', divisor: 2, ordem: 2 },
+      { materialNome: 'Alginato', consumo: 150, divisor: 3, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 400, divisor: 2, ordem: 2 },
     ],
   },
   {
@@ -2392,10 +2392,10 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 bisnaga', divisor: 1, ordem: 1 },
-      { materialNome: 'Adesivo Universal', consumo: '1 gota', divisor: 100, ordem: 2 },
-      { materialNome: 'Resina Flowável A1', consumo: '0,5g', divisor: 4, ordem: 3 },
-      { materialNome: 'Microbrush Aplicador', consumo: '4 un', divisor: 50, ordem: 4 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 1, ordem: 1 },
+      { materialNome: 'Adesivo Universal', consumo: 1, divisor: 100, ordem: 2 },
+      { materialNome: 'Resina Flowável A1', consumo: 0.5, divisor: 4, ordem: 3 },
+      { materialNome: 'Microbrush Aplicador', consumo: 4, divisor: 50, ordem: 4 },
     ],
   },
   {
@@ -2404,8 +2404,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Alginato', consumo: '100g', divisor: 5, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '300g', divisor: 3, ordem: 2 },
+      { materialNome: 'Alginato', consumo: 100, divisor: 5, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 300, divisor: 3, ordem: 2 },
     ],
   },
   {
@@ -2414,12 +2414,12 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Braquete Estético de Cerâmica (kit 20)', consumo: '1 kit', divisor: 1, ordem: 1 },
-      { materialNome: 'Tubo Molar com Gancho (par)', consumo: '2 pares', divisor: 1, ordem: 2 },
-      { materialNome: 'Adesivo para Braquete', consumo: '1 seringa', divisor: 1, ordem: 3 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '2 bisnagas', divisor: 1, ordem: 4 },
-      { materialNome: 'Fio Níquel-Titânio 0,014', consumo: '1 fio', divisor: 1, ordem: 5 },
-      { materialNome: 'Ligadura Elástica (rolo 1000 un)', consumo: '30 un', divisor: 33, ordem: 6 },
+      { materialNome: 'Braquete Estético de Cerâmica (kit 20)', consumo: 1, divisor: 1, ordem: 1 },
+      { materialNome: 'Tubo Molar com Gancho (par)', consumo: 2, divisor: 1, ordem: 2 },
+      { materialNome: 'Adesivo para Braquete', consumo: 1, divisor: 1, ordem: 3 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 2, divisor: 1, ordem: 4 },
+      { materialNome: 'Fio Níquel-Titânio 0,014', consumo: 1, divisor: 1, ordem: 5 },
+      { materialNome: 'Ligadura Elástica (rolo 1000 un)', consumo: 30, divisor: 33, ordem: 6 },
     ],
   },
   {
@@ -2428,9 +2428,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 60,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Pasta Profilática com Flúor', consumo: '5g', divisor: 40, ordem: 2 },
-      { materialNome: 'Disco de Polimento Alumínio Óxido', consumo: '4 discos', divisor: 12, ordem: 3 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Pasta Profilática com Flúor', consumo: 5, divisor: 40, ordem: 2 },
+      { materialNome: 'Disco de Polimento Alumínio Óxido', consumo: 4, divisor: 12, ordem: 3 },
     ],
   },
   {
@@ -2440,9 +2440,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 60,
     custoLaboratorio: 450.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '150g', divisor: 3, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '400g', divisor: 2, ordem: 2 },
-      { materialNome: 'Cimento de Ionômero para Cimentação', consumo: '2g', divisor: 34, ordem: 3 },
+      { materialNome: 'Alginato', consumo: 150, divisor: 3, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 400, divisor: 2, ordem: 2 },
+      { materialNome: 'Cimento de Ionômero para Cimentação', consumo: 2, divisor: 34, ordem: 3 },
     ],
   },
   {
@@ -2451,7 +2451,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -2460,9 +2460,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 15,
     materiais: [
-      { materialNome: 'Adesivo para Braquete', consumo: '0,1g', divisor: 68, ordem: 1 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 2 },
-      { materialNome: 'Microbrush Aplicador', consumo: '1 un', divisor: 100, ordem: 3 },
+      { materialNome: 'Adesivo para Braquete', consumo: 0.1, divisor: 68, ordem: 1 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 2 },
+      { materialNome: 'Microbrush Aplicador', consumo: 1, divisor: 100, ordem: 3 },
     ],
   },
   {
@@ -2471,8 +2471,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Anestésico Tópico (Benzocaína 20%)', consumo: '0,5g', divisor: 24, ordem: 1 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '1 aplicação', divisor: 5, ordem: 2 },
+      { materialNome: 'Anestésico Tópico (Benzocaína 20%)', consumo: 0.5, divisor: 24, ordem: 1 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 1, divisor: 5, ordem: 2 },
     ],
   },
   {
@@ -2482,8 +2482,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 30,
     custoLaboratorio: 150.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '100g', divisor: 5, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '200g', divisor: 5, ordem: 2 },
+      { materialNome: 'Alginato', consumo: 100, divisor: 5, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 200, divisor: 5, ordem: 2 },
     ],
   },
   {
@@ -2492,7 +2492,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 15,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -2502,8 +2502,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 60,
     custoLaboratorio: 380.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '150g', divisor: 3, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '400g', divisor: 2, ordem: 2 },
+      { materialNome: 'Alginato', consumo: 150, divisor: 3, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 400, divisor: 2, ordem: 2 },
     ],
   },
   {
@@ -2512,9 +2512,9 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 90,
     materiais: [
-      { materialNome: 'Adesivo para Braquete', consumo: '1 seringa', divisor: 1, ordem: 1 },
-      { materialNome: 'Ácido Fosfórico 37%', consumo: '2 bisnagas', divisor: 1, ordem: 2 },
-      { materialNome: 'Fio Níquel-Titânio 0,014', consumo: '1 fio', divisor: 1, ordem: 3 },
+      { materialNome: 'Adesivo para Braquete', consumo: 1, divisor: 1, ordem: 1 },
+      { materialNome: 'Ácido Fosfórico 37%', consumo: 2, divisor: 1, ordem: 2 },
+      { materialNome: 'Fio Níquel-Titânio 0,014', consumo: 1, divisor: 1, ordem: 3 },
     ],
   },
   {
@@ -2524,8 +2524,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     tempoMinutos: 45,
     custoLaboratorio: 80.0,
     materiais: [
-      { materialNome: 'Alginato', consumo: '150g', divisor: 3, ordem: 1 },
-      { materialNome: 'Gesso Pedra Tipo III', consumo: '400g', divisor: 2, ordem: 2 },
+      { materialNome: 'Alginato', consumo: 150, divisor: 3, ordem: 1 },
+      { materialNome: 'Gesso Pedra Tipo III', consumo: 400, divisor: 2, ordem: 2 },
     ],
   },
   {
@@ -2534,7 +2534,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 30,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
   {
@@ -2543,8 +2543,8 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 20,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
-      { materialNome: 'Elástico Intermaxilar (pacote 100)', consumo: '10 elásticos', divisor: 10, ordem: 2 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
+      { materialNome: 'Elástico Intermaxilar (pacote 100)', consumo: 10, divisor: 10, ordem: 2 },
     ],
   },
   {
@@ -2553,7 +2553,7 @@ export const DEFAULT_PROCEDIMENTOS: ProcedimentoData[] = [
     especialidadeCodigo: 'ortodontia',
     tempoMinutos: 15,
     materiais: [
-      { materialNome: 'Luvas de Procedimento M', consumo: '1 par', divisor: 100, ordem: 1 },
+      { materialNome: 'Luvas de Procedimento M', consumo: 1, divisor: 100, ordem: 1 },
     ],
   },
 ]
@@ -2595,6 +2595,7 @@ export async function createDefaultDataForUser(userId: string): Promise<void> {
       nome: mat.nome,
       unidade: mat.unidade,
       preco: mat.preco,
+      divisorPadrao: (mat as { divisorPadrao?: number }).divisorPadrao ?? 1,
       isDefault: true,
     })),
   })

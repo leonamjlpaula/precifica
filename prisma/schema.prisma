@@ -58,16 +58,17 @@ model CustoFixoItem {
 }
 
 model Material {
-  id            String                @id @default(cuid())
-  userId        String
-  user          User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  nome          String
-  unidade       String
-  preco         Float
-  isDefault     Boolean               @default(false)
-  createdAt     DateTime              @default(now())
-  updatedAt     DateTime              @updatedAt
-  procedimentos ProcedimentoMaterial[]
+  id             String                @id @default(cuid())
+  userId         String
+  user           User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nome           String
+  unidade        String
+  preco          Float
+  divisorPadrao  Int                   @default(1)
+  isDefault      Boolean               @default(false)
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+  procedimentos  ProcedimentoMaterial[]
 
   @@index([userId])
 }
@@ -108,7 +109,7 @@ model ProcedimentoMaterial {
   procedimento    Procedimento @relation(fields: [procedimentoId], references: [id], onDelete: Cascade)
   materialId      String
   material        Material     @relation(fields: [materialId], references: [id], onDelete: Cascade)
-  consumo         String
+  consumo         Float
   divisor         Float
   ordem           Int
 

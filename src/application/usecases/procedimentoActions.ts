@@ -208,10 +208,10 @@ export async function addMaterialToProcedimento(
   procedimentoId: string,
   userId: string,
   materialId: string,
-  consumo: string,
+  consumo: number,
   divisor: number
 ): Promise<ActionResult> {
-  if (!consumo.trim()) return { success: false, error: 'Consumo é obrigatório' }
+  if (consumo <= 0) return { success: false, error: 'Consumo deve ser maior que zero' }
   if (divisor <= 0) return { success: false, error: 'Divisor deve ser maior que zero' }
 
   const procedimento = await prisma.procedimento.findFirst({ where: { id: procedimentoId, userId } })
@@ -226,7 +226,7 @@ export async function addMaterialToProcedimento(
     data: {
       procedimentoId,
       materialId,
-      consumo: consumo.trim(),
+      consumo,
       divisor,
       ordem: count + 1,
     },
@@ -257,10 +257,10 @@ export async function removeMaterialFromProcedimento(
 export async function updateProcedimentoMaterial(
   pmaId: string,
   userId: string,
-  consumo: string,
+  consumo: number,
   divisor: number
 ): Promise<ActionResult> {
-  if (!consumo.trim()) return { success: false, error: 'Consumo é obrigatório' }
+  if (consumo <= 0) return { success: false, error: 'Consumo deve ser maior que zero' }
   if (divisor <= 0) return { success: false, error: 'Divisor deve ser maior que zero' }
 
   const pma = await prisma.procedimentoMaterial.findFirst({
@@ -273,7 +273,7 @@ export async function updateProcedimentoMaterial(
 
   await prisma.procedimentoMaterial.update({
     where: { id: pmaId },
-    data: { consumo: consumo.trim(), divisor },
+    data: { consumo, divisor },
   })
   return { success: true }
 }

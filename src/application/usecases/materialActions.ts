@@ -47,10 +47,11 @@ const createMaterialSchema = z.object({
   nome: z.string().min(1, 'Nome é obrigatório'),
   unidade: z.string().min(1, 'Unidade é obrigatória'),
   preco: z.number().positive('Preço deve ser maior que zero'),
+  divisorPadrao: z.number().int().min(1, 'Divisor deve ser pelo menos 1'),
 })
 
 export type CreateMaterialState = {
-  errors?: { nome?: string[]; unidade?: string[]; preco?: string[]; general?: string[] }
+  errors?: { nome?: string[]; unidade?: string[]; preco?: string[]; divisorPadrao?: string[]; general?: string[] }
   success?: boolean
   material?: Material
 }
@@ -59,9 +60,10 @@ export async function createMaterial(
   userId: string,
   nome: string,
   unidade: string,
-  preco: number
+  preco: number,
+  divisorPadrao: number
 ): Promise<CreateMaterialState> {
-  const result = createMaterialSchema.safeParse({ nome, unidade, preco })
+  const result = createMaterialSchema.safeParse({ nome, unidade, preco, divisorPadrao })
   if (!result.success) {
     const fieldErrors = result.error.flatten().fieldErrors
     return {
@@ -69,6 +71,7 @@ export async function createMaterial(
         nome: fieldErrors.nome,
         unidade: fieldErrors.unidade,
         preco: fieldErrors.preco,
+        divisorPadrao: fieldErrors.divisorPadrao,
       },
     }
   }

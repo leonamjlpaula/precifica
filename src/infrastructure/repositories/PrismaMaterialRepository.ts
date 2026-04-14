@@ -24,6 +24,7 @@ export class PrismaMaterialRepository implements IMaterialRepository {
         nome: data.nome,
         unidade: data.unidade,
         preco: data.preco,
+        divisorPadrao: data.divisorPadrao,
         isDefault: false,
       },
     })

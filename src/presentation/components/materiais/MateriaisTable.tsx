@@ -45,6 +45,7 @@ export function MateriaisTable({ userId, initialMateriais }: Props) {
   const [addNome, setAddNome] = useState('')
   const [addUnidade, setAddUnidade] = useState('')
   const [addPreco, setAddPreco] = useState('')
+  const [addDivisorPadrao, setAddDivisorPadrao] = useState('1')
   const [addErrors, setAddErrors] = useState<Record<string, string>>({})
 
   const filtered = useMemo(() => {
@@ -123,6 +124,7 @@ export function MateriaisTable({ userId, initialMateriais }: Props) {
     setAddNome('')
     setAddUnidade('')
     setAddPreco('')
+    setAddDivisorPadrao('1')
     setAddErrors({})
   }
 
@@ -132,13 +134,15 @@ export function MateriaisTable({ userId, initialMateriais }: Props) {
     if (!addUnidade.trim()) errors.unidade = 'Unidade é obrigatória'
     const preco = parseFloat(addPreco.replace(',', '.'))
     if (isNaN(preco) || preco <= 0) errors.preco = 'Preço deve ser maior que zero'
+    const divisorPadrao = parseInt(addDivisorPadrao, 10)
+    if (isNaN(divisorPadrao) || divisorPadrao < 1) errors.divisorPadrao = 'Divisor deve ser pelo menos 1'
     if (Object.keys(errors).length > 0) {
       setAddErrors(errors)
       return
     }
 
     startTransition(async () => {
-      const result = await createMaterial(userId, addNome.trim(), addUnidade.trim(), preco)
+      const result = await createMaterial(userId, addNome.trim(), addUnidade.trim(), preco, divisorPadrao)
       if (result.success && result.material) {
         setMateriais((prev) => [...prev, result.material!].sort((a, b) => a.nome.localeCompare(b.nome)))
         setIsAddDialogOpen(false)
@@ -364,6 +368,22 @@ export function MateriaisTable({ userId, initialMateriais }: Props) {
                 step={0.01}
               />
               {addErrors.preco && <p className="text-xs text-destructive">{addErrors.preco}</p>}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="add-divisor">Usos por embalagem</Label>
+              <Input
+                id="add-divisor"
+                type="number"
+                placeholder="1"
+                value={addDivisorPadrao}
+                onChange={(e) => setAddDivisorPadrao(e.target.value)}
+                min={1}
+                step={1}
+              />
+              <p className="text-xs text-muted-foreground">
+                Quantos procedimentos cabem em uma embalagem. Ex: caixa de 100 luvas → 100.
+              </p>
+              {addErrors.divisorPadrao && <p className="text-xs text-destructive">{addErrors.divisorPadrao}</p>}
             </div>
           </div>
           <DialogFooter>

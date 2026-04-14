@@ -16,7 +16,7 @@ import {
   updateProcedimentoMaterial,
   deleteProcedimento,
 } from '@/application/usecases/procedimentoActions'
-import { parseConsumoNumerico, margemColor } from '@/application/usecases/calcularPrecoProcedimento'
+import { margemColor } from '@/application/usecases/calcularPrecoProcedimento'
 import { useToast } from '@/presentation/hooks/use-toast'
 import { Button } from '@/presentation/components/ui/button'
 import { Input } from '@/presentation/components/ui/input'
@@ -138,9 +138,9 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
   const [editConsumo, setEditConsumo] = useState('')
   const [editDivisor, setEditDivisor] = useState('')
 
-  function startEditMaterial(pmaId: string, consumo: string, divisor: number) {
+  function startEditMaterial(pmaId: string, consumo: number, divisor: number) {
     setEditingPmaId(pmaId)
-    setEditConsumo(consumo)
+    setEditConsumo(String(consumo))
     setEditDivisor(String(divisor))
   }
 
@@ -151,9 +151,10 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
   }
 
   function handleSaveMaterial(pmaId: string) {
+    const consumo = parseFloat(editConsumo.replace(',', '.'))
     const divisor = parseFloat(editDivisor.replace(',', '.'))
-    if (!editConsumo.trim()) {
-      toast({ title: 'Consumo obrigatório', variant: 'destructive' })
+    if (isNaN(consumo) || consumo <= 0) {
+      toast({ title: 'Consumo inválido', description: 'Informe um valor maior que zero.', variant: 'destructive' })
       return
     }
     if (isNaN(divisor) || divisor <= 0) {
@@ -161,7 +162,7 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
       return
     }
     startTransition(async () => {
-      const result = await updateProcedimentoMaterial(pmaId, userId, editConsumo.trim(), divisor)
+      const result = await updateProcedimentoMaterial(pmaId, userId, consumo, divisor)
       if (result.success) {
         cancelEditMaterial()
         toast({ title: 'Material atualizado!' })
@@ -203,9 +204,10 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
       toast({ title: 'Selecione um material', variant: 'destructive' })
       return
     }
+    const consumo = parseFloat(addConsumo.replace(',', '.'))
     const divisor = parseFloat(addDivisor.replace(',', '.'))
-    if (!addConsumo.trim()) {
-      toast({ title: 'Consumo obrigatório', variant: 'destructive' })
+    if (isNaN(consumo) || consumo <= 0) {
+      toast({ title: 'Consumo inválido', description: 'Informe um valor maior que zero.', variant: 'destructive' })
       return
     }
     if (isNaN(divisor) || divisor <= 0) {
@@ -217,7 +219,7 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
         procedimento.id,
         userId,
         selectedMatId,
-        addConsumo.trim(),
+        consumo,
         divisor
       )
       if (result.success) {
@@ -648,8 +650,7 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
                   </tr>
                 ) : (
                   procedimento.materiais.map((pma, index) => {
-                    const consumoNum = parseConsumoNumerico(pma.consumo)
-                    const custoPorcao = (pma.material.preco / pma.divisor) * consumoNum
+                    const custoPorcao = (pma.material.preco / pma.divisor) * pma.consumo
                     const isEditing = editingPmaId === pma.id
 
                     return (
@@ -660,10 +661,12 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
                         <td className="px-4 py-3 text-right">
                           {isEditing ? (
                             <Input
+                              type="number"
                               value={editConsumo}
                               onChange={(e) => setEditConsumo(e.target.value)}
-                              className="w-24 ml-auto text-right"
-                              placeholder="ex: 1 par"
+                              className="w-20 ml-auto text-right"
+                              min={0.01}
+                              step={0.01}
                             />
                           ) : (
                             <span className="tabular-nums">{pma.consumo}</span>
@@ -751,8 +754,14 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
                 <MaterialCombobox
                   key={comboboxKey}
                   options={materiais}
-                  onSelect={(id) => setSelectedMatId(id)}
-                  onClear={() => setSelectedMatId('')}
+                  onSelect={(id, divisorPadrao) => {
+                    setSelectedMatId(id)
+                    setAddDivisor(String(divisorPadrao))
+                  }}
+                  onClear={() => {
+                    setSelectedMatId('')
+                    setAddDivisor('1')
+                  }}
                   placeholder="Buscar material..."
                   disabled={isPending}
                 />
@@ -760,9 +769,12 @@ export function ProcedimentoDetailPage({ userId, especialidadeSlug, detail, mate
               <div className="space-y-2">
                 <Label>Consumo por uso</Label>
                 <Input
-                  placeholder="ex: 1 par, 0,5ml, cobertura"
+                  type="number"
+                  placeholder="ex: 1"
                   value={addConsumo}
                   onChange={(e) => setAddConsumo(e.target.value)}
+                  min={0.01}
+                  step={0.01}
                 />
               </div>
               <div className="space-y-2">
