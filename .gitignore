@@ -47,3 +47,6 @@ custos_consultorio.numbers
 tasks/
 
 .remember/
+
+# leads database (marketing, não vai pro git)
+leads/

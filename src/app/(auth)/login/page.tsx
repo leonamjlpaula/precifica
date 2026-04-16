@@ -22,12 +22,17 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const [isResending, startResendTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
+  const [resendSuccess, setResendSuccess] = useState(false);
   const successMessage = searchParams.get('success');
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    setPendingEmail(null);
+    setResendSuccess(false);
     const formData = new FormData(event.currentTarget);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
@@ -37,11 +42,31 @@ function LoginForm() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
-        setError('Email ou senha inválidos.');
+        const isUnconfirmed =
+          error.message.toLowerCase().includes('email not confirmed') ||
+          ('code' in error && error.code === 'email_not_confirmed');
+
+        if (isUnconfirmed) {
+          setPendingEmail(email);
+          setError('Email ainda não confirmado.');
+        } else {
+          setError('Email ou senha inválidos.');
+        }
       } else {
         router.push('/dashboard');
         router.refresh();
       }
+    });
+  }
+
+  function handleResend() {
+    if (!pendingEmail) return;
+    setResendSuccess(false);
+
+    startResendTransition(async () => {
+      const supabase = createClient();
+      await supabase.auth.resend({ type: 'signup', email: pendingEmail });
+      setResendSuccess(true);
     });
   }
 
@@ -77,7 +102,28 @@ function LoginForm() {
           />
         </div>
 
-        {error && <p className="text-sm text-destructive">{error}</p>}
+        {error && (
+          <div className="space-y-2">
+            <p className="text-sm text-destructive">{error}</p>
+            {pendingEmail && (
+              <div className="text-sm text-muted-foreground">
+                Verifique sua caixa de entrada (e o spam) e clique no link de confirmação.{' '}
+                {resendSuccess ? (
+                  <span className="text-green-700 font-medium">Email reenviado!</span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleResend}
+                    disabled={isResending}
+                    className="text-primary underline-offset-4 hover:underline font-medium disabled:opacity-50"
+                  >
+                    {isResending ? 'Reenviando…' : 'Reenviar email'}
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
         <Button type="submit" className="w-full" loading={isPending}>
           Entrar

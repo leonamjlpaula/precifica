@@ -1,8 +1,9 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState, useEffect, useState, useTransition } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/presentation/components/ui/button';
 import banner from '@/assets/odonto_valor_banner.png';
 import { Input } from '@/presentation/components/ui/input';
@@ -25,6 +26,25 @@ export default function CadastroPage() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmSenha, setConfirmSenha] = useState('');
+  const [countdown, setCountdown] = useState(60);
+  const [isResending, startResendTransition] = useTransition();
+  const [resendSuccess, setResendSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!state.success || countdown === 0) return;
+    const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [state.success, countdown]);
+
+  function handleResend() {
+    setResendSuccess(false);
+    startResendTransition(async () => {
+      const supabase = createClient();
+      await supabase.auth.resend({ type: 'signup', email });
+      setResendSuccess(true);
+      setCountdown(60);
+    });
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
@@ -40,15 +60,41 @@ export default function CadastroPage() {
         </CardHeader>
         <CardContent>
           {state.success && (
-            <div className="p-4 rounded-md bg-green-50 border border-green-200 text-green-800 text-sm space-y-1">
-              <p className="font-medium">Conta criada com sucesso!</p>
-              <p>
-                Enviamos um email de confirmação para o seu endereço. Verifique a caixa de entrada
-                (e o spam) e clique no link para ativar sua conta.
-              </p>
-              <p className="pt-1">
+            <div className="p-5 rounded-md bg-green-50 border border-green-200 text-green-800 space-y-4 text-center">
+              <div className="space-y-1">
+                <p className="font-semibold">Conta criada com sucesso!</p>
+                <p className="text-sm text-green-700">
+                  Enviamos um email de confirmação para <span className="font-medium">{email}</span>
+                  . Verifique a caixa de entrada (e o spam) e clique no link para ativar sua conta.
+                </p>
+              </div>
+
+              {countdown > 0 ? (
+                <div className="flex flex-col items-center gap-0.5 py-1">
+                  <span className="text-5xl font-bold tabular-nums leading-none text-green-700">
+                    {countdown}
+                  </span>
+                  <span className="text-xs uppercase tracking-widest text-green-600 mt-1">
+                    segundos para reenviar
+                  </span>
+                </div>
+              ) : resendSuccess ? (
+                <p className="py-2 text-sm font-medium">✓ Email reenviado!</p>
+              ) : (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full border-green-300 text-green-800 hover:bg-green-100 hover:text-green-900"
+                  onClick={handleResend}
+                  loading={isResending}
+                >
+                  Reenviar email de confirmação
+                </Button>
+              )}
+
+              <p className="text-sm text-green-700">
                 Depois de confirmar,{' '}
-                <a href="/login" className="underline font-medium">
+                <a href="/login" className="underline font-medium underline-offset-4">
                   faça login aqui
                 </a>
                 .

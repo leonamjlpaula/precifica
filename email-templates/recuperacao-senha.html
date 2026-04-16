@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Recuperação de senha — OdontoValor</title>
+  <!--
+    TEMPLATE SUPABASE — Authentication > Email Templates > Reset Password
+    Variáveis disponíveis (Go template syntax):
+      {{ .ConfirmationURL }} — link de redefinição gerado pelo Supabase (obrigatório)
+      {{ .Email }}           — e-mail do usuário que solicitou o reset
+      {{ .SiteURL }}         — URL do site configurada no Supabase Dashboard
+
+    Imagem do banner:
+      Hospedar src/assets/odonto_valor_banner.png no Supabase Storage (bucket público)
+      e substituir a URL hardcoded abaixo pela URL pública gerada.
+  -->
+</head>
+<body style="margin: 0; padding: 0; background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+
+  <!-- Wrapper externo -->
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f1f5f9;">
+    <tr>
+      <td align="center" style="padding: 32px 16px;">
+
+        <!-- Container principal (600px) -->
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+
+          <!-- Banner -->
+          <tr>
+            <td style="background-color: #ffffff; padding: 20px;">
+              <img
+                src="SUBSTITUIR_PELA_URL_PUBLICA_DO_SUPABASE_STORAGE"
+                alt="Odonto Valor — OdontoValor"
+                width="560"
+                style="display: block; width: 100%; max-width: 560px; height: auto; border: 0;"
+              />
+            </td>
+          </tr>
+
+          <!-- Cabeçalho com nome do produto -->
+          <tr>
+            <td style="background-color: #1e293b; padding: 24px 40px; text-align: center;">
+              <p style="margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 2px; color: #94a3b8; text-transform: uppercase;">
+                OdontoValor
+              </p>
+              <h1 style="margin: 8px 0 0; font-size: 22px; font-weight: 700; color: #f8fafc; line-height: 1.3;">
+                Redefinição de senha solicitada
+              </h1>
+            </td>
+          </tr>
+
+          <!-- Corpo -->
+          <tr>
+            <td style="padding: 40px 40px 32px;">
+
+              <!-- Saudação -->
+              <p style="margin: 0 0 20px; font-size: 16px; color: #1e293b; line-height: 1.6;">
+                Olá! Recebemos uma solicitação para redefinir a senha da sua conta no <strong>OdontoValor</strong>.
+              </p>
+
+              <p style="margin: 0 0 32px; font-size: 15px; color: #475569; line-height: 1.7;">
+                Clique no botão abaixo para criar uma nova senha. O link é válido por <strong>1 hora</strong> e pode ser usado apenas uma vez.
+              </p>
+
+              <!-- CTA principal -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 32px;">
+                <tr>
+                  <td align="center">
+                    <a
+                      href="{{ .ConfirmationURL }}"
+                      style="display: inline-block; background-color: #1e293b; color: #ffffff; font-size: 15px; font-weight: 600; text-decoration: none; padding: 14px 36px; border-radius: 6px; letter-spacing: 0.3px;"
+                    >
+                      Redefinir senha →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Aviso de segurança -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #fefce8; border-radius: 6px; border: 1px solid #fde68a; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 20px 24px;">
+                    <p style="margin: 0 0 10px; font-size: 13px; font-weight: 700; letter-spacing: 1px; color: #92400e; text-transform: uppercase;">
+                      Dicas de segurança
+                    </p>
+
+                    <!-- Dica 1 -->
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 10px;">
+                      <tr>
+                        <td width="20" valign="top" style="padding-top: 2px;">
+                          <span style="font-size: 13px; color: #92400e;">•</span>
+                        </td>
+                        <td style="padding-left: 6px;">
+                          <p style="margin: 0; font-size: 13px; color: #78350f; line-height: 1.5;">Nunca compartilhe este link com ninguém — ele dá acesso direto à sua conta.</p>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Dica 2 -->
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 10px;">
+                      <tr>
+                        <td width="20" valign="top" style="padding-top: 2px;">
+                          <span style="font-size: 13px; color: #92400e;">•</span>
+                        </td>
+                        <td style="padding-left: 6px;">
+                          <p style="margin: 0; font-size: 13px; color: #78350f; line-height: 1.5;">Use uma senha forte: mínimo 8 caracteres, misturando letras, números e símbolos.</p>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Dica 3 -->
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td width="20" valign="top" style="padding-top: 2px;">
+                          <span style="font-size: 13px; color: #92400e;">•</span>
+                        </td>
+                        <td style="padding-left: 6px;">
+                          <p style="margin: 0; font-size: 13px; color: #78350f; line-height: 1.5;">Se você não solicitou a redefinição, ignore este e-mail — sua senha atual permanece inalterada.</p>
+                        </td>
+                      </tr>
+                    </table>
+
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- Divisor -->
+          <tr>
+            <td style="padding: 0 40px;">
+              <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 0;" />
+            </td>
+          </tr>
+
+          <!-- Rodapé -->
+          <tr>
+            <td style="padding: 24px 40px 32px;">
+              <p style="margin: 0 0 8px; font-size: 13px; color: #94a3b8; line-height: 1.6;">
+                Este e-mail foi enviado para <a href="mailto:{{ .Email }}" style="color: #64748b; text-decoration: none;">{{ .Email }}</a> porque foi solicitada a recuperação de senha no OdontoValor.
+              </p>
+              <p style="margin: 0; font-size: 13px; color: #94a3b8; line-height: 1.6;">
+                Se não foi você, ignore este e-mail — sua senha atual não será alterada.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+        <!-- /Container principal -->
+
+        <!-- Assinatura abaixo do card -->
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width: 600px; width: 100%;">
+          <tr>
+            <td style="padding: 20px 40px 0; text-align: center;">
+              <p style="margin: 0; font-size: 12px; color: #94a3b8;">
+                © 2026 OdontoValor · Todos os direitos reservados
+              </p>
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
