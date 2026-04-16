@@ -52,8 +52,7 @@ export default function AtualizarSenhaPage() {
         return;
       }
 
-      await supabase.auth.signOut();
-      router.push('/login?success=Senha+atualizada+com+sucesso!+Faça+login+com+a+nova+senha.');
+      router.push('/dashboard');
     });
   }
 
