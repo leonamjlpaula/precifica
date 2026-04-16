@@ -60,31 +60,41 @@ export default function CadastroPage() {
         </CardHeader>
         <CardContent>
           {state.success && (
-            <div className="p-4 rounded-md bg-green-50 border border-green-200 text-green-800 text-sm space-y-3">
-              <p className="font-medium">Conta criada com sucesso!</p>
-              <p>
-                Enviamos um email de confirmação para <span className="font-medium">{email}</span>.
-                Verifique a caixa de entrada (e o spam) e clique no link para ativar sua conta.
-              </p>
-              <div className="flex items-center gap-2 pt-1">
-                {countdown > 0 ? (
-                  <span className="text-green-700">Reenviar em {countdown}s</span>
-                ) : resendSuccess ? (
-                  <span className="font-medium">Email reenviado!</span>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleResend}
-                    disabled={isResending}
-                    className="underline font-medium underline-offset-4 hover:opacity-75 disabled:opacity-50"
-                  >
-                    {isResending ? 'Reenviando…' : 'Reenviar email de confirmação'}
-                  </button>
-                )}
+            <div className="p-5 rounded-md bg-green-50 border border-green-200 text-green-800 space-y-4 text-center">
+              <div className="space-y-1">
+                <p className="font-semibold">Conta criada com sucesso!</p>
+                <p className="text-sm text-green-700">
+                  Enviamos um email de confirmação para <span className="font-medium">{email}</span>
+                  . Verifique a caixa de entrada (e o spam) e clique no link para ativar sua conta.
+                </p>
               </div>
-              <p>
+
+              {countdown > 0 ? (
+                <div className="flex flex-col items-center gap-0.5 py-1">
+                  <span className="text-5xl font-bold tabular-nums leading-none text-green-700">
+                    {countdown}
+                  </span>
+                  <span className="text-xs uppercase tracking-widest text-green-600 mt-1">
+                    segundos para reenviar
+                  </span>
+                </div>
+              ) : resendSuccess ? (
+                <p className="py-2 text-sm font-medium">✓ Email reenviado!</p>
+              ) : (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full border-green-300 text-green-800 hover:bg-green-100 hover:text-green-900"
+                  onClick={handleResend}
+                  loading={isResending}
+                >
+                  Reenviar email de confirmação
+                </Button>
+              )}
+
+              <p className="text-sm text-green-700">
                 Depois de confirmar,{' '}
-                <a href="/login" className="underline font-medium">
+                <a href="/login" className="underline font-medium underline-offset-4">
                   faça login aqui
                 </a>
                 .
