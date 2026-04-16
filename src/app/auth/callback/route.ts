@@ -15,5 +15,7 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(`${origin}/login?error=Link+inválido+ou+expirado.+Solicite+um+novo+link.`);
+  return NextResponse.redirect(
+    `${origin}/login?error=Link+inválido+ou+expirado.+Solicite+um+novo+link.`
+  );
 }

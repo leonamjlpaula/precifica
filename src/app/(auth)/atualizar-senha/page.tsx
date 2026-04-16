@@ -45,9 +45,7 @@ export default function AtualizarSenhaPage() {
 
       if (error) {
         if (error.message.toLowerCase().includes('session')) {
-          setError(
-            'Link expirado ou inválido. Solicite um novo link de recuperação.'
-          );
+          setError('Link expirado ou inválido. Solicite um novo link de recuperação.');
         } else {
           setError('Erro ao atualizar a senha. Tente novamente.');
         }

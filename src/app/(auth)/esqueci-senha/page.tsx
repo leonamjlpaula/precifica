@@ -96,7 +96,10 @@ export default function EsqueciSenhaPage() {
 
           <div className="mt-4 text-center text-sm text-muted-foreground">
             Lembrou a senha?{' '}
-            <Link href="/login" className="text-primary underline-offset-4 hover:underline font-medium">
+            <Link
+              href="/login"
+              className="text-primary underline-offset-4 hover:underline font-medium"
+            >
               Voltar ao login
             </Link>
           </div>
