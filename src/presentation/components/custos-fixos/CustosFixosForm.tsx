@@ -468,7 +468,9 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
               step={0.1}
             />
             <p className="text-xs text-muted-foreground">
-              <TermTooltip term="ISS">ISS</TermTooltip> / <TermTooltip term="simplesNacional">Simples Nacional</TermTooltip> incidente sobre o preço de venda (não sobre o custo).
+              <TermTooltip term="ISS">ISS</TermTooltip> /{' '}
+              <TermTooltip term="simplesNacional">Simples Nacional</TermTooltip> incidente sobre o
+              preço de venda (não sobre o custo).
             </p>
           </div>
           <div className="space-y-2">

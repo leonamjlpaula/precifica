@@ -19,12 +19,7 @@ interface TermTooltipProps {
   iconClassName?: string;
 }
 
-export function TermTooltip({
-  term,
-  children,
-  className,
-  iconClassName,
-}: TermTooltipProps) {
+export function TermTooltip({ term, children, className, iconClassName }: TermTooltipProps) {
   const entry = GLOSSARY[term];
   const label = children ?? entry.short;
 
@@ -36,15 +31,12 @@ export function TermTooltip({
             tabIndex={0}
             className={cn(
               'inline-flex items-center gap-1 cursor-help underline decoration-dotted underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm',
-              className,
+              className
             )}
             aria-label={`${entry.short}: ${entry.tooltip}`}
           >
             {label}
-            <Info
-              className={cn('h-3.5 w-3.5 text-muted-foreground', iconClassName)}
-              aria-hidden
-            />
+            <Info className={cn('h-3.5 w-3.5 text-muted-foreground', iconClassName)} aria-hidden />
           </span>
         </TooltipTrigger>
         <TooltipContent side="top" className="max-w-xs text-xs leading-snug">
