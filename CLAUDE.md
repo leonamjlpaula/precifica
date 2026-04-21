@@ -49,6 +49,29 @@ npm run typecheck && npm run lint && npm run format:check
 
 Enforçado via hook `PreToolUse` em `.claude/settings.json` — se qualquer check falhar, o `gh pr create` é bloqueado. Ajustar código ou rodar `npm run format` antes de tentar de novo.
 
+### Nomenclatura de branch/worktree
+
+Ao iniciar trabalho em uma issue, renomear a branch/worktree auto-gerada (`claude/<adjetivo>-<nome>-<hash>`) para o padrão do ticket **antes do primeiro commit**:
+
+```
+feat/<N>-<slug-curto>       # nova feature — N = número da issue
+fix/<N>-<slug-curto>        # bugfix
+chore/<N>-<slug-curto>      # infra, deps, config
+refactor/<N>-<slug-curto>   # refactor sem mudança de comportamento
+```
+
+`<slug-curto>`: kebab-case, 2–4 palavras, derivado do título da issue.
+
+Exemplos:
+- Issue #9 "Tooltip de glossário" → `feat/9-glossary-tooltip`
+- Issue #13 "Usar parseBR nas server actions" → `refactor/13-parse-br-actions`
+
+```bash
+git branch -m <nome-antigo> <nome-novo>
+```
+
+**Sem ticket associado:** manter o nome auto-gerado do worktree — não inventar número.
+
 ---
 
 ## Metodologia de precificação (contexto crítico)
