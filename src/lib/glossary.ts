@@ -30,7 +30,8 @@ export const GLOSSARY: Record<TermKey, GlossaryEntry> = {
   ociosidade: {
     short: 'ociosidade',
     friendly: 'TODO(#20)',
-    tooltip: '% do tempo produtivo não utilizado. Reduz os minutos úteis disponíveis e eleva o custo por minuto.',
+    tooltip:
+      '% do tempo produtivo não utilizado. Reduz os minutos úteis disponíveis e eleva o custo por minuto.',
   },
   proLabore: {
     short: 'pró-labore',
@@ -40,7 +41,8 @@ export const GLOSSARY: Record<TermKey, GlossaryEntry> = {
   insalubridade: {
     short: 'insalubridade',
     friendly: 'TODO(#20)',
-    tooltip: 'Adicional obrigatório por lei (NR-15): 40% do salário mínimo para profissionais expostos a risco biológico, como odontólogos.',
+    tooltip:
+      'Adicional obrigatório por lei (NR-15): 40% do salário mínimo para profissionais expostos a risco biológico, como odontólogos.',
   },
   fundoReserva: {
     short: 'fundo de reserva',
