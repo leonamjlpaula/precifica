@@ -10,6 +10,25 @@
             "command": "input=$(cat); echo \"$input\" | jq -e -r '.tool_input.command' | grep -qE '(^|[^a-zA-Z])gh[[:space:]]+pr[[:space:]]+create([[:space:]]|$)' || exit 0; cd \"$CLAUDE_PROJECT_DIR\" && npm run typecheck && npm run lint && npm run format:check 1>&2 || { echo 'Pre-PR checks failed. Fix typecheck / lint / format before opening PR.' 1>&2; exit 2; }",
             "timeout": 180,
             "statusMessage": "Rodando typecheck + lint + format antes do gh pr create..."
+          },
+          {
+            "type": "command",
+            "command": "input=$(cat); echo \"$input\" | jq -e -r '.tool_input.command' | grep -qE '(^|[[:space:]])git[[:space:]]+commit' || exit 0; cd \"$CLAUDE_PROJECT_DIR\" && STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\\.(ts|tsx|json|md|css)$'); [ -z \"$STAGED\" ] && exit 0; echo \"$STAGED\" | tr '\\n' '\\0' | xargs -0 npx prettier --write 1>&2 && echo \"$STAGED\" | tr '\\n' '\\0' | xargs -0 git add 1>&2",
+            "timeout": 60,
+            "statusMessage": "Prettier nos arquivos staged antes do commit..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; [ -n \"$f\" ] && echo \"$f\" | grep -qE '\\.(ts|tsx|json|md|css)$' && npx prettier --write \"$f\" 2>/dev/null; } 2>/dev/null || true",
+            "timeout": 30,
+            "statusMessage": "Prettier..."
           }
         ]
       }
