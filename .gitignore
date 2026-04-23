@@ -40,7 +40,8 @@ next-env.d.ts
 prisma/*.db
 
 # claude code
-.claude/
+.claude/*
+!.claude/settings.json
 
 # project files
 custos_consultorio.numbers

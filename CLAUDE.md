@@ -41,6 +41,8 @@ Sempre usar `rtk` como prefixo — filtra output irrelevante, economiza tokens.
 rtk npm run dev              # inicia servidor de desenvolvimento
 rtk npm run typecheck        # tsc --noEmit (rodar antes de commitar)
 rtk npm run lint             # eslint
+rtk npm run format:check     # prettier --check
+rtk npm run format           # prettier --write (corrige formato)
 rtk npm run prisma:migrate   # aplica migrations usando .env.local
 rtk npm run prisma:seed      # popula dados padrão VRPO usando .env.local
 ```
@@ -53,6 +55,40 @@ rtk gain --history    # histórico de comandos com savings
 rtk discover          # detecta comandos que deveriam usar rtk
 rtk proxy <cmd>       # executa sem filtro (debug)
 ```
+
+### Pré-PR obrigatório
+
+Antes de abrir qualquer PR (`gh pr create`), rodar:
+
+```bash
+rtk npm run typecheck && rtk npm run lint && rtk npm run format:check
+```
+
+Enforçado via hook `PreToolUse` em `.claude/settings.json` — se qualquer check falhar, o `gh pr create` é bloqueado. Ajustar código ou rodar `rtk npm run format` antes de tentar de novo.
+
+### Nomenclatura de branch/worktree
+
+Ao iniciar trabalho em uma issue, renomear a branch/worktree auto-gerada (`claude/<adjetivo>-<nome>-<hash>`) para o padrão do ticket **antes do primeiro commit**:
+
+```
+feat/<N>-<slug-curto>       # nova feature — N = número da issue
+fix/<N>-<slug-curto>        # bugfix
+chore/<N>-<slug-curto>      # infra, deps, config
+refactor/<N>-<slug-curto>   # refactor sem mudança de comportamento
+```
+
+`<slug-curto>`: kebab-case, 2–4 palavras, derivado do título da issue.
+
+Exemplos:
+
+- Issue #9 "Tooltip de glossário" → `feat/9-glossary-tooltip`
+- Issue #13 "Usar parseBR nas server actions" → `refactor/13-parse-br-actions`
+
+```bash
+git branch -m <nome-antigo> <nome-novo>
+```
+
+**Sem ticket associado:** manter o nome auto-gerado do worktree — não inventar número.
 
 ---
 

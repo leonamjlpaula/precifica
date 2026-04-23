@@ -7,6 +7,7 @@ import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
 import { Label } from '@/presentation/components/ui/label';
 import { Card, CardHeader, CardTitle, CardContent } from '@/presentation/components/ui/card';
+import { TermTooltip } from '@/presentation/components/ui/TermTooltip';
 import type { CustoFixoConfig, CustoFixoItem } from '@prisma/client';
 
 type ConfigState = {
@@ -307,7 +308,9 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
       {/* Section 2 — Depreciação */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Seção 2 — Depreciação de Equipamentos</CardTitle>
+          <CardTitle className="text-base">
+            Seção 2 — <TermTooltip term="depreciacao">Depreciação</TermTooltip> de Equipamentos
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -351,7 +354,9 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
             />
           </div>
           <div className="space-y-2">
-            <Label>Fundo de reserva (%)</Label>
+            <Label>
+              <TermTooltip term="fundoReserva">Fundo de reserva</TermTooltip> (%)
+            </Label>
             <Input
               type="number"
               value={config.percFundoReserva}
@@ -362,7 +367,9 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
             />
           </div>
           <div className="space-y-2">
-            <Label>Insalubridade (%)</Label>
+            <Label>
+              <TermTooltip term="insalubridade">Insalubridade</TermTooltip> (%)
+            </Label>
             <Input
               type="number"
               value={config.percInsalubridade}
@@ -435,7 +442,9 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
             </p>
           </div>
           <div className="space-y-2">
-            <Label>Taxa de ociosidade (%)</Label>
+            <Label>
+              Taxa de <TermTooltip term="ociosidade">ociosidade</TermTooltip> (%)
+            </Label>
             <Input
               type="number"
               value={config.percOciosidade}
@@ -459,7 +468,9 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
               step={0.1}
             />
             <p className="text-xs text-muted-foreground">
-              ISS / Simples Nacional incidente sobre o preço de venda (não sobre o custo).
+              <TermTooltip term="ISS">ISS</TermTooltip> /{' '}
+              <TermTooltip term="simplesNacional">Simples Nacional</TermTooltip> incidente sobre o
+              preço de venda (não sobre o custo).
             </p>
           </div>
           <div className="space-y-2">

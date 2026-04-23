@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); echo \"$input\" | jq -e -r '.tool_input.command' | grep -qE '(^|[^a-zA-Z])gh[[:space:]]+pr[[:space:]]+create([[:space:]]|$)' || exit 0; cd \"$CLAUDE_PROJECT_DIR\" && npm run typecheck && npm run lint && npm run format:check 1>&2 || { echo 'Pre-PR checks failed. Fix typecheck / lint / format before opening PR.' 1>&2; exit 2; }",
+            "timeout": 180,
+            "statusMessage": "Rodando typecheck + lint + format antes do gh pr create..."
+          }
+        ]
+      }
+    ]
+  }
+}

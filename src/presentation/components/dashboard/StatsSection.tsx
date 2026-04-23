@@ -10,6 +10,7 @@ import {
   getDashboardStats,
   contarProcedimentosNoVermelho,
 } from '@/application/usecases/dashboardActions';
+import { TermTooltip } from '@/presentation/components/ui/TermTooltip';
 
 function formatBRL(value: number) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
@@ -54,8 +55,9 @@ export async function StatsSection({ userId }: { userId: string }) {
           )}
           {stats.ociosidadeNaoConfigurada && (
             <div className="rounded-md border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-              💡 Sua taxa de ociosidade está em 0%. Clínicas típicas ficam com 20% do tempo ocioso —
-              configurar esse valor torna o custo por minuto mais realista.{' '}
+              💡 Sua taxa de <TermTooltip term="ociosidade">ociosidade</TermTooltip> está em 0%.
+              Clínicas típicas ficam com 20% do tempo ocioso — configurar esse valor torna o custo
+              por minuto mais realista.{' '}
               <Link href="/custos-fixos" className="font-medium underline underline-offset-2">
                 Configurar agora
               </Link>
@@ -126,7 +128,8 @@ export async function StatsSection({ userId }: { userId: string }) {
                   Para pagar os custos do consultório
                 </p>
                 <p className="text-xs text-orange-700 mt-0.5">
-                  Itens fixos + depreciação + retorno (sem pró-labore)
+                  Itens fixos + <TermTooltip term="depreciacao">depreciação</TermTooltip> + retorno
+                  (sem <TermTooltip term="proLabore">pró-labore</TermTooltip>)
                 </p>
               </div>
               <span className="text-lg font-bold tabular-nums text-orange-900 ml-4 shrink-0">
@@ -153,7 +156,8 @@ export async function StatsSection({ userId }: { userId: string }) {
               <div>
                 <p className="text-sm font-medium text-purple-900">Faturamento mínimo semanal</p>
                 <p className="text-xs text-purple-700 mt-0.5">
-                  Break-even mensal (sem pró-labore) ÷ 4 semanas
+                  <TermTooltip term="breakEven">Break-even</TermTooltip> mensal (sem pró-labore) ÷ 4
+                  semanas
                 </p>
               </div>
               <span className="text-lg font-bold tabular-nums text-purple-900 ml-4 shrink-0">
