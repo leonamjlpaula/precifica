@@ -6,7 +6,13 @@ import { useToast } from '@/presentation/hooks/use-toast';
 import { Button } from '@/presentation/components/ui/button';
 import { Input } from '@/presentation/components/ui/input';
 import { Label } from '@/presentation/components/ui/label';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/presentation/components/ui/card';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/presentation/components/ui/card';
 import { TermTooltip } from '@/presentation/components/ui/TermTooltip';
 import type { CustoFixoConfig, CustoFixoItem } from '@prisma/client';
 
