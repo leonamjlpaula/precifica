@@ -355,7 +355,7 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
           </div>
           <div className="space-y-2">
             <Label>
-              <TermTooltip term="fundoReserva">Fundo de reserva</TermTooltip> (%)
+              <TermTooltip term="fundoReserva">Reserva emergencial</TermTooltip> (%)
             </Label>
             <Input
               type="number"
@@ -380,7 +380,7 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
             />
           </div>
           <div className="space-y-2">
-            <Label>Imprevistos (%)</Label>
+            <Label>Margem de imprevistos (%)</Label>
             <Input
               type="number"
               value={config.percImprevistos}
@@ -443,7 +443,7 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
           </div>
           <div className="space-y-2">
             <Label>
-              Taxa de <TermTooltip term="ociosidade">ociosidade</TermTooltip> (%)
+              <TermTooltip term="ociosidade">% agenda vazia</TermTooltip>
             </Label>
             <Input
               type="number"
