@@ -27,16 +27,33 @@ Antes de qualquer tarefa de produto, leia:
 
 ---
 
+## Estilo de comunicação
+
+Caveman mode ativo. Respostas curtas, sem artigos, sem filler. Técnico e direto. Código inalterado.
+
+---
+
 ## Comandos principais
 
+Sempre usar `rtk` como prefixo — filtra output irrelevante, economiza tokens.
+
 ```bash
-npm run dev              # inicia servidor de desenvolvimento
-npm run typecheck        # tsc --noEmit (rodar antes de commitar)
-npm run lint             # eslint
-npm run format:check     # prettier --check
-npm run format           # prettier --write (corrige formato)
-npm run prisma:migrate   # aplica migrations usando .env.local
-npm run prisma:seed      # popula dados padrão VRPO usando .env.local
+rtk npm run dev              # inicia servidor de desenvolvimento
+rtk npm run typecheck        # tsc --noEmit (rodar antes de commitar)
+rtk npm run lint             # eslint
+rtk npm run format:check     # prettier --check
+rtk npm run format           # prettier --write (corrige formato)
+rtk npm run prisma:migrate   # aplica migrations usando .env.local
+rtk npm run prisma:seed      # popula dados padrão VRPO usando .env.local
+```
+
+Subcomandos rtk úteis:
+
+```bash
+rtk gain              # mostra economia de tokens acumulada
+rtk gain --history    # histórico de comandos com savings
+rtk discover          # detecta comandos que deveriam usar rtk
+rtk proxy <cmd>       # executa sem filtro (debug)
 ```
 
 ### Pré-PR obrigatório
@@ -44,10 +61,10 @@ npm run prisma:seed      # popula dados padrão VRPO usando .env.local
 Antes de abrir qualquer PR (`gh pr create`), rodar:
 
 ```bash
-npm run typecheck && npm run lint && npm run format:check
+rtk npm run typecheck && rtk npm run lint && rtk npm run format:check
 ```
 
-Enforçado via hook `PreToolUse` em `.claude/settings.json` — se qualquer check falhar, o `gh pr create` é bloqueado. Ajustar código ou rodar `npm run format` antes de tentar de novo.
+Enforçado via hook `PreToolUse` em `.claude/settings.json` — se qualquer check falhar, o `gh pr create` é bloqueado. Ajustar código ou rodar `rtk npm run format` antes de tentar de novo.
 
 ### Nomenclatura de branch/worktree
 
@@ -218,10 +235,10 @@ Dev e prod apontam para o **mesmo Supabase** — não há banco Docker local par
 **Setup dev:**
 
 ```bash
-cp .env.example .env.local   # preencher com valores do painel Supabase
-npx prisma migrate dev
-npx prisma db seed
-npm run dev
+cp .env.example .env.local          # preencher com valores do painel Supabase
+rtk npx prisma migrate dev
+rtk npx prisma db seed
+rtk npm run dev
 ```
 
 **Email:** Confirmação de cadastro gerenciada pelo Supabase Auth. Para configurar provedor custom: `Supabase Dashboard → Project Settings → Auth → SMTP Settings`.
