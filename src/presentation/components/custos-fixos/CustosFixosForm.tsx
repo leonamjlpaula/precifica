@@ -443,7 +443,7 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
           </div>
           <div className="space-y-2">
             <Label>
-              <TermTooltip term="ociosidade">% agenda vazia</TermTooltip>
+              <TermTooltip term="ociosidade">% agenda vazia</TermTooltip> (%)
             </Label>
             <Input
               type="number"
