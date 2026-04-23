@@ -170,7 +170,7 @@ export function CustosFixosForm({ userId, initialConfig, initialItems }: Props) 
       </div>
 
       {/* Banner — Custo por Minuto */}
-      <Card className="bg-primary text-primary-foreground sticky top-0 z-10 backdrop-blur-sm">
+      <Card className="bg-primary/90 text-primary-foreground sticky top-0 z-10 backdrop-blur-sm">
         <CardContent className="p-6">
           <p className="text-sm font-medium opacity-80">Custo Fixo por Minuto</p>
           <p className="text-4xl font-bold mt-1">{formatBRL(custoFixoPorMinuto)} / min</p>
